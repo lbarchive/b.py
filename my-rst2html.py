@@ -164,6 +164,7 @@ def main():
       settings_overrides={'output_encoding': 'utf8',
                           'initial_header_level': 2,
                           'doctitle_xform': 0,
+                          'footnote_references': 'superscript',
                           },
       writer_name="html")
 
