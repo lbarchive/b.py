@@ -163,6 +163,7 @@ def main():
       source,
       settings_overrides={'output_encoding': 'utf8',
                           'initial_header_level': 2,
+                          'doctitle_xform': 0,
                           },
       writer_name="html")
 
@@ -171,7 +172,7 @@ def main():
   pattern = pattern.replace('|script', '|script|style')
   RE = re.compile(pattern, RE.flags)
   smartypants.tags_to_skip_regex = RE
-  print smartyPants(doc_parts['fragment']).encode('utf-8')
+  print smartyPants(doc_parts['body_pre_docinfo'] + doc_parts['fragment']).encode('utf-8')
 
 
 if __name__ == '__main__':
