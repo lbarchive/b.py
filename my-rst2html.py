@@ -154,10 +154,7 @@ def kbd(name, rawtext, text, lineno, inliner, options=None, content=None):
   return [nodes.raw('', '<kbd>%s</kbd>' % text, format='html')], []
 
 
-def main():
-
-  with open(sys.argv[1]) as f:
-    source = f.read()
+def generate(source):
 
   doc_parts = publish_parts(
       source,
@@ -173,7 +170,13 @@ def main():
   pattern = pattern.replace('|script', '|script|style')
   RE = re.compile(pattern, RE.flags)
   smartypants.tags_to_skip_regex = RE
-  print smartyPants(doc_parts['body_pre_docinfo'] + doc_parts['fragment']).encode('utf-8')
+  return smartyPants(doc_parts['body_pre_docinfo'] + doc_parts['fragment']).encode('utf-8')
+
+
+def main():
+
+  with open(sys.argv[1]) as f:
+    print generate(f.read()),
 
 
 if __name__ == '__main__':
