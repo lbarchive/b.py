@@ -1,5 +1,24 @@
 #!/usr/bin/env python
-# Yu-Jie Lin. MIT License.
+# Copyright (C) 2011-2013 by Yu-Jie Lin
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 
 import re
 import subprocess
@@ -9,8 +28,7 @@ from docutils.core import publish_parts
 from docutils.parsers.rst import Directive, directives, roles
 from xml.sax.saxutils import escape
 
-import smartypants
-from smartypants import smartyPants
+from bpy.handlers import base
 
 
 def register_directive(dir_name):
@@ -154,30 +172,40 @@ def kbd(name, rawtext, text, lineno, inliner, options=None, content=None):
   return [nodes.raw('', '<kbd>%s</kbd>' % text, format='html')], []
 
 
-def generate(source):
+class Handler(base.BaseHandler):
+  """Handler for reStructuredText markup language
 
-  doc_parts = publish_parts(
-      source,
-      settings_overrides={'output_encoding': 'utf8',
-                          'initial_header_level': 2,
-                          'doctitle_xform': 0,
-                          'footnote_references': 'superscript',
-                          },
-      writer_name="html")
+  >>> handler = Handler(None)
+  >>> print handler.generate_header({'title': 'foobar'})
+  .. !b
+     title: foobar
+  <BLANKLINE>
+  """
 
-  RE = smartypants.tags_to_skip_regex 
-  pattern = RE.pattern.replace('|code', '|code|tt')
-  pattern = pattern.replace('|script', '|script|style')
-  RE = re.compile(pattern, RE.flags)
-  smartypants.tags_to_skip_regex = RE
-  return smartyPants(doc_parts['body_pre_docinfo'] + doc_parts['fragment']).encode('utf-8')
+  PREFIX_HEAD = '.. '
+  PREFIX_END = ''
+  HEADER_FMT = '   %s: %s'
 
+  def _generate(self, markup=None):
+    """Generate HTML from Markdown
 
-def main():
+    >>> handler = Handler(None)
+    >>> print handler._generate('a *b*')
+    <p>a <em>b</em></p>
+    <BLANKLINE>
+    """
+    if markup is None:
+      markup = self.markup
 
-  with open(sys.argv[1]) as f:
-    print generate(f.read()),
+    settings_overrides = {
+      'output_encoding': 'utf8',
+      'initial_header_level': 2,
+      'doctitle_xform': 0,
+      'footnote_references': 'superscript',
+    }.update(self.options.get('settings_overrides', {}))
 
-
-if __name__ == '__main__':
-  main()
+    doc_parts = publish_parts(markup,
+                              settings_overrides=settings_overrides,
+                              writer_name="html")
+    
+    return doc_parts['body_pre_docinfo'] + doc_parts['body']
