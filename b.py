@@ -41,7 +41,7 @@ __program__ = 'b.py'
 __author__ = 'Yu-Jie Lin'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
-__version__ = '0.1'
+__version__ = '0.1.1'
 __website__ = 'http://bitbucket.org/livibetter/b.sh'
 
 
@@ -208,8 +208,9 @@ def main():
     if hasattr(rc, 'handlers'):
       for name, handler in rc.handlers.items():
         if name in handlers:
-          handler.update(rc.handlers[name])
-        handler[name] = rc.handlers[name].copy()
+          handlers[name].update(handler)
+        else:
+          handlers[name] = handler.copy()
 
   if args.command == 'blogs':
     http, service = get_http_service()
