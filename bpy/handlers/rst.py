@@ -202,7 +202,8 @@ class Handler(base.BaseHandler):
       'initial_header_level': 2,
       'doctitle_xform': 0,
       'footnote_references': 'superscript',
-    }.update(self.options.get('settings_overrides', {}))
+    }
+    settings_overrides.update(self.options.get('settings_overrides', {}))
 
     doc_parts = publish_parts(markup,
                               settings_overrides=settings_overrides,
