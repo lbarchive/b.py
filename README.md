@@ -26,6 +26,14 @@ Current status
     * Markdown
     * reStructuredText
 
+* Post data
+
+    API v3 only supports `insert` and `update` on posts resources, no pages support at this moment.
+  
+    * Title
+    * Labels
+    * Content
+
 
 Dependencies
 ------------
@@ -94,6 +102,7 @@ A header is used to specify the meta-data of a post, such as title or labels, it
 In reStructuredText, different markup has different style of header, a header look like
 
     .. !b
+       kind: post
        title: Title of "something."
        labels: comma, separated, list
        blog: 12345
@@ -102,7 +111,9 @@ In reStructuredText, different markup has different style of header, a header lo
 
 In normal usage, you may specify `title` and `labels`. `title` will override the post title, if this is missed, the post title will be the filename without extension.
 
-`blog`, `id`, and `url` are automatically added after a successful posting. `url` doesn't actually mean anything, just for you to have a record of the URL of a post.
+`kind`, `blog`, `id`, and `url` are automatically added after a successful posting. `url` doesn't actually mean anything, just for you to have a record of the URL of a post.
+
+`kind` is the type of the posting, default is `post` and currently only supports `post`.
 
 `blog` and `id` are very important, they are used in updating post and they should not be edited by you.
 

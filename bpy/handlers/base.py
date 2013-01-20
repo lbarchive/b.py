@@ -33,7 +33,7 @@ class BaseHandler():
   """The base clase of markup handler"""
   __metaclass__ = ABCMeta
 
-  MERGE_HEADERS = ('blog', 'id', 'url')
+  MERGE_HEADERS = ('kind', 'blog', 'id', 'url')
   HEADER_FMT = '%s: %s'
   PREFIX_HEAD = ''
   PREFIX_END = ''
@@ -98,6 +98,8 @@ class BaseHandler():
         continue
       if k == 'blog':
         v = v['id']
+      elif k == 'kind':
+        v = v.replace('blogger#', '')
       self.set_header(k, v)
 
   @abstractmethod

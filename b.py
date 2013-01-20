@@ -163,13 +163,19 @@ def find_handler(filename):
 
 def posting(post, http, service):
 
-  posts = service.posts()
+  kind = post['kind'].replace('blogger#', '')
+  title = post['title']
 
+  if kind == 'post':
+    posts = service.posts()
+  else:
+    raise ValueError('Unsupported kind: %s' % kind)
+  
   if 'id' in post:
-    print 'Updating post...'
+    print 'Updating a %s: %s' % (kind, title)
     req = posts.update(blogId=post['blog']['id'], postId=post['id'], body=post)
   else:
-    print 'Posting new post...'
+    print 'Posting a new %s: %s' % (kind, title)
     req = posts.insert(blogId=post['blog']['id'], body=post)
 
   resp = req.execute(http=http)
@@ -229,7 +235,8 @@ def main():
     hdr = handler.header
 
     post = {
-      'kind': 'blogger#post',
+      # default resource kind is blogger#post
+      'kind': 'blogger#%s' % hdr.get('kind', 'post'),
       'content': handler.generate(),
     }
     if rc:
