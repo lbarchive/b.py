@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+## Version 0.2dev
+
+ * Fix trailing newlines becoming spaces in title
+
 ## Version 0.1.2 (2013-01-18T05:47:16Z)
 
  * Fix handler rst `settings_overrides` not getting updates

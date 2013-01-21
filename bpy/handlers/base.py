@@ -177,12 +177,16 @@ class BaseHandler():
     >>> handler.options['smartypants'] = True
     >>> print handler.generate_title('foo "bar"')
     foo &#8220;bar&#8221;
+    >>> print repr(handler.generate_title('foo\\nbar\\n\\n'))
+    'foo bar'
     """
     if title is None:
       title = self.header.get('title', self.title)
 
     title = self.generate(title)
     title = title.replace('<p>', '').replace('</p>', '')
+    # no trailing newlines
+    title = title.rstrip('\n')
     title = title.replace('\n', ' ')
     return title
 

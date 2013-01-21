@@ -41,7 +41,7 @@ __program__ = 'b.py'
 __author__ = 'Yu-Jie Lin'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
-__version__ = '0.1.2'
+__version__ = '0.2dev'
 __website__ = 'http://bitbucket.org/livibetter/b.sh'
 
 
