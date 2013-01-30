@@ -1,6 +1,8 @@
 b.sh (b.py)
 ===========
 
+> *Publishing (technical) posts to Blogger in your favorite markup language seamlessly without much fuss.*
+
 **b.sh** is a program which enables [Blogger][] bloggers to blog from command-line. *[b.py][]* is the current implementation on Blogger V3 API, written in Python 2.7 at this moment. No support for Python 3 yet, because of [Google APIs Client Library][GoogleAPI] only supports Python 2.5-2.7.
 
 As the extension suggests, *[b.sh][]* was written in shell script and requires [GoogleCL][]. *b.sh* is deprecated due to the flaw in Blogger GData V2 API, which adds `<br/>` before each newline `\n`, rendering the posting via API unusable. The project's name is *b.sh* and will be used continuously even though it's no longer written in shell script.
@@ -127,7 +129,13 @@ Configuration
 
 ### `brc.py`
 
-It's the configuration that *b.py* reads from current working directory. Currently, only `blog` and `handlers` are used.
+It's the configuration that *b.py* reads from current working directory. Currently, only `blog` and `handlers` are used, it may read like:
+
+    :::python
+    blog = 12345
+    handlers = {
+      ... # see Handler section
+      }
 
 Handlers
 --------
