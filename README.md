@@ -206,7 +206,7 @@ Feel free to contribute and create a pull request.
 License
 -------
 
-    This project is licensed under the MIT License, see `COPYING`.
+    This project is licensed under the MIT License, see COPYING.
     Copyright (C) 2011-2013 by Yu-Jie Lin.
 
 [b.sh]: https://bitbucket.org/livibetter/b.sh/src/tip/b.sh

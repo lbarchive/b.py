@@ -215,8 +215,7 @@ class BaseHandler():
         m = self.RE_HEADER.match(item)
         if not m:
           continue
-        k, v = m.groups()
-        k = k.strip()
+        k, v = map(str.strip, m.groups())
         if k == 'labels':
           v = [label.strip() for label in v.split(',')]
         _header[k] = v
