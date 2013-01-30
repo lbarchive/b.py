@@ -1,20 +1,9 @@
 b.sh (b.py)
 ===========
 
-**b.sh** is a program which enables [Blogger][] bloggers to blog from command-line. *b.sh* is the previous implementation on Blogger GData V2 API and *b.py* is the current implementation on Blogger V3 API.
+**b.sh** is a program which enables [Blogger][] bloggers to blog from command-line. *[b.py][]* is the current implementation on Blogger V3 API, written in Python 2.7 at this moment. No support for Python 3 yet, because of [Google APIs Client Library][GoogleAPI] only supports Python 2.5-2.7.
 
-[Blogger]: http://www.blogger.com
-
-As the extension suggests, *b.sh* is written in shell script and requires [GoogleCL][]. *b.sh* is deprecated due to the flaw in Blogger GData V2 API, which adding `<br/>` after `\n`, rendering the posting via API unusable.
-
-[GoogleCL]: http://code.google.com/p/googlecl/
-
-*b.py* is written in Python 2.7 at this moment. No support for Python 3 yet, because of [Google APIs Client Library][GoogleAPI] only supports Python 2.5-2.7.
-
-The project's name is *b.sh* and will be used continuously even though it's no longer written in shell script, but the main program's name is *b.py*.
-
-[GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
-
+As the extension suggests, *[b.sh][]* was written in shell script and requires [GoogleCL][]. *b.sh* is deprecated due to the flaw in Blogger GData V2 API, which adds `<br/>` before each newline `\n`, rendering the posting via API unusable. The project's name is *b.sh* and will be used continuously even though it's no longer written in shell script.
 
 Current status
 --------------
@@ -34,6 +23,9 @@ Current status
     * Labels
     * Content
 
+I wish *b.sh* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
+
+*If anything is unclear since this is a new project, open an [issue][issues] for it.*
 
 Dependencies
 ------------
@@ -42,24 +34,33 @@ Dependencies
 
         easy_install --upgrade google-api-python-client
 
-
 Installation
 ------------
 
-* Clone this repository to, say, `/home/user/b.sh/`
-* Set up search path for `b.py`, e.g. `PATH=$PATH:/home/user/b.sh`
-* Switch to directory where you store posts, say, `/home/user/posts/`
-* Run `b.py blogs` to authorize this program to access via listing blogs.
+Assume
 
-    * Once you completed, there should be a `/home/user/posts/b.dat` credential file, which should be kept safe.
+* Home directory is `/home/me/`.
+* Clone this project to `/home/me/b.sh`.
+* Posts stored at `/home/me/posts`.
 
-* Create a configuration file `brc.py` with the content as follows
+The installation process:
 
-        :::python
-        blog = your_blog_id
+    # clone b.sh
+    $ cd ~
+    $ hg clone https://bitbucket.org/livibetter/b.sh
 
-    The blog IDs can be retrieved by `b.py blogs`, pick the right blog's ID.
+    # set up search path for `b.py` in .bashrc
+    # PATH=$PATH:/home/me/b.sh
+    # then re-login for new $PATH
 
+    # authorize and find blog ID you want to post
+    $ b.py blogs
+    # Note: there should be a `/home/user/posts/b.dat` credential file, which
+    # should be kept safe.
+
+    # add a local configuration
+    $ cd /home/me/posts
+    $ echo 'blog = <blog id>' > brc.py
 
 Commands
 --------
@@ -81,25 +82,29 @@ The generation can output a preview html at `/tmp/preview.html` if there is `tmp
 Work (post) flow
 ----------------
 
-In this section, I will explain how you can use *b.py* to post. We will assume you are in where you store your blog post markup files, say, `/home/user/posts` and the markup language is reStructuredText.
+You should have comleted the steps in *Installation* section, that is having `/home/me/posts/bpy.rc` and `/home/me/posts/b.dat`.
 
-* Create and write a new post `my-new-post.rst`
+    # create the post
+    $ cd /home/me/posts
+    $ echo << EOF > my-first-post.rst
+    .. !b
+       title: my first post
+       labels: blogging
 
-    * You can also add `title` and `labels` header, header will be explained in later section.
+    This is my **first post**.
+    EOF
 
-* Post it by `b.py post my-new-post.rst`
+    # post it on Blogger
+    $ b.py post my-new-post.rst
 
-That should be it, your new post should be published. Load the `my-new-post.rst` again, you should notice that there is something being added at top of the file.
-
-You can edit and run `b.py post my-new-post.rst` again to update the post.
-
+Once the post is posted successfully, *b.py* will update the header, adding blog ID, post ID, post URL, and some others. You can edit and run `b.py post my-new-post.rst` again to update the post.
 
 Header
 ------
 
 A header is used to specify the meta-data of a post, such as title or labels, it is also used to store information which is needed to update a post later on, such as `id`.
 
-In reStructuredText, different markup has different style of header, a header look like
+In reStructuredText (different markup has different style of header), a header look like
 
     .. !b
        kind: post
@@ -116,7 +121,6 @@ In normal usage, you may specify `title` and `labels`. `title` will override the
 `kind` is the type of the posting, default is `post` and currently only supports `post`.
 
 `blog` and `id` are very important, they are used in updating post and they should not be edited by you.
-
 
 Configuration
 -------------
@@ -144,7 +148,6 @@ You can specify [configuration][markdown-config] for Python Markdown in `brc.py`
       },
     }
 
-[markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
 
 ### reStructuredText
 
@@ -161,9 +164,8 @@ You can specify [settings-overrides][] for reStructuredText in `brc.py`, for exa
       },
     }
 
-[settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
 
-### Custom handler
+### Writing a custom handler
 
 A sample handler `sample_handler.py`:
 
@@ -194,8 +196,24 @@ And corresponding setting in `brc.py`:
       },
     }
 
+Help and Support
+----------------
+
+Please use [Issues][issues] to file a bug report or request a new feature.
+
+Feel free to contribute and create a pull request.
 
 License
 -------
 
-*b.sh* is licensed under the MIT License, see `COPYING`. Copyright (C) 2011-2013 by Yu-Jie Lin.
+    This project is licensed under the MIT License, see `COPYING`.
+    Copyright (C) 2011-2013 by Yu-Jie Lin.
+
+[b.sh]: https://bitbucket.org/livibetter/b.sh/src/tip/b.sh
+[b.py]: https://bitbucket.org/livibetter/b.sh/src/tip/b.sh
+[Blogger]: http://www.blogger.com
+[GoogleCL]: http://code.google.com/p/googlecl/
+[GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
+[markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
+[settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
+[issues]: https://bitbucket.org/livibetter/b.sh/issues
