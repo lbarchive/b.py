@@ -44,6 +44,51 @@ class BaseHandlerTestCase(unittest.TestCase):
 
     self.handler = None
 
+  def test_id_affix(self):
+
+    handler = self.handler
+    handler.title = 'test'
+
+    def test_header_override():
+
+      handler.header['id_affix'] = None
+      self.assertEqual(handler.id_affix, None)
+
+      handler.header['id_affix'] = ''
+      self.assertEqual(handler.id_affix, '098f')
+
+      handler.header['id_affix'] = 'prefix'
+      self.assertEqual(handler.id_affix, 'prefix')
+      
+    # -----
+
+    self.assertEqual(handler.id_affix, None)
+
+    # -----
+
+    handler.options['id_affix'] = None
+    self.assertEqual(handler.id_affix, None)
+
+    test_header_override()
+
+    # -----
+
+    del handler.header['id_affix']
+
+    handler.options['id_affix'] = ''
+    self.assertEqual(handler.id_affix, '098f')
+
+    test_header_override()
+
+    # -----
+
+    del handler.header['id_affix']
+
+    handler.options['id_affix'] = 'prefix'
+    self.assertEqual(handler.id_affix, 'prefix')
+
+    test_header_override()
+
   def test_split_header_markup(self):
 
     handler = self.handler

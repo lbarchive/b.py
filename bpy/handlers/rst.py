@@ -205,6 +205,11 @@ class Handler(base.BaseHandler):
     }
     settings_overrides.update(self.options.get('settings_overrides', {}))
 
+    id_affix = self.id_affix
+    if id_affix:
+      settings_overrides['id_prefix'] = id_affix + '-'
+      self.set_header('id_affix', id_affix)
+
     doc_parts = publish_parts(markup,
                               settings_overrides=settings_overrides,
                               writer_name="html")

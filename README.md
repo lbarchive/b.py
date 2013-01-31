@@ -25,7 +25,7 @@ Current status
     * Labels
     * Content
 
-* Miscellanous
+* Miscellaneous
 
     * [smartypants][] for all handlers.
 
@@ -88,7 +88,7 @@ The generation can output a preview html at `/tmp/preview.html` if there is `tmp
 Work (post) flow
 ----------------
 
-You should have comleted the steps in *Installation* section, that is having `/home/me/posts/bpy.rc` and `/home/me/posts/b.dat`.
+You should have completed the steps in *Installation* section, that is having `/home/me/posts/bpy.rc` and `/home/me/posts/b.dat`.
 
     # create the post
     $ cd /home/me/posts
@@ -118,6 +118,7 @@ In reStructuredText (different markup has different style of header), a header l
        labels: comma, separated, list
        blog: 12345
        id: 54321
+       id_affix: foobar
        url: http://example.com/2013/01/title-of-something.html
 
 In normal usage, you may specify `title` and `labels`. `title` will override the post title, if this is missed, the post title will be the filename without extension.
@@ -127,6 +128,8 @@ In normal usage, you may specify `title` and `labels`. `title` will override the
 `kind` is the type of the posting, default is `post` and currently only supports `post`.
 
 `blog` and `id` are very important, they are used in updating post and they should not be edited by you.
+
+`id_affix` is the affix to HTML element ID, see also the General Options of Handlers.
 
 Configuration
 -------------
@@ -157,6 +160,9 @@ The general options are supported by all handlers, defined in `BaseHandler`, but
     handlers = {
       '<MARKUP HANDLER ID>': {
         'options': {
+          # prefix string to HTML ID to avoid conflict
+          'id_affix': None,
+
           # string to prepend to actual markup
           'markup_prefix': '',
 
@@ -168,6 +174,16 @@ The general options are supported by all handlers, defined in `BaseHandler`, but
         },
       },
     }
+
+`id_affix` is used to avoid conflict across posts' HTML element ID. It may be a prefix or suffix, depending on handler's implementation and markup library's support. It has three types of value:
+
+1. `None`: no affix to ID.
+2. non-empty string: the string is the affix.
+3. empty string: the affix is generated automatically.
+
+Currently supported markup handler:
+
+* reStructuredText 
 
 `markup_prefix` and `markup_suffix` can be useful for adding header and footer content for posts. Another useful case in reStructuredText is you can use it for setting up some directives, for example `.. sectnum::`, so you can ensure all posts have prefixing section number if in use conjunction with `.. contents::`.
 

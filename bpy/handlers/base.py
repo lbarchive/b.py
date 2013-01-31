@@ -21,6 +21,7 @@
 
 
 from abc import abstractmethod, ABCMeta
+from hashlib import md5
 from os.path import basename, splitext
 import re
 import sys
@@ -38,6 +39,7 @@ class BaseHandler():
     'markup_prefix': '',
     'markup_suffix': '',
     'smartypants': False,
+    'id_affix': None,
     }
     
   MERGE_HEADERS = ('kind', 'blog', 'id', 'url')
@@ -136,6 +138,57 @@ class BaseHandler():
   def markup(self, markup):
     """Set the markup"""
     self._markup = markup
+
+  @property
+  def id_affix(self):
+    """Return id_affix
+
+    The initial value is from self.options, and can be overriden by
+    self.header.
+
+    Returns None if it's None.
+    Returns value if value is not ''
+    Returns first 4 digits of md5 of value if value is '', and assign back to
+            self.options. _generate method of Handler should write back to
+            self.header.
+
+    >>> class Handler(BaseHandler):
+    ...   def _generate(self, source=None): return source
+    >>> options = {
+    ...   'id_affix': None,
+    ...   }
+    >>> handler = Handler(None, options)
+    >>> print repr(handler.id_affix)
+    None
+    >>> handler.options['id_affix'] = 'foobar'
+    >>> print repr(handler.id_affix)
+    'foobar'
+    >>> # auto generate an id affix from title
+    >>> handler.options['id_affix'] = ''
+    >>> handler.title = 'abc'
+    >>> print repr(handler.id_affix)
+    '9001'
+    >>> handler.header['id_affix'] = 'override-affix'
+    >>> print repr(handler.id_affix)
+    'override-affix'
+    """
+    id_affix = self.options['id_affix']
+    # override?
+    if 'id_affix' in self.header:
+      id_affix = self.header['id_affix']
+      if self.header['id_affix'] and id_affix != 'None':
+        return self.header['id_affix']
+
+    # second case is from header of post, has to use string 'None'
+    if id_affix is None or id_affix == 'None':
+      return None
+
+    if id_affix:
+      return id_affix
+
+    m = md5()
+    m.update(self.title)
+    return m.hexdigest()[:4]
 
   @abstractmethod
   def _generate(self, markup=None):

@@ -5,6 +5,7 @@ CHANGES
 
  * Fix trailing newlines becoming spaces in title
  * Add handler options `markup_prefix` and `markup_suffix`
+ * Add header and handler option `id_affix` to avoid HTML element ID conflict across posts
 
 ## Version 0.1.2 (2013-01-18T05:47:16Z)
 
