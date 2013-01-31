@@ -25,6 +25,10 @@ Current status
     * Labels
     * Content
 
+* Miscellanous
+
+    * [smartypants][] for all handlers.
+
 I wish *b.sh* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 
 *If anything is unclear since this is a new project, open an [issue][issues] for it.*
@@ -140,6 +144,35 @@ It's the configuration that *b.py* reads from current working directory. Current
 Handlers
 --------
 
+Markup handlers and their IDs:
+
+* Markdown: `Markdown`
+* reStructuredText: `reStructuredText`
+
+### General options
+
+The general options are supported by all handlers, defined in `BaseHandler`, but they have to be specified per handler basis, the following sample code shows the options and their default value:
+
+    :::python
+    handlers = {
+      '<MARKUP HANDLER ID>': {
+        'options': {
+          # string to prepend to actual markup
+          'markup_prefix': '',
+
+          # string to append to actual markup
+          'markup_suffix': '',
+
+          # use smartypant to process the output of markup processor
+          'smartypants': False,
+        },
+      },
+    }
+
+`markup_prefix` and `markup_suffix` can be useful for adding header and footer content for posts. Another useful case in reStructuredText is you can use it for setting up some directives, for example `.. sectnum::`, so you can ensure all posts have prefixing section number if in use conjunction with `.. contents::`.
+
+If `smartypants` is enabled, then all generated HTML from markup processor will be processed by [smartypants][] library.
+
 ### Markdown
 
 You can specify [configuration][markdown-config] for Python Markdown in `brc.py`, for example:
@@ -221,6 +254,7 @@ License
 [b.py]: https://bitbucket.org/livibetter/b.sh/src/tip/b.sh
 [Blogger]: http://www.blogger.com
 [GoogleCL]: http://code.google.com/p/googlecl/
+[smartypants]: http://pypi.python.org/pypi/smartypants
 [GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
 [markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
 [settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer

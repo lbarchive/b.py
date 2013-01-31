@@ -33,6 +33,13 @@ class BaseHandler():
   """The base clase of markup handler"""
   __metaclass__ = ABCMeta
 
+  # default handler options
+  OPTIONS = {
+    'markup_prefix': '',
+    'markup_suffix': '',
+    'smartypants': False,
+    }
+    
   MERGE_HEADERS = ('kind', 'blog', 'id', 'url')
   HEADER_FMT = '%s: %s'
   PREFIX_HEAD = ''
@@ -45,7 +52,7 @@ class BaseHandler():
 
     self.filename = filename
     self.title = ''
-    self.options = {}
+    self.options = self.OPTIONS.copy()
     self.options.update(options or {})
     if filename:
       with open(filename) as f:
@@ -101,6 +108,34 @@ class BaseHandler():
       elif k == 'kind':
         v = v.replace('blogger#', '')
       self.set_header(k, v)
+
+  @property
+  def markup(self):
+    """Return markup with markup_prefix and markup_suffix
+    
+    >>> class Handler(BaseHandler):
+    ...   def _generate(self, source=None): return source
+    >>> options = {
+    ...   'markup_prefix': 'the prefix\\n',
+    ...   'markup_suffix': '\\nthe suffix',
+    ...   }
+    >>> handler = Handler(None, options)
+    >>> handler.markup = 'content'
+    >>> print handler.markup
+    the prefix
+    content
+    the suffix
+    """
+    return '%s%s%s' % (
+      self.options['markup_prefix'],
+      self._markup,
+      self.options['markup_suffix'],
+      )
+
+  @markup.setter
+  def markup(self, markup):
+    """Set the markup"""
+    self._markup = markup
 
   @abstractmethod
   def _generate(self, markup=None):
