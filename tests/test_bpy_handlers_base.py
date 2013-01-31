@@ -29,14 +29,13 @@ from bpy.handlers.base import BaseHandler
 class Handler(BaseHandler):
 
   def _generate(self, source=None):
-    
+
     return source
 
 
 class BaseHandlerTestCase(unittest.TestCase):
 
   def setUp(self):
-
 
     self.handler = Handler(None)
 
@@ -88,6 +87,23 @@ class BaseHandlerTestCase(unittest.TestCase):
     self.assertEqual(handler.id_affix, 'prefix')
 
     test_header_override()
+
+  def test_markup_affixes(self):
+
+    handler = self.handler
+    handler.title = 'title'
+    handler.markup = 'content'
+    handler.options['markup_prefix'] = 'prefix>'
+    handler.options['markup_suffix'] = '<suffix'
+
+    expect = 'prefix>content<suffix'
+    self.assertEqual(handler.generate(), expect)
+
+    expect = 'foobar'
+    self.assertEqual(handler.generate('foobar'), expect)
+
+    expect = 'title'
+    self.assertEqual(handler.generate_title(), expect)
 
   def test_split_header_markup(self):
 
