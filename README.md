@@ -14,6 +14,7 @@ Current status
 * System: Linux
 * Markup handlers
 
+    * AsciiDoc
     * Markdown
     * reStructuredText
 
@@ -149,6 +150,7 @@ Handlers
 
 Markup handlers and their IDs:
 
+* AsciiDoc: `AsciiDoc`
 * Markdown: `Markdown`
 * reStructuredText: `reStructuredText`
 
@@ -188,6 +190,10 @@ Currently supported markup handler:
 `markup_prefix` and `markup_suffix` can be useful for adding header and footer content for posts. Another useful case in reStructuredText is you can use it for setting up some directives, for example `.. sectnum::`, so you can ensure all posts have prefixing section number if in use conjunction with `.. contents::`.
 
 If `smartypants` is enabled, then all generated HTML from markup processor will be processed by [smartypants][] library.
+
+### AsciiDoc
+
+No options are available at this moment.
 
 ### Markdown
 

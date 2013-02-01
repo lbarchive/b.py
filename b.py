@@ -85,6 +85,10 @@ TEMPLATE_PATH = path.join(os.getcwd(), 'tmpl.html')
 
 # handlers for markup files
 handlers = {
+  'AsciiDoc': {
+    'match': re.compile(r'.*\.asciidoc$'),
+    'module': path.join('bpy', 'handlers', 'asciidoc'),
+  },
   'Markdown': {
     'match': re.compile(r'.*\.(markdown|md(own)?|mkdn?)$'),
     'module': path.join('bpy', 'handlers', 'mkd'),
@@ -128,9 +132,9 @@ def load_config():
     finally:
       if _mod_data[0]:
         _mod_data[0].close()
-  except ImportError as e:
+  except ImportError:
     pass
-  except Exception as e:
+  except Exception:
     traceback.print_exc()
     print 'Error in %s, aborted.' % _mod_data[1]
     sys.exit(1)
@@ -152,9 +156,8 @@ def find_handler(filename):
             _mod_data[0].close()
           if module:
             break
-      except ImportError:
+      except Exception:
         print 'Cannot load module %s of handler %s' % (hdlr['module'], name)
-      except Exception as e:
         traceback.print_exc()
   if module:
     return module.Handler(filename, hdlr.get('options', {}))

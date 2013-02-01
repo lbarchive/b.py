@@ -41,7 +41,7 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
     source = '''Test Handler
 ------------'''
 
-    html_base = '<div class="section" id="%stest-handler">\n<h2>Test Handler</h2>\n</div>\n'
+    html_base = '<div class="section" id="%stest-handler">\n<h2>Test Handler</h2>\n</div>'
 
     html = html_base % ''
     self.assertEqual(handler.generate(source), html)
@@ -66,10 +66,10 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
     handler.options['markup_prefix'] = 'prefix-'
     handler.options['markup_suffix'] = '-suffix'
 
-    expect = '<p>prefix-content-suffix</p>\n'
+    expect = '<p>prefix-content-suffix</p>'
     self.assertEqual(handler.generate(), expect)
 
-    expect = '<p>foobar</p>\n'
+    expect = '<p>foobar</p>'
     self.assertEqual(handler.generate('foobar'), expect)
 
     expect = 'title'

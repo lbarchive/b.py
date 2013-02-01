@@ -20,13 +20,42 @@
 # THE SOFTWARE.
 
 
-import unittest
-import doctest
+import re
+import StringIO
+import sys
 
-from bpy.handlers import base, asciidoc, mkd, rst
+from asciidocapi import AsciiDocAPI
+from bpy.handlers import base
 
 
-def load_tests(loader, tests, pattern):
-  for module in (base, asciidoc, mkd, rst):
-    tests.addTests(doctest.DocTestSuite(module))
-  return tests
+class Handler(base.BaseHandler):
+  """Handler for AsciiDoc markup language
+
+  >>> handler = Handler(None)
+  >>> print handler.generate_header({'title': 'foobar'})
+  // !b
+  // title: foobar
+  <BLANKLINE>
+  """
+
+  PREFIX_HEAD = '// '
+  PREFIX_END = ''
+  HEADER_FMT = '// %s: %s'
+
+  def _generate(self, markup=None):
+    """Generate HTML from AsciiDoc
+
+    >>> handler = Handler(None)
+    >>> print handler._generate('a *b*')
+    <p>a <strong>b</strong></p>
+    """
+    if markup is None:
+      markup = self.markup
+
+    asciidoc = AsciiDocAPI()
+    infile = StringIO.StringIO(markup)
+    outfile = StringIO.StringIO()
+    asciidoc.options('--no-header-footer')
+    asciidoc.execute(infile, outfile, backend='html4')
+
+    return outfile.getvalue().rstrip()

@@ -192,7 +192,6 @@ class Handler(base.BaseHandler):
     >>> handler = Handler(None)
     >>> print handler._generate('a *b*')
     <p>a <em>b</em></p>
-    <BLANKLINE>
     """
     if markup is None:
       markup = self.markup
@@ -214,4 +213,4 @@ class Handler(base.BaseHandler):
                               settings_overrides=settings_overrides,
                               writer_name="html")
     
-    return doc_parts['body_pre_docinfo'] + doc_parts['body']
+    return doc_parts['body_pre_docinfo'] + doc_parts['body'].rstrip()

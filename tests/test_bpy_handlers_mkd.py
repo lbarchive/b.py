@@ -23,10 +23,31 @@
 import unittest
 import doctest
 
-from bpy.handlers import base, asciidoc, mkd, rst
+from bpy.handlers.mkd import Handler
+
+import test_bpy_handlers_base as test_base
 
 
-def load_tests(loader, tests, pattern):
-  for module in (base, asciidoc, mkd, rst):
-    tests.addTests(doctest.DocTestSuite(module))
-  return tests
+class HandlerTestCase(test_base.BaseHandlerTestCase):
+
+  def setUp(self):
+
+    self.handler = Handler(None)
+
+  def test_markup_affixes(self):
+
+    handler = self.handler
+    handler.title = 'title'
+    handler.markup = 'content'
+    handler.options['markup_prefix'] = 'prefix-'
+    handler.options['markup_suffix'] = '-suffix'
+
+    expect = '<p>prefix-content-suffix</p>'
+    self.assertEqual(handler.generate(), expect)
+
+    expect = '<p>foobar</p>'
+    self.assertEqual(handler.generate('foobar'), expect)
+
+    expect = 'title'
+    self.assertEqual(handler.generate_title(), expect)
+
