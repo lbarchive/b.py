@@ -4,6 +4,7 @@ CHANGES
 ## Version 0.2dev
 
  * Fix trailing newlines becoming spaces in title
+ * fix empty label '' in labels array
  * Add handler options `markup_prefix` and `markup_suffix`
  * Add header and handler option `id_affix` to avoid HTML element ID conflict across posts
  * Add handler for AsciiDoc

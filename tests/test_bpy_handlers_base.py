@@ -43,6 +43,71 @@ class BaseHandlerTestCase(unittest.TestCase):
 
     self.handler = None
 
+  def test_header_no_labels(self):
+    
+    handler = self.handler
+    handler.source = '''!b
+
+post content'''
+    header, markup = handler.split_header_markup()
+    self.assertEqual(header, {
+      })
+    self.assertEqual(markup, 'post content')
+
+  def test_header_labels_none(self):
+    
+    handler = self.handler
+    handler.source = '''!b
+labels:
+
+post content'''
+    header, markup = handler.split_header_markup()
+    self.assertEqual(header, {
+      'labels': [],
+      })
+    self.assertEqual(markup, 'post content')
+
+  def test_header_labels_single(self):
+    
+    handler = self.handler
+    handler.source = '''!b
+labels: foobar
+
+post content'''
+    header, markup = handler.split_header_markup()
+    self.assertEqual(header, {
+      'labels': ['foobar'],
+      })
+    self.assertEqual(markup, 'post content')
+
+  def test_header_labels_two(self):
+    
+    handler = self.handler
+    handler.source = '''!b
+labels: foo, bar
+
+post content'''
+    header, markup = handler.split_header_markup()
+    self.assertEqual(header, {
+      'labels': ['foo', 'bar'],
+      })
+    self.assertEqual(markup, 'post content')
+
+  def test_header_labels_with_empty_label(self):
+    
+    handler = self.handler
+    handler.source = '''!b
+labels: foo, , bar
+
+post content'''
+    header, markup = handler.split_header_markup()
+    self.assertEqual(header, {
+      'labels': ['foo', 'bar'],
+      })
+    self.assertEqual(markup, 'post content')
+
+  # =====
+
   def test_id_affix(self):
 
     handler = self.handler

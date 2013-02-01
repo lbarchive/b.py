@@ -291,7 +291,9 @@ class BaseHandler():
     return post
 
   def split_header_markup(self, source=None):
-
+    """Split source into header and markup parts
+    
+    It also parses header into a dict."""
     if source is None:
       source = self.source
 
@@ -305,7 +307,7 @@ class BaseHandler():
           continue
         k, v = map(str.strip, m.groups())
         if k == 'labels':
-          v = [label.strip() for label in v.split(',')]
+          v = filter(None, [label.strip() for label in v.split(',')])
         _header[k] = v
     header = _header
 
