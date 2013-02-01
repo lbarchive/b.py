@@ -25,16 +25,14 @@ import doctest
 
 from bpy.handlers.rst import Handler
 
+import test_bpy_handlers_base as test_base
 
-class HandlerTestCase(unittest.TestCase):
+
+class HandlerTestCase(test_base.BaseHandlerTestCase):
 
   def setUp(self):
 
     self.handler = Handler(None)
-
-  def tearDown(self):
-
-    self.handler = None
 
   def test_id_affix(self):
 
@@ -59,3 +57,21 @@ class HandlerTestCase(unittest.TestCase):
     handler.header['id_affix'] = 'foobar-prefix'
     html = html_base % 'foobar-prefix-'
     self.assertEqual(handler.generate(source), html)
+
+  def test_markup_affixes(self):
+
+    handler = self.handler
+    handler.title = 'title'
+    handler.markup = 'content'
+    handler.options['markup_prefix'] = 'prefix-'
+    handler.options['markup_suffix'] = '-suffix'
+
+    expect = '<p>prefix-content-suffix</p>\n'
+    self.assertEqual(handler.generate(), expect)
+
+    expect = '<p>foobar</p>\n'
+    self.assertEqual(handler.generate('foobar'), expect)
+
+    expect = 'title'
+    self.assertEqual(handler.generate_title(), expect)
+
