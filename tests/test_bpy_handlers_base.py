@@ -179,11 +179,33 @@ abc=  foo
 
 post content'''
     header, markup = handler.split_header_markup()
-    self.assertEqual(header, {
+    expect = {
       'abc': 'foo',
       'def': 'bar',
-      })
+      }
+    self.assertEqual(header, expect)
     self.assertEqual(markup, 'post content')
+
+    source = '%s!b\n' % handler.PREFIX_HEAD
+    source += handler.HEADER_FMT % ('abc', 'foo') + '\n'
+    source += handler.HEADER_FMT % ('def', 'bar') + '\n'
+    if handler.PREFIX_END:
+      source += handler.PREFIX_END + '\n'
+    source += '\npost content'
+    handler.source = source
+    header, markup = handler.split_header_markup()
+    self.assertEqual(header, expect)
+    self.assertEqual(markup, 'post content')
+
+  def test_generate_header(self):
+
+    handler = self.handler
+    handler.set_header('id', '123')
+    expect = '%s!b\n%s\n' % (handler.PREFIX_HEAD, handler.HEADER_FMT % ('id', '123'))
+    if handler.PREFIX_END:
+      expect += handler.PREFIX_END + '\n'
+
+    self.assertEqual(handler.generate_header(), expect)
 
   def test_generate_post(self):
 
@@ -206,3 +228,24 @@ post content'''
         'id': '456',
         }
       })
+
+  def test_update_source(self):
+
+    handler = self.handler
+    source = '%s!b\n%s\n' % (handler.PREFIX_HEAD, handler.HEADER_FMT % ('id', '123'))
+    if handler.PREFIX_END:
+      source += handler.PREFIX_END + '\n'
+    source += '\npost content'
+    handler.source = source
+
+    header, markup = handler.split_header_markup()
+    handler.header = header
+    handler.markup = markup
+
+    handler.update_source()
+    self.assertEqual(handler.source, source)
+
+    handler.options['markup_prefix'] = 'PREFIX'
+
+    handler.update_source()
+    self.assertEqual(handler.source, source)

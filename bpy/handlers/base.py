@@ -48,7 +48,7 @@ class BaseHandler():
   PREFIX_END = ''
 
   RE_SPLIT = re.compile(r'^(?:([^\n]*?!b.*?)\n\n)?(.*)', re.DOTALL | re.MULTILINE)
-  RE_HEADER = re.compile(r'(.*?)\s*[=:]\s*(.*)\s*')
+  RE_HEADER = re.compile(r'.*?([a-zA-Z0-9_-]+)\s*[=:]\s*(.*)\s*')
 
   def __init__(self, filename, options=None):
 
@@ -318,7 +318,7 @@ class BaseHandler():
     if header is None:
       header = self.header
     if markup is None:
-      markup = self.markup
+      markup = self._markup
 
     source = self.generate_header(header) + \
              '\n' + \
