@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,7 @@ import imp
 import json
 import os
 from os import path
-from os.path import dirname, realpath
+from os.path import dirname, expanduser, realpath
 import re
 import sys
 import traceback
@@ -38,12 +38,14 @@ from oauth2client.tools import run
 
 
 __program__ = 'b.py'
-__author__ = 'Yu-Jie Lin'
+__description__ = 'Post to Blogger in markup language seamlessly'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
 __version__ = '0.2dev'
-__website__ = 'http://bitbucket.org/livibetter/b.sh'
+__website__ = 'http://bitbucket.org/livibetter/b.py'
 
+__author__ = 'Yu-Jie Lin'
+__email__  = 'livibetter@gmail.com'
 
 # API stuff
 ###########
@@ -53,8 +55,16 @@ http = None
 service = None
 
 # filename of credentials
-CLIENT_SECRETS = path.join(dirname(realpath(sys.argv[0])),
-                           'client_secrets.json')
+search_path = [
+  dirname(realpath(sys.argv[0])),
+  '/usr/share/' + __program__,
+  '~/share/' + __program__,
+  '~/.local/share/' + __program__,
+  ]
+search_path = [expanduser(p + '/client_secrets.json') for p in search_path]
+search_path = filter(path.exists, search_path)
+if search_path:
+  CLIENT_SECRETS = search_path[0]
 API_SCOPE ='https://www.googleapis.com/auth/blogger'
 NOTFOUND_MESSAGE = 'Could not found client_secrets.json'
 API_STORAGE = 'b.dat'
@@ -173,7 +183,7 @@ def posting(post, http, service):
     posts = service.posts()
   else:
     raise ValueError('Unsupported kind: %s' % kind)
-  
+
   if 'id' in post:
     print 'Updating a %s: %s' % (kind, title)
     req = posts.update(blogId=post['blog']['id'], postId=post['id'], body=post)
