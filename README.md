@@ -92,7 +92,7 @@ Let's create a first post, `my-first-post.rst`:
 
 Then issue the command to post it to Blogger:
 
-    $ b.py post my-new-post.rst
+    $ b.py post my-first-post.rst
 
 If it runs without problem, then open the file again, the header part would have been edited and may look like:
 
@@ -109,7 +109,7 @@ The detail of header, please see *Header* section.
 
 Now, you spot there is a typo `frm` and you edit it. To update the post, run the same command as posting:
 
-    $ b.py post my-new-post.rst
+    $ b.py post my-first-post.rst
 
 The `blog` and `id` in the header tells *b.py* which post to update.
 
@@ -273,6 +273,11 @@ Please use [Issues][issues] to file a bug report or request a new feature.
 
 Feel free to contribute and create a pull request.
 
+Links
+-----
+
+* [PyPI][]
+
 License
 -------
 
@@ -280,9 +285,9 @@ License
     Copyright (C) 2011-2013 by Yu-Jie Lin.
 
 [Blogger]: http://www.blogger.com
-[GoogleCL]: http://code.google.com/p/googlecl/
 [smartypants]: http://pypi.python.org/pypi/smartypants
 [GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
 [markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
 [settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
 [issues]: https://bitbucket.org/livibetter/b.py/issues
+[PyPI]: http://pypi.python.org/pypi/b.py
