@@ -1,11 +1,9 @@
-b.sh (b.py)
-===========
+b.py
+====
 
 > *Publishing (technical) posts to Blogger in your favorite markup language seamlessly without much fuss.*
 
-**b.sh** is a program which enables [Blogger][] bloggers to blog from command-line. *[b.py][]* is the current implementation on Blogger V3 API, written in Python 2.7 at this moment. No support for Python 3 yet, because of [Google APIs Client Library][GoogleAPI] only supports Python 2.5-2.7.
-
-As the extension suggests, *[b.sh][]* was written in shell script and requires [GoogleCL][]. *b.sh* is deprecated due to the flaw in Blogger GData V2 API, which adds `<br/>` before each newline `\n`, rendering the posting via API unusable. The project's name is *b.sh* and will be used continuously even though it's no longer written in shell script.
+**b.py** is a Python program which enables [Blogger][] bloggers to blog from command-line.
 
 Current status
 --------------
@@ -21,7 +19,7 @@ Current status
 * Post data
 
     API v3 only supports `insert` and `update` on posts resources, no pages support at this moment.
-  
+
     * Title
     * Labels
     * Content
@@ -30,7 +28,7 @@ Current status
 
     * [smartypants][] for all handlers.
 
-I wish *b.sh* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
+I wish *b.py* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 
 *If anything is unclear since this is a new project, open an [issue][issues] for it.*
 
@@ -47,18 +45,19 @@ Installation
 Assume
 
 * Home directory is `/home/me/`.
-* Clone this project to `/home/me/b.sh`.
+* Clone this project to `/home/me/b.py`.
 * Posts stored at `/home/me/posts`.
 
 The installation process:
 
-    # clone b.sh
+    # clone b.py
     $ cd ~
-    $ hg clone https://bitbucket.org/livibetter/b.sh
+    $ hg clone https://bitbucket.org/livibetter/b.py
 
-    # set up search path for `b.py` in .bashrc
-    # PATH=$PATH:/home/me/b.sh
-    # then re-login for new $PATH
+    # b.py is not yet ready for PyPI, so you need to build source tarball to
+    # install at this moment.
+    $ python setup.py sdist
+    $ pip install dist/b.py-VERSION-tar.gz
 
     # authorize and find blog ID you want to post
     $ b.py blogs
@@ -185,7 +184,7 @@ The general options are supported by all handlers, defined in `BaseHandler`, but
 
 Currently supported markup handler:
 
-* reStructuredText 
+* reStructuredText
 
 `markup_prefix` and `markup_suffix` can be useful for adding header and footer content for posts. Another useful case in reStructuredText is you can use it for setting up some directives, for example `.. sectnum::`, so you can ensure all posts have prefixing section number if in use conjunction with `.. contents::`.
 
@@ -272,12 +271,10 @@ License
     This project is licensed under the MIT License, see COPYING.
     Copyright (C) 2011-2013 by Yu-Jie Lin.
 
-[b.sh]: https://bitbucket.org/livibetter/b.sh/src/tip/b.sh
-[b.py]: https://bitbucket.org/livibetter/b.sh/src/tip/b.sh
 [Blogger]: http://www.blogger.com
 [GoogleCL]: http://code.google.com/p/googlecl/
 [smartypants]: http://pypi.python.org/pypi/smartypants
 [GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
 [markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
 [settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
-[issues]: https://bitbucket.org/livibetter/b.sh/issues
+[issues]: https://bitbucket.org/livibetter/b.py/issues
