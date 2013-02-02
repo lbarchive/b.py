@@ -1,7 +1,9 @@
 CHANGES
 =======
 
-## Version 0.2dev
+## Development
+
+## Version 0.2 (2013-02-02T12:02:10Z)
 
  * Fix trailing newlines becoming spaces in title
  * fix empty label '' in labels array

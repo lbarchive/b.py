@@ -42,31 +42,23 @@ Dependencies
 Installation
 ------------
 
-Assume
+    $ pip install b.py
 
-* Home directory is `/home/me/`.
-* Clone this project to `/home/me/b.py`.
-* Posts stored at `/home/me/posts`.
+### Authorization
 
-The installation process:
+You need to authorize *b.py* to access your Blogger account. Simply using `blogs` command (see *Commands* section) would get you into the authorization process:
 
-    # clone b.py
-    $ cd ~
-    $ hg clone https://bitbucket.org/livibetter/b.py
-
-    # b.py is not yet ready for PyPI, so you need to build source tarball to
-    # install at this moment.
-    $ python setup.py sdist
-    $ pip install dist/b.py-VERSION-tar.gz
-
-    # authorize and find blog ID you want to post
     $ b.py blogs
-    # Note: there should be a `/home/user/posts/b.dat` credential file, which
-    # should be kept safe.
 
-    # add a local configuration
-    $ cd /home/me/posts
-    $ echo 'blog = <blog id>' > brc.py
+Once you follow the steps and finish, there should be a `b.dat` credential file created under the current working directory, you should keep it safe.
+
+### Basic configuration file
+
+Beside the `b.dat` above, you may also need a `brc.py`, the *b.py* local configuration file. For starter, the following setting should be sufficient:
+
+    blog = <THE BLOG ID>
+
+You can use `blogs` command to quickly get the blog ID.
 
 Commands
 --------
@@ -88,22 +80,38 @@ The generation can output a preview html at `/tmp/preview.html` if there is `tmp
 Work (post) flow
 ----------------
 
-You should have completed the steps in *Installation* section, that is having `/home/me/posts/bpy.rc` and `/home/me/posts/b.dat`.
+You should have completed the steps in *Installation* section, that is having `bpy.rc` and `b.dat` reside in the directory for your posts.
 
-    # create the post
-    $ cd /home/me/posts
-    $ echo << EOF > my-first-post.rst
+Let's create a first post, `my-first-post.rst`:
+
     .. !b
-       title: my first post
+       title: My First Post
        labels: blogging
 
-    This is my **first post**.
-    EOF
+    Hooray, posting frm commandline!
 
-    # post it on Blogger
+Then issue the command to post it to Blogger:
+
     $ b.py post my-new-post.rst
 
-Once the post is posted successfully, *b.py* will update the header, adding blog ID, post ID, post URL, and some others. You can edit and run `b.py post my-new-post.rst` again to update the post.
+If it runs without problem, then open the file again, the header part would have been edited and may look like:
+
+    .. !b
+       kind: post
+       url: http://[...].blogspot.com/2013/01/my-first-post.html
+       labels: blogging
+       id_affix: 5e5f
+       blog: <THE BLOG ID>
+       id: <THE POST ID>
+       title: My First Post
+
+The detail of header, please see *Header* section.
+
+Now, you spot there is a typo `frm` and you edit it. To update the post, run the same command as posting:
+
+    $ b.py post my-new-post.rst
+
+The `blog` and `id` in the header tells *b.py* which post to update.
 
 Header
 ------

@@ -51,6 +51,17 @@ with open(script_name) as f:
       (line.split('=') for line in f if line.startswith('__'))
     )
 
+classifiers = [
+  'Development Status :: 3 - Alpha',
+  'Environment :: Console',
+  'Intended Audience :: End Users/Desktop',
+  'License :: OSI Approved :: MIT License',
+  'Natural Language :: English',
+  'Operating System :: POSIX :: Linux',
+  'Programming Language :: Python :: 2.7',
+  'Topic :: Other/Nonlisted Topic',
+  ]
+
 packages = [
   'bpy',
   'bpy.api',
@@ -73,6 +84,8 @@ setup_d = dict(
 
   author       = meta['author'],
   author_email = meta['email'],
+
+  classifiers = classifiers,
 
   scripts  = [script_name],
   packages = packages,
