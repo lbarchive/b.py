@@ -28,6 +28,12 @@ Current status
 
     * [smartypants][] for all handlers.
 
+* Tests/checks
+
+    * Unittest: `python setup.py test`
+    * PEP8 (4-space indentation is ignored): `python setup.py pep8`
+    * Pyflakes: `python setup.py pyflakes`
+
 I wish *b.py* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 
 *If anything is unclear since this is a new project, open an [issue][issues] for it.*

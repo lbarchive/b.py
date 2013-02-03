@@ -23,12 +23,12 @@ from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
 import sys
 
-try:
-  import pep8
-except ImportError:
-  pep8 = None
+# scripts to be exculded from checking
+EXCLUDE_SCRIPTS = ('asciidocapi.py',)
 
 script_name = 'b.py'
+
+# ============================================================================
 
 
 class cmd_test(Command):
@@ -67,15 +67,17 @@ class cmd_pep8(Command):
 
   def run(self):
 
-    if not pep8:
-      print >> sys.stderr, ('No pep8 checker to use, '
+    try:
+      import pep8
+    except ImportError:
+      print >> sys.stderr, ('Cannot import pep8, you forgot to install?\n'
                             'run `pip install pep8` to install.')
       sys.exit(1)
 
     p8 = pep8.StyleGuide()
 
     # do not include code not written in b.py
-    p8.options.exclude += ('asciidocapi.py',)
+    p8.options.exclude += EXCLUDE_SCRIPTS
     # ignore four-space indentation error
     p8.options.ignore += ('E111', 'E121')
 
@@ -99,6 +101,58 @@ class cmd_pep8(Command):
     report.print_statistics()
     print '%-7d Total errors and warnings' % report.get_count()
 
+
+class cmd_pyflakes(Command):
+
+  description = 'run Pyflakes'
+  user_options = []
+
+  def initialize_options(self):
+
+    pass
+
+  def finalize_options(self):
+
+    pass
+
+  def run(self):
+
+    try:
+      from pyflakes import api
+      from pyflakes import reporter as modReporter
+    except ImportError:
+      print >> sys.stderr, ('Cannot import pyflakes, you forgot to install?\n'
+                            'run `pip install pyflakes` to install.')
+      sys.exit(1)
+
+    from os.path import basename
+
+    reporter = modReporter._makeDefaultReporter()
+
+    # monkey patch for exclusion of pathes
+    api_iterSourceCode = api.iterSourceCode
+
+    def _iterSourceCode(paths):
+      for path in api_iterSourceCode(paths):
+        if basename(path) not in EXCLUDE_SCRIPTS:
+          yield path
+    api.iterSourceCode = _iterSourceCode
+
+    print
+    print 'Options'
+    print '======='
+    print
+    print 'Exclude:', EXCLUDE_SCRIPTS
+
+    print
+    print 'Results'
+    print '======='
+    print
+    warnings = api.checkRecursive('.', reporter)
+    print
+    print 'Total warnings: %d' % warnings
+
+# ============================================================================
 
 with open(script_name) as f:
   meta = dict(
@@ -147,6 +201,7 @@ data_files = [
 setup_d = dict(
   cmdclass={
     'pep8': cmd_pep8,
+    'pyflakes': cmd_pyflakes,
     'test': cmd_test,
   },
   classifiers=classifiers,
