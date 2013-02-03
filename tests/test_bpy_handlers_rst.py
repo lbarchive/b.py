@@ -20,9 +20,6 @@
 # THE SOFTWARE.
 
 
-import unittest
-import doctest
-
 from bpy.handlers.rst import Handler
 
 import test_bpy_handlers_base as test_base

@@ -20,9 +20,7 @@
 # THE SOFTWARE.
 
 
-import re
 import StringIO
-import sys
 
 from bpy.api.asciidocapi import AsciiDocAPI
 from bpy.handlers import base

@@ -23,7 +23,6 @@
 import argparse as ap
 import httplib2
 import imp
-import json
 import os
 from os import path
 from os.path import dirname, expanduser, realpath

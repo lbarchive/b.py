@@ -24,7 +24,6 @@ from abc import abstractmethod, ABCMeta
 from hashlib import md5
 from os.path import basename, splitext
 import re
-import sys
 
 import smartypants
 from smartypants import smartyPants
@@ -194,7 +193,7 @@ class BaseHandler():
   @abstractmethod
   def _generate(self, markup=None):
     """Generate HTML of markup source"""
-    raise NotImplementError
+    raise NotImplementedError
 
   def generate(self, markup=None):
     """Generate HTML

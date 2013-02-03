@@ -20,9 +20,7 @@
 # THE SOFTWARE.
 
 
-import re
 import subprocess
-import sys
 from docutils import nodes
 from docutils.core import publish_parts
 from docutils.parsers.rst import Directive, directives, roles

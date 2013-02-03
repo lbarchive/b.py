@@ -20,7 +20,6 @@
 # THE SOFTWARE.
 
 
-import unittest
 import doctest
 
 from bpy.handlers import base, asciidoc, mkd, rst

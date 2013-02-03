@@ -21,7 +21,6 @@
 
 
 import unittest
-import doctest
 
 from bpy.handlers.base import BaseHandler
 

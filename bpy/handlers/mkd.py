@@ -20,9 +20,6 @@
 # THE SOFTWARE.
 
 
-import re
-import sys
-
 import markdown
 from bpy.handlers import base
 
