@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,66 +44,57 @@ class BaseHandlerTestCase(unittest.TestCase):
     self.handler = None
 
   def test_header_no_labels(self):
-    
+
     handler = self.handler
     handler.source = '''!b
 
 post content'''
     header, markup = handler.split_header_markup()
-    self.assertEqual(header, {
-      })
+    self.assertEqual(header, {})
     self.assertEqual(markup, 'post content')
 
   def test_header_labels_none(self):
-    
+
     handler = self.handler
     handler.source = '''!b
 labels:
 
 post content'''
     header, markup = handler.split_header_markup()
-    self.assertEqual(header, {
-      'labels': [],
-      })
+    self.assertEqual(header, {'labels': []})
     self.assertEqual(markup, 'post content')
 
   def test_header_labels_single(self):
-    
+
     handler = self.handler
     handler.source = '''!b
 labels: foobar
 
 post content'''
     header, markup = handler.split_header_markup()
-    self.assertEqual(header, {
-      'labels': ['foobar'],
-      })
+    self.assertEqual(header, {'labels': ['foobar']})
     self.assertEqual(markup, 'post content')
 
   def test_header_labels_two(self):
-    
+
     handler = self.handler
     handler.source = '''!b
 labels: foo, bar
 
 post content'''
     header, markup = handler.split_header_markup()
-    self.assertEqual(header, {
-      'labels': ['foo', 'bar'],
-      })
+    self.assertEqual(header, {'labels': ['foo', 'bar']})
     self.assertEqual(markup, 'post content')
 
   def test_header_labels_with_empty_label(self):
-    
+
     handler = self.handler
     handler.source = '''!b
 labels: foo, , bar
 
 post content'''
     header, markup = handler.split_header_markup()
-    self.assertEqual(header, {
-      'labels': ['foo', 'bar'],
-      })
+    self.assertEqual(header, {'labels': ['foo', 'bar']})
     self.assertEqual(markup, 'post content')
 
   # =====
@@ -123,7 +114,7 @@ post content'''
 
       handler.header['id_affix'] = 'prefix'
       self.assertEqual(handler.id_affix, 'prefix')
-      
+
     # -----
 
     self.assertEqual(handler.id_affix, None)
@@ -174,15 +165,12 @@ post content'''
 
     handler = self.handler
     handler.source = '''xoxo !b oxox
-abc=  foo  
+abc=  foo
  def:bar
 
 post content'''
     header, markup = handler.split_header_markup()
-    expect = {
-      'abc': 'foo',
-      'def': 'bar',
-      }
+    expect = {'abc': 'foo', 'def': 'bar'}
     self.assertEqual(header, expect)
     self.assertEqual(markup, 'post content')
 
@@ -201,7 +189,8 @@ post content'''
 
     handler = self.handler
     handler.set_header('id', '123')
-    expect = '%s!b\n%s\n' % (handler.PREFIX_HEAD, handler.HEADER_FMT % ('id', '123'))
+    expect = '%s!b\n%s\n' % (handler.PREFIX_HEAD,
+                             handler.HEADER_FMT % ('id', '123'))
     if handler.PREFIX_END:
       expect += handler.PREFIX_END + '\n'
 
@@ -224,15 +213,14 @@ post content'''
     self.assertEqual(post, {
       'title': 'the title',
       'id': '123',
-      'blog': {
-        'id': '456',
-        }
-      })
+      'blog': {'id': '456'}
+    })
 
   def test_update_source(self):
 
     handler = self.handler
-    source = '%s!b\n%s\n' % (handler.PREFIX_HEAD, handler.HEADER_FMT % ('id', '123'))
+    source = '%s!b\n%s\n' % (handler.PREFIX_HEAD,
+                             handler.HEADER_FMT % ('id', '123'))
     if handler.PREFIX_END:
       source += handler.PREFIX_END + '\n'
     source += '\npost content'

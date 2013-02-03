@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # Copyright (C) 2011-2013 by Yu-Jie Lin
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +33,7 @@ from bpy.handlers import base
 
 def register_directive(dir_name):
   """For lazy guys
-  
+
   @register_directive(name)
   class MyDirective(Directive):
     [...]
@@ -81,10 +81,10 @@ def youtube(name, args, options, content, lineno,
         'width': 425,
         'height': 344,
         'extra': ''
-        }
-    extra_args = content[1:] # Because content[0] is ID
-    extra_args = [ea.strip().split("=") for ea in extra_args] # key=value
-    extra_args = [ea for ea in extra_args if len(ea) == 2] # drop bad lines
+    }
+    extra_args = content[1:]  # Because content[0] is ID
+    extra_args = [ea.strip().split("=") for ea in extra_args]  # key=value
+    extra_args = [ea for ea in extra_args if len(ea) == 2]  # drop bad lines
     extra_args = dict(extra_args)
     if 'width' in extra_args:
         string_vars['width'] = extra_args.pop('width')
@@ -126,14 +126,18 @@ class PreCode(Directive):
   def run(self):
 
     lang = self.arguments[0] if len(self.arguments) else None
-    raw = nodes.raw('', self._run('\n'.join(self.content), lang, self.options), format='html')
+    raw = nodes.raw(
+      '',
+      self._run('\n'.join(self.content), lang, self.options),
+      format='html'
+    )
     return [raw]
 
 
 @register_directive('pyrun')
 class PyRun(Directive):
   """Append the output of Python code
-  
+
   The encoding definition may be required when use Unicode characters:
 
     # -*- coding: utf-8 -*-
@@ -143,10 +147,19 @@ class PyRun(Directive):
                  'class': directives.unchanged,
                  }
   has_content = True
-  
+
+  def _generate_std(self, content):
+
+    content = escape(content.decode('utf-8'))
+    return nodes.raw(
+      '',
+      '<pre class="pyrun stdout">%s</pre>' % content,
+      format='html'
+    )
+
   def run(self):
     code = '\n'.join(self.content)
-    
+
     cmd = 'python'
     if 'command' in self.options:
       cmd = self.options['command']
@@ -156,12 +169,16 @@ class PyRun(Directive):
                             stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate(code.encode('utf-8'))
 
-    raws = [nodes.raw('', PreCode._run(code, self.options.get('class', 'python'), self.options), format='html')]
+    raws = [nodes.raw(
+      '',
+      PreCode._run(code, self.options.get('class', 'python'), self.options),
+      format='html'
+    )]
     if not stdout:
       stdout = '*** NO OUTPUT ***'
-    raws.append(nodes.raw('', '<pre class="pyrun stdout">%s</pre>' % escape(stdout.decode('utf-8')), format='html'))
+    raws.append(self._generate_std(stdout))
     if stderr:
-      raws.append(nodes.raw('', '<pre class="pyrun stderr">%s</pre>' % escape(stderr.decode('utf-8')), format='html'))
+      raws.append(self._generate_std(stderr))
     return raws
 
 
@@ -212,5 +229,5 @@ class Handler(base.BaseHandler):
     doc_parts = publish_parts(markup,
                               settings_overrides=settings_overrides,
                               writer_name="html")
-    
+
     return doc_parts['body_pre_docinfo'] + doc_parts['body'].rstrip()

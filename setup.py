@@ -68,7 +68,8 @@ class cmd_pep8(Command):
   def run(self):
 
     if not pep8:
-      print >> sys.stderr, 'No pep8 checker to use, run `pip install pep8` to install.'
+      print >> sys.stderr, ('No pep8 checker to use, '
+                            'run `pip install pep8` to install.')
       sys.exit(1)
 
     p8 = pep8.StyleGuide()
@@ -82,8 +83,8 @@ class cmd_pep8(Command):
     print 'Options'
     print '======='
     print
-    print 'Exclude: ', p8.options.exclude
-    print 'Ignore : ', p8.options.ignore
+    print 'Exclude:', p8.options.exclude
+    print 'Ignore :', p8.options.ignore
 
     print
     print 'Results'
@@ -96,7 +97,7 @@ class cmd_pep8(Command):
     print '=========='
     print
     report.print_statistics()
-    print '%-7d Total erros and warnings' % report.get_count()
+    print '%-7d Total errors and warnings' % report.get_count()
 
 
 with open(script_name) as f:
@@ -104,7 +105,23 @@ with open(script_name) as f:
     (k.strip(' _'), eval(v)) for k, v in
       # There will be a '\n', with eval(), it's safe to ignore
       (line.split('=') for line in f if line.startswith('__'))
-    )
+  )
+
+  # renaming meta-data keys
+  meta_renames = [
+    ('program', 'name'),
+    ('website', 'url'),
+    ('email', 'author_email'),
+  ]
+  for old, new in meta_renames:
+    if old in meta:
+      meta[new] = meta[old]
+      del meta[old]
+
+  # keep these
+  meta_keys = ['name', 'description', 'version', 'license', 'url', 'author',
+               'author_email']
+  meta = dict(filter(lambda m: m[0] in meta_keys, meta.items()))
 
 classifiers = [
   'Development Status :: 3 - Alpha',
@@ -115,41 +132,29 @@ classifiers = [
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 2.7',
   'Topic :: Other/Nonlisted Topic',
-  ]
+]
 
 packages = [
   'bpy',
   'bpy.api',
   'bpy.handlers',
-  ]
+]
 
 data_files = [
   ('share/' + script_name, ['client_secrets.json']),
-  ]
+]
 
 setup_d = dict(
-  cmdclass = {
+  cmdclass={
     'pep8': cmd_pep8,
     'test': cmd_test,
   },
-
-  name        = meta['program'],
-  version     = meta['version'],
-  license     = meta['license'],
-  url         = meta['website'],
-
-  description = meta['description'],
-
-  author       = meta['author'],
-  author_email = meta['email'],
-
-  classifiers = classifiers,
-
-  scripts  = [script_name],
-  packages = packages,
-
-  data_files = data_files,
-  )
+  classifiers=classifiers,
+  scripts=[script_name],
+  packages=packages,
+  data_files=data_files,
+  **meta
+)
 
 if __name__ == '__main__':
   setup(**setup_d)

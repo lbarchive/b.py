@@ -24,7 +24,7 @@ gen() {
       echo 'Unknown markup language: $markup' >&2
       exit 1
   esac
-  
+
   if [[ $HAS_HEADER == yes ]]; then
     $MARKUP <(sed '1,/^$/d' "$SRC") > "$GEN_HTML"
   else

@@ -45,7 +45,7 @@ __version__ = '0.2'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
-__email__  = 'livibetter@gmail.com'
+__email__ = 'livibetter@gmail.com'
 
 # API stuff
 ###########
@@ -60,12 +60,12 @@ search_path = [
   '/usr/share/' + __program__,
   '~/share/' + __program__,
   '~/.local/share/' + __program__,
-  ]
+]
 search_path = [expanduser(p + '/client_secrets.json') for p in search_path]
 search_path = filter(path.exists, search_path)
 if search_path:
   CLIENT_SECRETS = search_path[0]
-API_SCOPE ='https://www.googleapis.com/auth/blogger'
+API_SCOPE = 'https://www.googleapis.com/auth/blogger'
 NOTFOUND_MESSAGE = 'Could not found client_secrets.json'
 API_STORAGE = 'b.dat'
 
@@ -271,7 +271,8 @@ def main():
       return
 
     if 'blog' not in post:
-      print 'You need to specify which blog to post on in either brc.py or header of %s.' % handler.filename
+      print ('You need to specify which blog to post on '
+             'in either brc.py or header of %s.' % handler.filename)
       sys.exit(1)
 
     http, service = get_http_service()

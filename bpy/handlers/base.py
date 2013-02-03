@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,14 +40,15 @@ class BaseHandler():
     'markup_suffix': '',
     'smartypants': False,
     'id_affix': None,
-    }
-    
+  }
+
   MERGE_HEADERS = ('kind', 'blog', 'id', 'url')
   HEADER_FMT = '%s: %s'
   PREFIX_HEAD = ''
   PREFIX_END = ''
 
-  RE_SPLIT = re.compile(r'^(?:([^\n]*?!b.*?)\n\n)?(.*)', re.DOTALL | re.MULTILINE)
+  RE_SPLIT = re.compile(r'^(?:([^\n]*?!b.*?)\n\n)?(.*)',
+                        re.DOTALL | re.MULTILINE)
   RE_HEADER = re.compile(r'.*?([a-zA-Z0-9_-]+)\s*[=:]\s*(.*)\s*')
 
   def __init__(self, filename, options=None):
@@ -114,7 +115,7 @@ class BaseHandler():
   @property
   def markup(self):
     """Return markup with markup_prefix and markup_suffix
-    
+
     >>> class Handler(BaseHandler):
     ...   def _generate(self, source=None): return source
     >>> options = {
@@ -132,7 +133,7 @@ class BaseHandler():
       self.options['markup_prefix'],
       self._markup,
       self.options['markup_suffix'],
-      )
+    )
 
   @markup.setter
   def markup(self, markup):
@@ -197,7 +198,7 @@ class BaseHandler():
 
   def generate(self, markup=None):
     """Generate HTML
-    
+
     >>> class Handler(BaseHandler):
     ...   def _generate(self, markup=None): return markup
     >>> handler = Handler(None)
@@ -214,7 +215,7 @@ class BaseHandler():
     html = self._generate(markup)
 
     if self.options.get('smartypants', False):
-      RE = smartypants.tags_to_skip_regex 
+      RE = smartypants.tags_to_skip_regex
       pattern = RE.pattern.replace('|code', '|code|tt')
       pattern = pattern.replace('|script', '|script|style')
       RE = re.compile(pattern, RE.flags)
@@ -225,7 +226,7 @@ class BaseHandler():
 
   def generate_header(self, header=None):
     """Generate header in text for writing back to the file
-    
+
     >>> class Handler(BaseHandler):
     ...   PREFIX_HEAD = 'foo '
     ...   PREFIX_END = 'bar'
@@ -256,7 +257,7 @@ class BaseHandler():
 
   def generate_title(self, title=None):
     """Generate title for posting
-    
+
     >>> class Handler(BaseHandler):
     ...   def _generate(self, source=None): return source
     >>> handler = Handler(None)
@@ -292,7 +293,7 @@ class BaseHandler():
 
   def split_header_markup(self, source=None):
     """Split source into header and markup parts
-    
+
     It also parses header into a dict."""
     if source is None:
       source = self.source
@@ -320,9 +321,7 @@ class BaseHandler():
     if markup is None:
       markup = self._markup
 
-    source = self.generate_header(header) + \
-             '\n' + \
-             markup
+    source = self.generate_header(header) + '\n' + markup
     if not only_returned:
       self.source = source
     return source
