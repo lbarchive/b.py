@@ -21,10 +21,17 @@
 
 from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
+import sys
+
+try:
+  import pep8
+except ImportError:
+  pep8 = None
 
 script_name = 'b.py'
 
-class test(Command):
+
+class cmd_test(Command):
 
   description = 'run tests'
   user_options = []
@@ -43,6 +50,54 @@ class test(Command):
     tests = loader.discover(start_dir='tests')
     runner = TextTestRunner(verbosity=2)
     runner.run(tests)
+
+
+class cmd_pep8(Command):
+
+  description = 'run pep8'
+  user_options = []
+
+  def initialize_options(self):
+
+    pass
+
+  def finalize_options(self):
+
+    pass
+
+  def run(self):
+
+    if not pep8:
+      print >> sys.stderr, 'No pep8 checker to use, run `pip install pep8` to install.'
+      sys.exit(1)
+
+    p8 = pep8.StyleGuide()
+
+    # do not include code not written in b.py
+    p8.options.exclude += ('asciidocapi.py',)
+    # ignore four-space indentation error
+    p8.options.ignore += ('E111', 'E121')
+
+    print
+    print 'Options'
+    print '======='
+    print
+    print 'Exclude: ', p8.options.exclude
+    print 'Ignore : ', p8.options.ignore
+
+    print
+    print 'Results'
+    print '======='
+    print
+    report = p8.check_files('.')
+
+    print
+    print 'Statistics'
+    print '=========='
+    print
+    report.print_statistics()
+    print '%-7d Total erros and warnings' % report.get_count()
+
 
 with open(script_name) as f:
   meta = dict(
@@ -73,7 +128,10 @@ data_files = [
   ]
 
 setup_d = dict(
-  cmdclass = {'test': test},
+  cmdclass = {
+    'pep8': cmd_pep8,
+    'test': cmd_test,
+  },
 
   name        = meta['program'],
   version     = meta['version'],
