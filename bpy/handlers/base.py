@@ -21,6 +21,7 @@
 
 
 from abc import abstractmethod, ABCMeta
+import codecs
 from hashlib import md5
 from os.path import basename, splitext
 import re
@@ -57,8 +58,12 @@ class BaseHandler():
     self.options = self.OPTIONS.copy()
     self.options.update(options or {})
     if filename:
-      with open(filename) as f:
-        self.source = f.read()
+      with codecs.open(filename, 'r', 'utf8') as f:
+        # load file as utf8, then encoding into ut8 string, this would be
+        # easier without changing exchaging existing literl string into u'...'
+        # and better when b.py converts to Python 3 as libraries support
+        # Python 3.
+        self.source = f.read().encode('utf8')
       header, markup = self.split_header_markup()
       self.title = splitext(basename(filename))[0]
     else:
@@ -337,6 +342,7 @@ class BaseHandler():
     else:
       self.update_source()
 
-    with open(self.filename, 'w') as f:
-      f.write(self.source)
+    with codecs.open(self.filename, 'w', 'utf8') as f:
+      # decode back into Uncode string
+      f.write(self.source.decode('utf8'))
     self.modified = False
