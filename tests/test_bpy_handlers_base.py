@@ -98,6 +98,44 @@ post content'''
 
   # =====
 
+  def test_merge_header(self):
+
+    handler = self.handler
+    header = {'id': '123'}
+
+    handler.header = header.copy()
+    handler.merge_header(header.copy())
+    self.assertEqual(handler.header, header)
+
+    header['id'] = '456'
+    header['blah'] = 'lol'
+    handler.merge_header(header.copy())
+    del header['blah']
+    self.assertEqual(handler.header, header)
+
+    header['id'] = '789'
+    uheader = {'id': u'789'}
+    handler.merge_header(uheader.copy())
+    self.assertEqual(handler.header, header)
+    self.assertIsInstance(handler.header['id'], str)
+
+    header['id'] = '123'
+    uheader = {u'id': u'123'}
+    handler.merge_header(uheader.copy())
+    self.assertEqual(handler.header, header)
+    self.assertIsInstance(handler.header['id'], str)
+    self.assertEqual(handler.header.keys(), ['id'])
+    self.assertIsInstance(handler.header.keys()[0], str)
+
+    handler.header = {}
+    handler.merge_header(uheader.copy())
+    self.assertEqual(handler.header, header)
+    self.assertIsInstance(handler.header['id'], str)
+    self.assertEqual(handler.header.keys(), ['id'])
+    self.assertIsInstance(handler.header.keys()[0], str)
+
+  # =====
+
   def test_id_affix(self):
 
     handler = self.handler

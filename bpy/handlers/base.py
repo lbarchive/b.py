@@ -87,6 +87,10 @@ class BaseHandler():
     if k in self.header and self.header[k] == v:
       return
 
+    if isinstance(k, unicode):
+      k = k.encode('utf8')
+    if isinstance(v, unicode):
+      v = v.encode('utf8')
     self.header[k] = v
     self.modified = True
 
