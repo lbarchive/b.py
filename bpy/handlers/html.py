@@ -19,12 +19,35 @@
 # THE SOFTWARE.
 
 
-import doctest
+from bpy.handlers import base
+from bpy.util import utf8_encoded
 
-from bpy.handlers import base, asciidoc, html, mkd, rst, text
 
+class Handler(base.BaseHandler):
+  """Handler for HTML
 
-def load_tests(loader, tests, pattern):
-  for module in (base, asciidoc, html, mkd, rst, text):
-    tests.addTests(doctest.DocTestSuite(module))
-  return tests
+  >>> handler = Handler(None)
+  >>> print handler.generate_header({'title': 'foobar'})
+  <!-- !b
+  title: foobar
+  -->
+  <BLANKLINE>
+  """
+
+  PREFIX_HEAD = '<!-- '
+  PREFIX_END = '-->'
+  HEADER_FMT = '%s: %s'
+
+  def _generate(self, markup=None):
+    """Return markup untouched
+
+    This handler doesn't do anything to the markup.
+
+    >>> handler = Handler(None)
+    >>> print handler._generate('<br/>')
+    <br/>
+    """
+    if markup is None:
+      markup = self.markup
+
+    return utf8_encoded(markup)

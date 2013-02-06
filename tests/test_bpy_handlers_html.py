@@ -19,12 +19,13 @@
 # THE SOFTWARE.
 
 
-import doctest
+from bpy.handlers.html import Handler
 
-from bpy.handlers import base, asciidoc, html, mkd, rst, text
+import test_bpy_handlers_base as test_base
 
 
-def load_tests(loader, tests, pattern):
-  for module in (base, asciidoc, html, mkd, rst, text):
-    tests.addTests(doctest.DocTestSuite(module))
-  return tests
+class HandlerTestCase(test_base.BaseHandlerTestCase):
+
+  def setUp(self):
+
+    self.handler = Handler(None)

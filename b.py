@@ -40,7 +40,7 @@ __program__ = 'b.py'
 __description__ = 'Post to Blogger in markup language seamlessly'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
-__version__ = '0.2'
+__version__ = '0.3'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
@@ -97,6 +97,10 @@ handlers = {
   'AsciiDoc': {
     'match': re.compile(r'.*\.asciidoc$'),
     'module': path.join('bpy', 'handlers', 'asciidoc'),
+  },
+  'HTML': {
+    'match': re.compile(r'.*\.(html?|raw)$'),
+    'module': path.join('bpy', 'handlers', 'html'),
   },
   'Markdown': {
     'match': re.compile(r'.*\.(markdown|md(own)?|mkdn?)$'),

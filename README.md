@@ -10,7 +10,7 @@ Current status
 
 * Python: 2.7
 * System: Linux
-* Markup handlers: AsciiDoc, Markdown, reStructuredText, Text
+* Markup handlers: AsciiDoc, HTML, Markdown, reStructuredText, Text
 * Post data
 
     API v3 only supports `insert` and `update` on posts resources, no pages support at this moment.
@@ -159,6 +159,7 @@ Handlers
 Markup handlers and their IDs, libraries, and extensions:
 
 * [AsciiDoc][] (`AsciiDoc`): `.asciidoc`
+* HTML (`HTML`): `.html`, `.htm`, `.raw`
 * [Markdown][] (`Markdown`): `.md`, `.mkd`, `.mkdn`, `.mkdown`, `.markdown`
 * [reStructuredText][] (`reStructuredText`): `.rst`
 * Text (`Text`): `.txt`, `.text`
@@ -205,6 +206,12 @@ Currently supported markup handler:
 If `smartypants` is enabled, then all generated HTML from markup processor will be processed by [smartypants][] library.
 
 ### AsciiDoc
+
+No options are available at this moment.
+
+### HTML
+
+HTML handler simply takes the file content as its output, and assume it's valid HTML, therefore the handler doesn't edit or validate the content.
 
 No options are available at this moment.
 
