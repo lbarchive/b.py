@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,10 +21,10 @@
 
 import doctest
 
-from bpy.handlers import base, asciidoc, mkd, rst
+from bpy.handlers import base, asciidoc, mkd, rst, text
 
 
 def load_tests(loader, tests, pattern):
-  for module in (base, asciidoc, mkd, rst):
+  for module in (base, asciidoc, mkd, rst, text):
     tests.addTests(doctest.DocTestSuite(module))
   return tests

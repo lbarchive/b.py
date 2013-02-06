@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -181,22 +180,33 @@ post content'''
 
     test_header_override()
 
+  # =====
+
+  test_markup_affixes_EXPECT1 = 'prefix-content-suffix'
+  test_markup_affixes_EXPECT2 = 'foobar'
+  test_markup_affixes_EXPECT3 = 'title'
+
   def test_markup_affixes(self):
 
     handler = self.handler
     handler.title = 'title'
     handler.markup = 'content'
-    handler.options['markup_prefix'] = 'prefix>'
-    handler.options['markup_suffix'] = '<suffix'
+    handler.options['markup_prefix'] = 'prefix-'
+    handler.options['markup_suffix'] = '-suffix'
 
-    expect = 'prefix>content<suffix'
-    self.assertEqual(handler.generate(), expect)
+    self.assertEqual(
+      handler.generate(),
+      self.test_markup_affixes_EXPECT1)
 
-    expect = 'foobar'
-    self.assertEqual(handler.generate('foobar'), expect)
+    self.assertEqual(
+      handler.generate('foobar'),
+      self.test_markup_affixes_EXPECT2)
 
-    expect = 'title'
-    self.assertEqual(handler.generate_title(), expect)
+    self.assertEqual(
+      handler.generate_title(),
+      self.test_markup_affixes_EXPECT3)
+
+  # =====
 
   def test_split_header_markup(self):
 
@@ -222,6 +232,8 @@ post content'''
     self.assertEqual(header, expect)
     self.assertEqual(markup, 'post content')
 
+  # =====
+
   def test_generate_header(self):
 
     handler = self.handler
@@ -232,6 +244,30 @@ post content'''
       expect += handler.PREFIX_END + '\n'
 
     self.assertEqual(handler.generate_header(), expect)
+
+  # =====
+
+  test_generate_str_MARKUP = '\xc3\xa1'
+  test_generate_str_EXPECT = '\xc3\xa1'
+
+  def test_generate__str(self):
+
+    handler = self.handler
+
+    html = handler._generate(self.test_generate_str_MARKUP)
+    self.assertEqual(html, self.test_generate_str_EXPECT)
+    self.assertIsInstance(html, str)
+
+  def test_generate_str(self):
+
+    handler = self.handler
+    handler.markup = self.test_generate_str_MARKUP
+
+    html = handler.generate()
+    self.assertEqual(html, self.test_generate_str_EXPECT)
+    self.assertIsInstance(html, str)
+
+  # =====
 
   def test_generate_post(self):
 
@@ -252,6 +288,8 @@ post content'''
       'id': '123',
       'blog': {'id': '456'}
     })
+
+  # =====
 
   def test_update_source(self):
 

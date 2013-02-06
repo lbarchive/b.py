@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,19 +30,11 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
 
     self.handler = Handler(None)
 
-  def test_markup_affixes(self):
+  # =====
 
-    handler = self.handler
-    handler.title = 'title'
-    handler.markup = 'content'
-    handler.options['markup_prefix'] = 'prefix-'
-    handler.options['markup_suffix'] = '-suffix'
+  test_markup_affixes_EXPECT1 = '<p>prefix-content-suffix</p>'
+  test_markup_affixes_EXPECT2 = '<p>foobar</p>'
 
-    expect = '<p>prefix-content-suffix</p>'
-    self.assertEqual(handler.generate(), expect)
+  # =====
 
-    expect = '<p>foobar</p>'
-    self.assertEqual(handler.generate('foobar'), expect)
-
-    expect = 'title'
-    self.assertEqual(handler.generate_title(), expect)
+  test_generate_str_EXPECT = '<p>\xc3\xa1</p>'

@@ -19,37 +19,54 @@
 # THE SOFTWARE.
 
 
-import markdown
+import cgi
+
 from bpy.handlers import base
 from bpy.util import utf8_encoded
 
 
 class Handler(base.BaseHandler):
-  """Handler for Markdown markup language
+  """Handler for plain text
 
   >>> handler = Handler(None)
+  >>> handler.markup = 'post <content>\\n & something'
+  >>> print handler.generate()
+  post &lt;content&gt;<br/>
+   &amp; something
+  >>> handler.options['pre_wrap'] = True
+  >>> print handler.generate()
+  <pre>post &lt;content&gt;
+   &amp; something</pre>
+  >>> handler = Handler(None)
   >>> print handler.generate_header({'title': 'foobar'})
-  <!-- !b
+  !b
   title: foobar
-  -->
   <BLANKLINE>
   """
 
-  PREFIX_HEAD = '<!-- '
-  PREFIX_END = '-->'
+  PREFIX_HEAD = ''
+  PREFIX_END = ''
   HEADER_FMT = '%s: %s'
 
   @utf8_encoded
   def _generate(self, markup=None):
-    """Generate HTML from Markdown
+    """Generate HTML from plain text
 
     >>> handler = Handler(None)
-    >>> print handler._generate('a *b*')
-    <p>a <em>b</em></p>
+    >>> print handler._generate('a < b\\nc & d\\n\\xc3\\xa1')
+    a &lt; b<br/>
+    c &amp; d<br/>
+    \xc3\xa1
+    >>> handler.options['pre_wrap'] = True
+    >>> print handler._generate('abc\\ndef')
+    <pre>abc
+    def</pre>
     """
     if markup is None:
       markup = self.markup
 
-    # markdown library only accepts unicode, utf8 encoded str results in error.
-    markup = markup.decode('utf8')
-    return markdown.markdown(markup, **self.options.get('config', {}))
+    html = cgi.escape(markup.decode('utf8'))
+    if self.options.get('pre_wrap', False):
+      return '<pre>%s</pre>' % html
+    else:
+      return html.replace('\n', '<br/>\n')

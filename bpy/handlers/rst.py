@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright (C) 2011-2013 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,6 +26,7 @@ from docutils.parsers.rst import Directive, directives, roles
 from xml.sax.saxutils import escape
 
 from bpy.handlers import base
+from bpy.util import utf8_encoded
 
 
 def register_directive(dir_name):
@@ -201,6 +201,7 @@ class Handler(base.BaseHandler):
   PREFIX_END = ''
   HEADER_FMT = '   %s: %s'
 
+  @utf8_encoded
   def _generate(self, markup=None):
     """Generate HTML from Markdown
 

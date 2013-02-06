@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # Copyright (C) 2013 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,6 +27,8 @@ import re
 
 import smartypants
 from smartypants import smartyPants
+
+from bpy.util import utf8_encoded
 
 
 class BaseHandler():
@@ -204,6 +205,7 @@ class BaseHandler():
     """Generate HTML of markup source"""
     raise NotImplementedError
 
+  @utf8_encoded
   def generate(self, markup=None):
     """Generate HTML
 
@@ -230,7 +232,7 @@ class BaseHandler():
       smartypants.tags_to_skip_regex = RE
       html = smartyPants(html)
 
-    return html.encode('utf-8')
+    return html
 
   def generate_header(self, header=None):
     """Generate header in text for writing back to the file

@@ -19,22 +19,19 @@
 # THE SOFTWARE.
 
 
-from bpy.handlers.mkd import Handler
+def utf8_encoded(f):
+  """Encode string to utf8 if it is unicode
 
-import test_bpy_handlers_base as test_base
-
-
-class HandlerTestCase(test_base.BaseHandlerTestCase):
-
-  def setUp(self):
-
-    self.handler = Handler(None)
-
-  # =====
-
-  test_markup_affixes_EXPECT1 = '<p>prefix-content-suffix</p>'
-  test_markup_affixes_EXPECT2 = '<p>foobar</p>'
-
-  # =====
-
-  test_generate_str_EXPECT = '<p>\xc3\xa1</p>'
+  >>> f = lambda: u'\\u2190'
+  >>> print repr(utf8_encoded(f)())
+  '\\xe2\\x86\\x90'
+  >>> f = lambda: '\\xe2\\x86\\x90'
+  >>> print repr(utf8_encoded(f)())
+  '\\xe2\\x86\\x90'
+  """
+  def func(*args, **kwds):
+    string = f(*args, **kwds)
+    if isinstance(string, unicode):
+      return string.encode('utf8')
+    return string
+  return func
