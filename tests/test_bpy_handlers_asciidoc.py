@@ -37,4 +37,8 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
 
   # =====
 
+  test_generate_title_common_markup_EXPECT = 'foo <strong>bar</strong>'
+
+  # =====
+
   test_generate_str_EXPECT = '<p>\xc3\xa1</p>'

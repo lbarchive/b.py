@@ -39,7 +39,6 @@ class Handler(base.BaseHandler):
   PREFIX_END = '-->'
   HEADER_FMT = '%s: %s'
 
-  @utf8_encoded
   def _generate(self, markup=None):
     """Generate HTML from Markdown
 
@@ -52,4 +51,5 @@ class Handler(base.BaseHandler):
 
     # markdown library only accepts unicode, utf8 encoded str results in error.
     markup = markup.decode('utf8')
-    return markdown.markdown(markup, **self.options.get('config', {}))
+    html = markdown.markdown(markup, **self.options.get('config', {}))
+    return utf8_encoded(html)

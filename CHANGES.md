@@ -3,7 +3,8 @@ CHANGES
 
 ## Development
 
- * fix update_source cannot handle unicode and utf8 enocded str by ensuring everything is utf8 encoded internally
+ * fix `update_source` cannot handle unicode and utf8 enocded str by ensuring everything is utf8 encoded internally
+ * add Text handler for plain text
 
 ## Version 0.2 (2013-02-02T12:02:10Z)
 

@@ -285,8 +285,7 @@ class BaseHandler():
     title = self.generate(title)
     title = title.replace('<p>', '').replace('</p>', '')
     # no trailing newlines
-    title = title.rstrip('\n')
-    title = title.replace('\n', ' ')
+    title = re.sub(r'\n+', ' ', title).rstrip()
     return title
 
   def generate_post(self):

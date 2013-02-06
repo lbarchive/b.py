@@ -10,12 +10,7 @@ Current status
 
 * Python: 2.7
 * System: Linux
-* Markup handlers
-
-    * AsciiDoc
-    * Markdown
-    * reStructuredText
-
+* Markup handlers: AsciiDoc, Markdown, reStructuredText, Text
 * Post data
 
     API v3 only supports `insert` and `update` on posts resources, no pages support at this moment.
@@ -113,7 +108,7 @@ If it runs without problem, then open the file again, the header part would have
 
 The detail of header, please see *Header* section.
 
-Now, you spot there is a typo `frm` and you edit it. To update the post, run the same command as posting:
+Now, you spot there is a typo `frm` and you fix it. To update the post, run the same command as posting:
 
     $ b.py post my-first-post.rst
 
@@ -161,11 +156,16 @@ It's the configuration that *b.py* reads from current working directory. Current
 Handlers
 --------
 
-Markup handlers and their IDs:
+Markup handlers and their IDs, libraries, and extensions:
 
-* AsciiDoc: `AsciiDoc`
-* Markdown: `Markdown`
-* reStructuredText: `reStructuredText`
+* [AsciiDoc][] (`AsciiDoc`): `.asciidoc`
+* [Markdown][] (`Markdown`): `.md`, `.mkd`, `.mkdn`, `.mkdown`, `.markdown`
+* [reStructuredText][] (`reStructuredText`): `.rst`
+* Text (`Text`): `.txt`, `.text`
+
+[AsciiDoc]: http://www.methods.co.nz/asciidoc/
+[Markdown]: http://pypi.python.org/pypi/Markdown
+[reStructuredText]: http://docutils.sourceforge.net/rst.html
 
 ### General options
 
@@ -240,6 +240,22 @@ You can specify [settings-overrides][] for reStructuredText in `brc.py`, for exa
       },
     }
 
+### Text
+
+The Text handler for plain text always escape HTML, and add `<br/>` if not `pre_wrap`.
+
+You can specify the following options for plain text in `brc.py`, for example:
+
+    :::python
+    handlers = {
+      'Text': {
+        'options': {
+          'pre_wrap': False
+        },
+      },
+    }
+
+`pre_wrap` will wrap output in `<pre/>` tag.
 
 ### Writing a custom handler
 

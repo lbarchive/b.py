@@ -201,7 +201,6 @@ class Handler(base.BaseHandler):
   PREFIX_END = ''
   HEADER_FMT = '   %s: %s'
 
-  @utf8_encoded
   def _generate(self, markup=None):
     """Generate HTML from Markdown
 
@@ -229,4 +228,5 @@ class Handler(base.BaseHandler):
                               settings_overrides=settings_overrides,
                               writer_name="html")
 
-    return doc_parts['body_pre_docinfo'] + doc_parts['body'].rstrip()
+    html = doc_parts['body_pre_docinfo'] + doc_parts['body'].rstrip()
+    return utf8_encoded(html)

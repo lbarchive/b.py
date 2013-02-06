@@ -247,6 +247,37 @@ post content'''
 
   # =====
 
+  def test_generate_title_oneline(self):
+
+    handler = self.handler
+    title = 'foobar'
+    expect = 'foobar'
+
+    result = handler.generate_title(title)
+    self.assertEqual(result, expect)
+
+  def test_generate_title_multiline(self):
+
+    handler = self.handler
+    title = 'foo\nbar\n\nblah'
+    expect = 'foo bar blah'
+
+    result = handler.generate_title(title)
+    self.assertEqual(result, expect)
+
+  test_generate_title_common_markup_EXPECT = 'foo *bar*'
+
+  def test_generate_title_common_markup(self):
+
+    handler = self.handler
+    title = 'foo *bar*'
+
+    result = handler.generate_title(title)
+    expect = self.test_generate_title_common_markup_EXPECT
+    self.assertEqual(result, expect)
+
+  # =====
+
   test_generate_str_MARKUP = '\xc3\xa1'
   test_generate_str_EXPECT = '\xc3\xa1'
 

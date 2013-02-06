@@ -24,6 +24,7 @@ import StringIO
 
 from bpy.api.asciidocapi import AsciiDocAPI
 from bpy.handlers import base
+from bpy.util import utf8_encoded
 
 
 class Handler(base.BaseHandler):
@@ -46,6 +47,13 @@ class Handler(base.BaseHandler):
     >>> handler = Handler(None)
     >>> print handler._generate('a *b*')
     <p>a <strong>b</strong></p>
+    >>> print handler._generate('a\\nb')
+    <p>a
+    b</p>
+    >>> print handler._generate('a\\nb\\n\\nc')
+    <p>a
+    b</p>
+    <p>c</p>
     """
     if markup is None:
       markup = self.markup
@@ -56,4 +64,5 @@ class Handler(base.BaseHandler):
     asciidoc.options('--no-header-footer')
     asciidoc.execute(infile, outfile, backend='html4')
 
-    return outfile.getvalue().rstrip()
+    html = outfile.getvalue().replace('\r\n', '\n').rstrip()
+    return utf8_encoded(html)

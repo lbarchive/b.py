@@ -106,6 +106,10 @@ handlers = {
     'match': re.compile(r'.*\.rst$'),
     'module': path.join('bpy', 'handlers', 'rst'),
   },
+  'Text': {
+    'match': re.compile(r'.*\.te?xt$'),
+    'module': path.join('bpy', 'handlers', 'text'),
+  },
 }
 
 

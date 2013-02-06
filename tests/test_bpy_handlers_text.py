@@ -19,14 +19,33 @@
 # THE SOFTWARE.
 
 
-def utf8_encoded(string):
-  """Encode string to utf8 if it is unicode
+from bpy.handlers.text import Handler
 
-  >>> print repr(utf8_encoded(u'\\u2190'))
-  '\\xe2\\x86\\x90'
-  >>> print repr(utf8_encoded('\\xe2\\x86\\x90'))
-  '\\xe2\\x86\\x90'
-  """
-  if isinstance(string, unicode):
-    return string.encode('utf8')
-  return string
+import test_bpy_handlers_base as test_base
+
+
+class HandlerTestCase(test_base.BaseHandlerTestCase):
+
+  def setUp(self):
+
+    self.handler = Handler(None)
+
+  # =====
+
+  def test_generate_title_pre_wrap_oneline(self):
+
+    handler = self.handler
+    handler.options['pre_wrap'] = True
+    super(HandlerTestCase, self).test_generate_title_oneline()
+
+  def test_generate_pre_wrap_multiline(self):
+
+    handler = self.handler
+    handler.options['pre_wrap'] = True
+    super(HandlerTestCase, self).test_generate_title_multiline()
+
+  def test_generate_pre_wrap_common_markup(self):
+
+    handler = self.handler
+    handler.options['pre_wrap'] = True
+    super(HandlerTestCase, self).test_generate_title_common_markup()

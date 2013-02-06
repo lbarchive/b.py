@@ -20,6 +20,7 @@
 
 
 import cgi
+import re
 
 from bpy.handlers import base
 from bpy.util import utf8_encoded
@@ -48,7 +49,17 @@ class Handler(base.BaseHandler):
   PREFIX_END = ''
   HEADER_FMT = '%s: %s'
 
-  @utf8_encoded
+  def generate_title(self, markup=None):
+    """Generate HTML from plain text
+
+    >>> handler = Handler(None)
+    >>> print handler.generate_title('a < b\\nc & d\\n\\nfoo')
+    a &lt; b c &amp; d foo
+    """
+    html = super(Handler, self).generate_title(markup)
+    html = html.replace('<pre>', '').replace('</pre>', '')
+    return re.sub('(<br/> )+', ' ', html)
+
   def _generate(self, markup=None):
     """Generate HTML from plain text
 
@@ -66,6 +77,7 @@ class Handler(base.BaseHandler):
       markup = self.markup
 
     html = cgi.escape(markup.decode('utf8'))
+    html = utf8_encoded(html)
     if self.options.get('pre_wrap', False):
       return '<pre>%s</pre>' % html
     else:
