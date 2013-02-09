@@ -261,17 +261,17 @@ For adding your own custom reStructuredText directives or roles, you can do it i
 * by adding in b.py's option as shown above, or
 * by using decorator of b.py, for example:
 
-    :::python
-    from docutils.parsers.rst import Directive
-    from bpy.handlers.rst import register_directive, register_role
+        :::python
+        from docutils.parsers.rst import Directive
+        from bpy.handlers.rst import register_directive, register_role
 
-    @register_directive('mydir')
-    class MyDir(Directive):
-      pass
+        @register_directive('mydir')
+        class MyDir(Directive):
+          pass
 
-    @register_role('myrole')
-    def myrole(name, rawtext, text, lineno, inliner, options=None, content=None):
-      pass
+        @register_role('myrole')
+        def myrole(name, rawtext, text, lineno, inliner, options=None, content=None):
+          pass
 
 ### Text
 
