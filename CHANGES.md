@@ -3,6 +3,9 @@ CHANGES
 
 ## Development
 
+ * add `register_directives` and `register_roles` options of rst handler
+ * remove all existing directives and roles of rst handler
+
 ## Version 0.3 (2013-02-06T11:31:43Z)
 
  * fix `update_source` cannot handle unicode and utf8 enocded str by ensuring everything is utf8 encoded internally

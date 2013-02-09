@@ -19,11 +19,8 @@
 # THE SOFTWARE.
 
 
-import subprocess
-from docutils import nodes
 from docutils.core import publish_parts
-from docutils.parsers.rst import Directive, directives, roles
-from xml.sax.saxutils import escape
+from docutils.parsers.rst import directives, roles
 
 from bpy.handlers import base
 from bpy.util import utf8_encoded
@@ -52,141 +49,6 @@ def register_role(role_name):
   return _register_role
 
 
-# YouTube video embedding by Jason Stitt. MIT License
-# http://countergram.com/youtube-in-rst
-# TODO convert to class style, so it will read a bit cleaner
-# TODO support iframe style
-def youtube(name, args, options, content, lineno,
-            contentOffset, blockText, state, stateMachine):
-    """ Restructured text extension for inserting youtube embedded videos """
-    CODE = """\
-    <object type="application/x-shockwave-flash"
-            width="%(width)s"
-            height="%(height)s"
-            class="youtube-embed"
-            data="http://www.youtube.com/v/%(yid)s">
-        <param name="movie" value="http://www.youtube.com/v/%(yid)s"></param>
-        <param name="wmode" value="transparent"></param>%(extra)s
-    </object>
-    """
-
-    PARAM = """\n    <param name="%s" value="%s"></param>"""
-
-    if len(content) == 0:
-        return
-    string_vars = {
-        'yid': content[0],
-        'width': 425,
-        'height': 344,
-        'extra': ''
-    }
-    extra_args = content[1:]  # Because content[0] is ID
-    extra_args = [ea.strip().split("=") for ea in extra_args]  # key=value
-    extra_args = [ea for ea in extra_args if len(ea) == 2]  # drop bad lines
-    extra_args = dict(extra_args)
-    if 'width' in extra_args:
-        string_vars['width'] = extra_args.pop('width')
-    if 'height' in extra_args:
-        string_vars['height'] = extra_args.pop('height')
-    if extra_args:
-        params = [PARAM % (key, extra_args[key]) for key in extra_args]
-        string_vars['extra'] = "".join(params)
-    return [nodes.raw('', CODE % (string_vars), format='html')]
-youtube.content = True
-directives.register_directive('youtube', youtube)
-
-
-@register_directive('precode')
-class PreCode(Directive):
-  """Generate HTML as <pre><code> style for highlight.js"""
-  optional_arguments = 1
-  option_spec = {'class': directives.unchanged}
-  has_content = True
-
-  @staticmethod
-  def _run(code, lang=None, options=None):
-    if options is None:
-      options = {}
-
-    if lang:
-      tmpl = '<code class="%s">%%s</code>' % lang
-    else:
-      tmpl = '<code>%s</code>'
-
-    if 'class' in options:
-      tmpl = ('<pre class="%s">' % options['class']) + tmpl + '</pre>'
-    else:
-      tmpl = '<pre>' + tmpl + '</pre>'
-
-    html = tmpl % escape(code)
-    return html
-
-  def run(self):
-
-    lang = self.arguments[0] if len(self.arguments) else None
-    raw = nodes.raw(
-      '',
-      self._run('\n'.join(self.content), lang, self.options),
-      format='html'
-    )
-    return [raw]
-
-
-@register_directive('pyrun')
-class PyRun(Directive):
-  """Append the output of Python code
-
-  The encoding definition may be required when use Unicode characters:
-
-    # -*- coding: utf-8 -*-
-  """
-  # TODO expand this to arbitrary command
-  option_spec = {'command': directives.unchanged,
-                 'class': directives.unchanged,
-                 }
-  has_content = True
-
-  def _generate_std(self, content):
-
-    content = escape(content.decode('utf-8'))
-    return nodes.raw(
-      '',
-      '<pre class="pyrun stdout">%s</pre>' % content,
-      format='html'
-    )
-
-  def run(self):
-    code = '\n'.join(self.content)
-
-    cmd = 'python'
-    if 'command' in self.options:
-      cmd = self.options['command']
-    proc = subprocess.Popen((cmd, '-'),
-                            stdin=subprocess.PIPE,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    stdout, stderr = proc.communicate(code.encode('utf-8'))
-
-    raws = [nodes.raw(
-      '',
-      PreCode._run(code, self.options.get('class', 'python'), self.options),
-      format='html'
-    )]
-    if not stdout:
-      stdout = '*** NO OUTPUT ***'
-    raws.append(self._generate_std(stdout))
-    if stderr:
-      raws.append(self._generate_std(stderr))
-    return raws
-
-
-@register_role('kbd')
-def kbd(name, rawtext, text, lineno, inliner, options=None, content=None):
-  """Generate kbd element"""
-
-  return [nodes.raw('', '<kbd>%s</kbd>' % text, format='html')], []
-
-
 class Handler(base.BaseHandler):
   """Handler for reStructuredText markup language
 
@@ -200,6 +62,18 @@ class Handler(base.BaseHandler):
   PREFIX_HEAD = '.. '
   PREFIX_END = ''
   HEADER_FMT = '   %s: %s'
+
+  def __init__(self, filename, options=None):
+
+    super(Handler, self).__init__(filename, options)
+
+    if not options:
+      return
+
+    for dir_name, directive in options.get('register_directives', {}).items():
+      directives.register_directive(dir_name, directive)
+    for role_name, role in options.get('register_roles', {}).items():
+      roles.register_canonical_role(role_name, role)
 
   def _generate(self, markup=None):
     """Generate HTML from Markdown

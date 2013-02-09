@@ -240,12 +240,38 @@ You can specify [settings-overrides][] for reStructuredText in `brc.py`, for exa
     handlers = {
       'reStructuredText': {
         'options': {
+          'register_directives': {
+            'dir_name': MyDir,
+          },
+          'register_roles': {
+            'role_name': MyRole,
+          },
           'settings_overrides': {
             'footnote_references': 'brackets',
           },
         },
       },
     }
+
+#### Custom Directives and Roles
+
+For adding your own custom reStructuredText directives or roles, you can do it in `brc.py` with one of the following method:
+
+* by calling register functions of docutils directly,
+* by adding in b.py's option as shown above, or
+* by using decorator of b.py, for example:
+
+    :::python
+    from docutils.parsers.rst import Directive
+    from bpy.handlers.rst import register_directive, register_role
+
+    @register_directive('mydir')
+    class MyDir(Directive):
+      pass
+
+    @register_role('myrole')
+    def myrole(name, rawtext, text, lineno, inliner, options=None, content=None):
+      pass
 
 ### Text
 
