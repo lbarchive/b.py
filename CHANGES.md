@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+## Version 0.3.1 (2013-02-09T09:41:19Z)
+
  * add `register_directives` and `register_roles` options of rst handler
  * remove all existing directives and roles of rst handler
 
