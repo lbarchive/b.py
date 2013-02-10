@@ -22,7 +22,7 @@
 from docutils import nodes
 from docutils.parsers.rst import Directive
 
-from bpy.handlers.rst import Handler
+from bpy.handlers.rst import Handler, register_directive, register_role
 
 import test_bpy_handlers_base as test_base
 
@@ -34,6 +34,36 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
     self.handler = Handler(None)
 
   # =====
+
+  def test_options_register_directive_decorator(self):
+
+    source = '.. dtestdir::'
+    expect = '<p>TEST</p>'
+
+    @register_directive('dtestdir')
+    class dTestDir(Directive):
+
+      def run(self):
+
+        return [nodes.raw('', expect, format='html')]
+
+    handler = Handler(None)
+
+    self.assertEqual(handler.generate(source), expect)
+
+  def test_options_register_role_decorator(self):
+
+    source = 'abc :dtestrole:`123` def'
+    expect = '<p>abc <em>TEST</em> def</p>'
+
+    @register_role('dtestrole')
+    def dTestRole(*args, **kwds):
+
+      return [nodes.raw('', '<em>TEST</em>', format='html')], []
+
+    handler = Handler(None)
+
+    self.assertEqual(handler.generate(source), expect)
 
   def test_options_register_directives(self):
 
