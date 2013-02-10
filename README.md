@@ -28,6 +28,7 @@ Current status
     * Unittest: `python setup.py test`
     * PEP8 (4-space indentation is ignored): `python setup.py pep8`
     * Pyflakes: `python setup.py pyflakes`
+    * Pylint: `python setup.py pylint`
 
 I wish *b.py* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 

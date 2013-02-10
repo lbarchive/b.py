@@ -152,6 +152,46 @@ class cmd_pyflakes(Command):
     print
     print 'Total warnings: %d' % warnings
 
+
+class cmd_pylint(Command):
+
+  description = 'run Pylint'
+  user_options = []
+
+  def initialize_options(self):
+
+    pass
+
+  def finalize_options(self):
+
+    pass
+
+  def run(self):
+
+    from glob import glob
+    try:
+      from pylint import lint
+    except ImportError:
+      print >> sys.stderr, ('Cannot import pylint, you forgot to install?\n'
+                            'run `pip install pylint` to install.')
+      sys.exit(1)
+
+    print
+    print 'Options'
+    print '======='
+    print
+    print 'Exclude:', EXCLUDE_SCRIPTS
+
+    files = ['setup.py', 'b.py', 'bpy'] + glob('tests/*.py')
+    args = [
+      '--ignore=%s' % ','.join(EXCLUDE_SCRIPTS),
+      '--output-format=colorized',
+      '--include-ids=y',
+      '--indent-string="  "',
+    ] + files
+    print
+    lint.Run(args)
+
 # ============================================================================
 
 with open(script_name) as f:
@@ -202,6 +242,7 @@ setup_d = dict(
   cmdclass={
     'pep8': cmd_pep8,
     'pyflakes': cmd_pyflakes,
+    'pylint': cmd_pylint,
     'test': cmd_test,
   },
   classifiers=classifiers,

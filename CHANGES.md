@@ -4,6 +4,7 @@ CHANGES
 ## Development
 
  * add tests for `register_directive` and `register_role` decorators
+ * add setup.py pylint command
 
 ## Version 0.3.1 (2013-02-09T09:41:19Z)
 
