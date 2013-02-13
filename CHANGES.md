@@ -3,8 +3,11 @@ CHANGES
 
 ## Development
 
+## Version 0.4 (2013-02-13T13:33:19Z)
+
  * add tests for `register_directive` and `register_role` decorators
  * add setup.py pylint command
+ * add linkcheck command for checking links
 
 ## Version 0.3.1 (2013-02-09T09:41:19Z)
 

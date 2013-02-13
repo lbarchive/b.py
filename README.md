@@ -79,6 +79,10 @@ Generate HTML file at `/tmp/draft.html`.
 
 The generation can output a preview html at `/tmp/preview.html` if there is `tmpl.html`. It will replace `%%Title%%` with post title and `%%Content%%` with generated HTML.
 
+### `checklink`
+
+Check links in generated HTML using [lnkckr][].
+
 Work (post) flow
 ----------------
 
@@ -347,3 +351,4 @@ License
 [settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
 [issues]: https://bitbucket.org/livibetter/b.py/issues
 [PyPI]: http://pypi.python.org/pypi/b.py
+[lnkckr]: https://bitbucket.org/livibetter/lnkckr

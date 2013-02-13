@@ -27,6 +27,7 @@ import os
 from os import path
 from os.path import dirname, expanduser, realpath
 import re
+from StringIO import StringIO
 import sys
 import traceback
 
@@ -35,12 +36,18 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage as BaseStorage
 from oauth2client.tools import run
 
+HAS_LNKCKR = False
+try:
+  from lnkckr.checkers.html import Checker
+  HAS_LNKCKR = True
+except ImportError:
+  pass
 
 __program__ = 'b.py'
 __description__ = 'Post to Blogger in markup language seamlessly'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
-__version__ = '0.3.1'
+__version__ = '0.4'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
@@ -128,6 +135,10 @@ def parse_args():
   pgen = sp.add_parser('generate', help='generate html')
   pgen.add_argument('filename')
   pgen.set_defaults(subparser=pgen, command='generate')
+
+  pgen = sp.add_parser('checklink', help='check links in generateed html')
+  pgen.add_argument('filename')
+  pgen.set_defaults(subparser=pgen, command='checklink')
 
   ppost = sp.add_parser('post', help='post or update a blog post')
   ppost.add_argument('filename')
@@ -246,7 +257,7 @@ def main():
     print '%-20s: %s' % ('Blog ID', 'Blog name')
     for blog in resp['items']:
       print '%-20s: %s' % (blog['id'], blog['name'])
-  elif args.command in ('generate', 'post'):
+  elif args.command in ('generate', 'checklink', 'post'):
     handler = find_handler(args.filename)
     if not handler:
       print 'No handler for the file!'
@@ -275,6 +286,16 @@ def main():
         html = html.replace('%%Content%%', post['content'])
         with open('/tmp/preview.html', 'w') as f:
           f.write(html)
+      return
+    elif args.command == 'checklink':
+      if not HAS_LNKCKR:
+        print 'You do not have lnkckr library'
+        return
+      c = Checker()
+      c.process(StringIO(post['content']))
+      c.check()
+      c.print_report()
+      c.print_summary()
       return
 
     if 'blog' not in post:
