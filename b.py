@@ -132,13 +132,18 @@ def parse_args():
   pblogs = sp.add_parser('blogs', help='list blogs')
   pblogs.set_defaults(subparser=pblogs, command='blogs')
 
+  psearch = sp.add_parser('search', help='search for posts')
+  psearch.add_argument('-b', '--blog', help='Blog ID')
+  psearch.add_argument('q', nargs='+', help='query text')
+  psearch.set_defaults(subparser=psearch, command='search')
+
   pgen = sp.add_parser('generate', help='generate html')
   pgen.add_argument('filename')
   pgen.set_defaults(subparser=pgen, command='generate')
 
-  pgen = sp.add_parser('checklink', help='check links in generateed html')
-  pgen.add_argument('filename')
-  pgen.set_defaults(subparser=pgen, command='checklink')
+  pchk = sp.add_parser('checklink', help='check links in chkerateed html')
+  pchk.add_argument('filename')
+  pchk.set_defaults(subparser=pchk, command='checklink')
 
   ppost = sp.add_parser('post', help='post or update a blog post')
   ppost.add_argument('filename')
@@ -213,6 +218,34 @@ def posting(post, http, service):
   return resp
 
 
+def do_search(rc, args):
+
+  http, service = get_http_service()
+  posts = service.posts()
+  if args.blog:
+    blog_id = args.blog
+  elif hasattr(rc, 'blog'):
+    blog_id = rc.blog
+  else:
+    print >> sys.stderr, 'no blog ID to search'
+    sys.exit(1)
+  q = ' '.join(args.q)
+  fields = 'items(labels,published,title,url)'
+  req = posts.search(blogId=blog_id, q=q, fields=fields)
+  resp = req.execute(http=http)
+  items = resp.get('items', [])
+  print 'Found %d posts on Blog %s' % (len(items), blog_id)
+  print
+  for post in items:
+    print post['title']
+    labels = post.get('labels', [])
+    if labels:
+      print 'Labels:', ', '.join(labels)
+    print 'Published:', post['published']
+    print post['url']
+    print
+
+
 def get_http_service():
 
   global http, service
@@ -257,6 +290,8 @@ def main():
     print '%-20s: %s' % ('Blog ID', 'Blog name')
     for blog in resp['items']:
       print '%-20s: %s' % (blog['id'], blog['name'])
+  elif args.command == 'search':
+    do_search(rc, args)
   elif args.command in ('generate', 'checklink', 'post'):
     handler = find_handler(args.filename)
     if not handler:

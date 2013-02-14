@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+ * add `do_search` for very simple search command
+
 ## Version 0.4 (2013-02-13T13:33:19Z)
 
  * add tests for `register_directive` and `register_role` decorators
