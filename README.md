@@ -228,7 +228,7 @@ You can specify [configuration][markdown-config] for Python Markdown in `brc.py`
     handlers = {
       'Markdown': {
         'options': {
-          config: {
+          'config': {
             'extensions': ['extension1', 'extension2'],
             'tab_length': 8,
           },
