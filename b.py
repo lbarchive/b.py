@@ -127,6 +127,8 @@ handlers = {
 def parse_args():
 
   p = ap.ArgumentParser()
+  p.add_argument('--version', action='version',
+                 version='%(prog)s ' + __version__)
   sp = p.add_subparsers(help='commands')
 
   pblogs = sp.add_parser('blogs', help='list blogs')

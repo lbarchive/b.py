@@ -4,6 +4,7 @@ CHANGES
 ## Development
 
  * add `do_search` for very simple search command
+ * add `--version` option
 
 ## Version 0.4 (2013-02-13T13:33:19Z)
 
