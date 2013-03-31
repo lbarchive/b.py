@@ -3,8 +3,11 @@ CHANGES
 
 ## Development
 
+## Version 0.4.1 (2013-03-31T14:02:39Z)
+
  * add `do_search` for very simple search command
  * add `--version` option
+ * fix unclear message, NameError on `CLIENT_SECRETS`, when `client_secrets.json` isn't in the search path. (#10)
 
 ## Version 0.4 (2013-02-13T13:33:19Z)
 

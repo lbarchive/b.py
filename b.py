@@ -47,7 +47,7 @@ __program__ = 'b.py'
 __description__ = 'Post to Blogger in markup language seamlessly'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
-__version__ = '0.4'
+__version__ = '0.4.1'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
@@ -64,11 +64,13 @@ service = None
 search_path = [
   dirname(realpath(sys.argv[0])),
   '/usr/share/' + __program__,
+  '/usr/local/share/' + __program__,
   '~/share/' + __program__,
   '~/.local/share/' + __program__,
 ]
 search_path = [expanduser(p + '/client_secrets.json') for p in search_path]
 search_path = filter(path.exists, search_path)
+CLIENT_SECRETS = ''
 if search_path:
   CLIENT_SECRETS = search_path[0]
 API_SCOPE = 'https://www.googleapis.com/auth/blogger'
