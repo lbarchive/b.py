@@ -5,6 +5,8 @@ b.py
 
 **b.py** is a Python program which enables [Blogger][] bloggers to blog from command-line.
 
+[TOC]
+
 Current status
 --------------
 
@@ -45,6 +47,18 @@ Installation
 ------------
 
     $ pip install b.py
+
+Or install to user-site, meaning no root required and install at your home directory:
+
+    $ pip install --user b.py
+
+To upgrade:
+
+    $ pip install --upgrade b.py
+
+To uninstall:
+
+    $ pip uninstall b.py
 
 ### Authorization
 
