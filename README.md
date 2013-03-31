@@ -5,6 +5,8 @@ b.py
 
 **b.py** is a Python program which enables [Blogger][] bloggers to blog from command-line.
 
+**Contents**
+
 [TOC]
 
 Current status
