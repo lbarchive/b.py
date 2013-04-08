@@ -234,10 +234,6 @@ packages = [
   'bpy.handlers',
 ]
 
-data_files = [
-  ('share/' + script_name, ['client_secrets.json']),
-]
-
 setup_d = dict(
   cmdclass={
     'pep8': cmd_pep8,
@@ -248,7 +244,6 @@ setup_d = dict(
   classifiers=classifiers,
   scripts=[script_name],
   packages=packages,
-  data_files=data_files,
   **meta
 )
 

@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+ * remove `client_secrets.json`, now its data is included in code. (#11)
+
 ## Version 0.4.1 (2013-03-31T14:02:39Z)
 
  * add `do_search` for very simple search command

@@ -25,14 +25,13 @@ import httplib2
 import imp
 import os
 from os import path
-from os.path import dirname, expanduser, realpath
 import re
 from StringIO import StringIO
 import sys
 import traceback
 
 from apiclient.discovery import build
-from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage as BaseStorage
 from oauth2client.tools import run
 
@@ -60,21 +59,6 @@ __email__ = 'livibetter@gmail.com'
 http = None
 service = None
 
-# filename of credentials
-search_path = [
-  dirname(realpath(sys.argv[0])),
-  '/usr/share/' + __program__,
-  '/usr/local/share/' + __program__,
-  '~/share/' + __program__,
-  '~/.local/share/' + __program__,
-]
-search_path = [expanduser(p + '/client_secrets.json') for p in search_path]
-search_path = filter(path.exists, search_path)
-CLIENT_SECRETS = ''
-if search_path:
-  CLIENT_SECRETS = search_path[0]
-API_SCOPE = 'https://www.googleapis.com/auth/blogger'
-NOTFOUND_MESSAGE = 'Could not found client_secrets.json'
 API_STORAGE = 'b.dat'
 
 
@@ -257,9 +241,13 @@ def get_http_service():
   if http and service:
     return http, service
 
-  FLOW = flow_from_clientsecrets(CLIENT_SECRETS,
-                                 scope=API_SCOPE,
-                                 message=NOTFOUND_MESSAGE)
+  FLOW = OAuth2WebServerFlow(
+    '56045325640.apps.googleusercontent.com',
+    'xCzmIv2FUWxeQzA5yJvm4w9U',
+    'https://www.googleapis.com/auth/blogger',
+    auth_uri='https://accounts.google.com/o/oauth2/auth',
+    token_uri='https://accounts.google.com/o/oauth2/token',
+  )
 
   storage = Storage(API_STORAGE)
   credentials = storage.get()
