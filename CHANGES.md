@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+## Version 0.5.0 (2013-07-25T02:55:42Z)
+
  * remove `client_secrets.json`, now its data is included in code. (#11)
  * fix checklink output, use lnkckr's `print_all()`.
 
