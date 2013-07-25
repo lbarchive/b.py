@@ -321,8 +321,8 @@ def main():
       c = Checker()
       c.process(StringIO(post['content']))
       c.check()
-      c.print_report()
-      c.print_summary()
+      print
+      c.print_all()
       return
 
     if 'blog' not in post:
