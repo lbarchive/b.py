@@ -4,6 +4,8 @@ CHANGES
 ## Development
 
 * fix smartypants isn't optional.
+* fix handler import on Windows. (#13)
+* fix HTML files generation location on system other than Linux
 
 ## Version 0.5.0 (2013-07-25T02:55:42Z)
 

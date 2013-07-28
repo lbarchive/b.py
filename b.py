@@ -28,6 +28,7 @@ from os import path
 import re
 from StringIO import StringIO
 import sys
+from tempfile import gettempdir
 import traceback
 
 from apiclient.discovery import build
@@ -297,7 +298,7 @@ def main():
     post.update(handler.generate_post())
 
     if args.command == 'generate':
-      with open('/tmp/draft.html', 'w') as f:
+      with open(path.join(gettempdir(), 'draft.html'), 'w') as f:
         f.write(post['content'])
 
       if args.command == 'generate' and path.exists(TEMPLATE_PATH):
@@ -305,7 +306,7 @@ def main():
           html = f.read()
         html = html.replace('%%Title%%', post['title'])
         html = html.replace('%%Content%%', post['content'])
-        with open('/tmp/preview.html', 'w') as f:
+        with open(path.join(gettempdir(), 'preview.html'), 'w') as f:
           f.write(html)
       return
     elif args.command == 'checklink':
