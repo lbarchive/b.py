@@ -89,23 +89,23 @@ TEMPLATE_PATH = path.join(os.getcwd(), 'tmpl.html')
 handlers = {
   'AsciiDoc': {
     'match': re.compile(r'.*\.asciidoc$'),
-    'module': path.join('bpy', 'handlers', 'asciidoc'),
+    'module': 'bpy.handlers.asciidoc',
   },
   'HTML': {
     'match': re.compile(r'.*\.(html?|raw)$'),
-    'module': path.join('bpy', 'handlers', 'html'),
+    'module': 'bpy.handlers.html',
   },
   'Markdown': {
     'match': re.compile(r'.*\.(markdown|md(own)?|mkdn?)$'),
-    'module': path.join('bpy', 'handlers', 'mkd'),
+    'module': 'bpy.handlers.mkd',
   },
   'reStructuredText': {
     'match': re.compile(r'.*\.rst$'),
-    'module': path.join('bpy', 'handlers', 'rst'),
+    'module': 'bpy.handlers.rst',
   },
   'Text': {
     'match': re.compile(r'.*\.te?xt$'),
-    'module': path.join('bpy', 'handlers', 'text'),
+    'module': 'bpy.handlers.text',
   },
 }
 
@@ -164,22 +164,16 @@ def load_config():
 
 def find_handler(filename):
 
-  search_path = [os.getcwd()] + sys.path
+  sys.path = [os.getcwd()] + sys.path
   module = None
   for name, hdlr in handlers.items():
     if hdlr['match'].match(filename):
       try:
-        _mod_data = imp.find_module(hdlr['module'], search_path)
-        try:
-          module = imp.load_module(name, *_mod_data)
-        finally:
-          if _mod_data[0]:
-            _mod_data[0].close()
-          if module:
-            break
+        module = __import__(hdlr['module'], fromlist=['Handler'])
       except Exception:
         print 'Cannot load module %s of handler %s' % (hdlr['module'], name)
         traceback.print_exc()
+  sys.path = sys.path[1:]
   if module:
     return module.Handler(filename, hdlr.get('options', {}))
   return None
