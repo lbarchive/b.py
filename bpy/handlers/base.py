@@ -24,9 +24,15 @@ import codecs
 from hashlib import md5
 from os.path import basename, splitext
 import re
+import sys
 
-import smartypants
-from smartypants import smartyPants
+HAS_SMARTYPANTS = False
+try:
+  import smartypants
+  from smartypants import smartyPants
+  HAS_SMARTYPANTS = True
+except ImportError:
+  pass
 
 from bpy.util import utf8_encoded
 
@@ -225,6 +231,10 @@ class BaseHandler():
     html = self._generate(markup)
 
     if self.options.get('smartypants', False):
+      if not HAS_SMARTYPANTS:
+        print >> sys.stderr, ("WARNING: smartypants option is set, "
+                              "but the library isn't installed.")
+        return html
       RE = smartypants.tags_to_skip_regex
       pattern = RE.pattern.replace('|code', '|code|tt')
       pattern = pattern.replace('|script', '|script|style')

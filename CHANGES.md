@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+* fix smartypants isn't optional.
+
 ## Version 0.5.0 (2013-07-25T02:55:42Z)
 
  * remove `client_secrets.json`, now its data is included in code. (#11)
