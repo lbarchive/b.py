@@ -40,7 +40,7 @@ I wish *b.py* can support major operating systems and many markup languages some
 
 *If anything is unclear since this is a new project, open an [issue][issues] for it.*
 
-[^unsupported]: not officially supported, only reported working. If you are a Python developer on Windows, feel free to contain the project owner and help the project.
+[^unsupported]: not officially supported, only reported working. If you are a Windows Python developer, feel free to contact the project owner and help the project.
 [^4space]: 4-space indentation check is ignored.
 
 Dependencies
