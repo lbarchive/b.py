@@ -165,7 +165,7 @@ def load_config():
 
 def find_handler(filename):
 
-  sys.path = [os.getcwd()] + sys.path
+  sys.path.insert(0, os.getcwd())
   module = None
   for name, hdlr in handlers.items():
     if hdlr['match'].match(filename):
@@ -174,7 +174,7 @@ def find_handler(filename):
       except Exception:
         print 'Cannot load module %s of handler %s' % (hdlr['module'], name)
         traceback.print_exc()
-  sys.path = sys.path[1:]
+  sys.path.pop(0)
   if module:
     return module.Handler(filename, hdlr.get('options', {}))
   return None
