@@ -171,6 +171,7 @@ def find_handler(filename):
     if hdlr['match'].match(filename):
       try:
         module = __import__(hdlr['module'], fromlist=['Handler'])
+        break
       except Exception:
         print 'Cannot load module %s of handler %s' % (hdlr['module'], name)
         traceback.print_exc()

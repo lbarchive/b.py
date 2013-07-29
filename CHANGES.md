@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+* fix options doesn't get read properly
+
 ## Version 0.5.1 (2013-07-29T00:49:19Z)
 
 * fix smartypants isn't optional.
