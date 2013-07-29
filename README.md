@@ -12,8 +12,8 @@ b.py
 Current status
 --------------
 
-* Python: 2.7
-* System: Linux
+* Python: 2.6[^unsupported], 2.7
+* System: Linux, Windows[^unsupported]
 * Markup handlers: AsciiDoc, HTML, Markdown, reStructuredText, Text
 * Post data
 
@@ -29,21 +29,26 @@ Current status
 
 * Tests/checks
 
-    * Unittest: `python setup.py test`
-    * PEP8 (4-space indentation is ignored): `python setup.py pep8`
-    * Pyflakes: `python setup.py pyflakes`
-    * Pylint: `python setup.py pylint`
+    name | command
+    --- | ---
+    Unittest | `python setup.py test`
+    PEP8[^4space] | `python setup.py pep8`
+    Pyflakes | `python setup.py pyflakes`
+    Pylint | `python setup.py pylint`
 
 I wish *b.py* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 
 *If anything is unclear since this is a new project, open an [issue][issues] for it.*
+
+[^unsupported]: not officially supported, only reported working. If you are a Python developer on Windows, feel free to contain the project owner and help the project.
+[^4space]: 4-space indentation check is ignored.
 
 Dependencies
 ------------
 
 * [Google APIs Client Library for Python][GoogleAPI]
 
-        easy_install --upgrade google-api-python-client
+        $ pip install --upgrade google-api-python-client
 
 Installation
 ------------
@@ -91,9 +96,9 @@ Post or update a blog post.
 
 ### `generate`
 
-Generate HTML file at `/tmp/draft.html`.
+Generate HTML file at `<TEMP>/draft.html`, where `<TEMP>` is the system's temporary directory.
 
-The generation can output a preview html at `/tmp/preview.html` if there is `tmpl.html`. It will replace `%%Title%%` with post title and `%%Content%%` with generated HTML.
+The generation can output a preview html at `<TEMP>/preview.html` if there is `tmpl.html`. It will replace `%%Title%%` with post title and `%%Content%%` with generated HTML.
 
 ### `checklink`
 
@@ -320,7 +325,7 @@ A sample handler `sample_handler.py`:
 
     class Handler(base.BaseHandler):
       PREFIX_HEAD = ''
-      PREFIX_END = '
+      PREFIX_END = ''
       HEADER_FMT = '%s: %s'
 
       def _generate(self, markup=None):
