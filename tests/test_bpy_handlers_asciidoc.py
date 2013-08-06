@@ -18,12 +18,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+import unittest
+import sys
 
-from bpy.handlers.asciidoc import Handler
+if sys.version_info.major == 2:
+  from bpy.handlers.asciidoc import Handler
 
 import test_bpy_handlers_base as test_base
 
 
+@unittest.skipIf(sys.version_info.major != 2, 'asciidoc only support Python 2')
 class HandlerTestCase(test_base.BaseHandlerTestCase):
 
   def setUp(self):
@@ -42,3 +47,7 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
   # =====
 
   test_generate_str_EXPECT = '<p>\xc3\xa1</p>'
+
+  # =====
+
+  test_smartypants_EXPECT = '<p>foo &#8220;bar&#8221;</p>'

@@ -19,15 +19,16 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function, unicode_literals
+
 from bpy.handlers import base
-from bpy.util import utf8_encoded
 
 
 class Handler(base.BaseHandler):
   """Handler for HTML
 
   >>> handler = Handler(None)
-  >>> print handler.generate_header({'title': 'foobar'})
+  >>> print(handler.generate_header({'title': 'foobar'}))
   <!-- !b
   title: foobar
   -->
@@ -44,10 +45,10 @@ class Handler(base.BaseHandler):
     This handler doesn't do anything to the markup.
 
     >>> handler = Handler(None)
-    >>> print handler._generate('<br/>')
+    >>> print(handler._generate('<br/>'))
     <br/>
     """
     if markup is None:
       markup = self.markup
 
-    return utf8_encoded(markup)
+    return markup

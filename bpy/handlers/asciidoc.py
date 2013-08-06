@@ -20,18 +20,18 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function, unicode_literals
 import StringIO
 
 from bpy.api.asciidocapi import AsciiDocAPI
 from bpy.handlers import base
-from bpy.util import utf8_encoded
 
 
 class Handler(base.BaseHandler):
   """Handler for AsciiDoc markup language
 
   >>> handler = Handler(None)
-  >>> print handler.generate_header({'title': 'foobar'})
+  >>> print(handler.generate_header({'title': 'foobar'}))
   // !b
   // title: foobar
   <BLANKLINE>
@@ -45,18 +45,19 @@ class Handler(base.BaseHandler):
     """Generate HTML from AsciiDoc
 
     >>> handler = Handler(None)
-    >>> print handler._generate('a *b*')
+    >>> print(handler._generate('a *b*'))
     <p>a <strong>b</strong></p>
-    >>> print handler._generate('a\\nb')
+    >>> print(handler._generate('a\\nb'))
     <p>a
     b</p>
-    >>> print handler._generate('a\\nb\\n\\nc')
+    >>> print(handler._generate('a\\nb\\n\\nc'))
     <p>a
     b</p>
     <p>c</p>
     """
     if markup is None:
       markup = self.markup
+    markup = markup.encode('utf8')
 
     asciidoc = AsciiDocAPI()
     infile = StringIO.StringIO(markup)
@@ -64,5 +65,6 @@ class Handler(base.BaseHandler):
     asciidoc.options('--no-header-footer')
     asciidoc.execute(infile, outfile, backend='html4')
 
-    html = outfile.getvalue().replace('\r\n', '\n').rstrip()
-    return utf8_encoded(html)
+    html = outfile.getvalue().decode('utf8')
+    html = html.replace('\r\n', '\n').rstrip()
+    return html

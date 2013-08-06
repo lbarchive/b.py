@@ -19,11 +19,11 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function, unicode_literals
 from docutils.core import publish_parts
 from docutils.parsers.rst import directives, roles
 
 from bpy.handlers import base
-from bpy.util import utf8_encoded
 
 
 def register_directive(dir_name):
@@ -53,7 +53,7 @@ class Handler(base.BaseHandler):
   """Handler for reStructuredText markup language
 
   >>> handler = Handler(None)
-  >>> print handler.generate_header({'title': 'foobar'})
+  >>> print(handler.generate_header({'title': 'foobar'}))
   .. !b
      title: foobar
   <BLANKLINE>
@@ -79,7 +79,7 @@ class Handler(base.BaseHandler):
     """Generate HTML from Markdown
 
     >>> handler = Handler(None)
-    >>> print handler._generate('a *b*')
+    >>> print(handler._generate('a *b*'))
     <p>a <em>b</em></p>
     """
     if markup is None:
@@ -103,4 +103,4 @@ class Handler(base.BaseHandler):
                               writer_name="html")
 
     html = doc_parts['body_pre_docinfo'] + doc_parts['body'].rstrip()
-    return utf8_encoded(html)
+    return html

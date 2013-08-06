@@ -18,8 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
+from __future__ import unicode_literals
 import unittest
+import sys
 
 from bpy.handlers.base import BaseHandler
 
@@ -113,25 +114,25 @@ post content'''
     self.assertEqual(handler.header, header)
 
     header['id'] = '789'
-    uheader = {'id': u'789'}
+    uheader = {'id': '789'}
     handler.merge_header(uheader.copy())
     self.assertEqual(handler.header, header)
-    self.assertIsInstance(handler.header['id'], str)
+    self.assertIsInstance(handler.header['id'], type(''))
 
     header['id'] = '123'
-    uheader = {u'id': u'123'}
+    uheader = {'id': '123'}
     handler.merge_header(uheader.copy())
     self.assertEqual(handler.header, header)
-    self.assertIsInstance(handler.header['id'], str)
-    self.assertEqual(handler.header.keys(), ['id'])
-    self.assertIsInstance(handler.header.keys()[0], str)
+    self.assertIsInstance(handler.header['id'], type(''))
+    self.assertEqual(list(handler.header.keys()), ['id'])
+    self.assertIsInstance(list(handler.header.keys())[0], type(''))
 
     handler.header = {}
     handler.merge_header(uheader.copy())
     self.assertEqual(handler.header, header)
-    self.assertIsInstance(handler.header['id'], str)
-    self.assertEqual(handler.header.keys(), ['id'])
-    self.assertIsInstance(handler.header.keys()[0], str)
+    self.assertIsInstance(handler.header['id'], type(''))
+    self.assertEqual(list(handler.header.keys()), ['id'])
+    self.assertIsInstance(list(handler.header.keys())[0], type(''))
 
   # =====
 
@@ -287,7 +288,7 @@ post content'''
 
     html = handler._generate(self.test_generate_str_MARKUP)
     self.assertEqual(html, self.test_generate_str_EXPECT)
-    self.assertIsInstance(html, str)
+    self.assertIsInstance(html, type(''))
 
   def test_generate_str(self):
 
@@ -296,7 +297,27 @@ post content'''
 
     html = handler.generate()
     self.assertEqual(html, self.test_generate_str_EXPECT)
-    self.assertIsInstance(html, str)
+    self.assertIsInstance(html, type(''))
+
+  # =====
+
+  test_smartypants_MARKUP = 'foo "bar"'
+  test_smartypants_EXPECT = 'foo &#8220;bar&#8221;'
+
+  def test_smartypants(self):
+
+    handler = self.handler
+    handler.options['smartypants'] = True
+    handler.markup = self.test_smartypants_MARKUP
+
+    if sys.version_info.major == 3:
+      with self.assertRaises(NotImplementedError):
+        html = handler.generate()
+      return
+
+    html = handler.generate()
+    self.assertEqual(html, self.test_smartypants_EXPECT)
+    self.assertIsInstance(html, type(''))
 
   # =====
 

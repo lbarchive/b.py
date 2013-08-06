@@ -19,11 +19,11 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function, unicode_literals
 import cgi
 import re
 
 from bpy.handlers import base
-from bpy.util import utf8_encoded
 
 
 class Handler(base.BaseHandler):
@@ -31,15 +31,15 @@ class Handler(base.BaseHandler):
 
   >>> handler = Handler(None)
   >>> handler.markup = 'post <content>\\n & something'
-  >>> print handler.generate()
+  >>> print(handler.generate())
   post &lt;content&gt;<br/>
    &amp; something
   >>> handler.options['pre_wrap'] = True
-  >>> print handler.generate()
+  >>> print(handler.generate())
   <pre>post &lt;content&gt;
    &amp; something</pre>
   >>> handler = Handler(None)
-  >>> print handler.generate_header({'title': 'foobar'})
+  >>> print(handler.generate_header({'title': 'foobar'}))
   !b
   title: foobar
   <BLANKLINE>
@@ -53,7 +53,7 @@ class Handler(base.BaseHandler):
     """Generate HTML from plain text
 
     >>> handler = Handler(None)
-    >>> print handler.generate_title('a < b\\nc & d\\n\\nfoo')
+    >>> print(handler.generate_title('a < b\\nc & d\\n\\nfoo'))
     a &lt; b c &amp; d foo
     """
     html = super(Handler, self).generate_title(markup)
@@ -64,20 +64,19 @@ class Handler(base.BaseHandler):
     """Generate HTML from plain text
 
     >>> handler = Handler(None)
-    >>> print handler._generate('a < b\\nc & d\\n\\xc3\\xa1')
+    >>> print(handler._generate('a < b\\nc & d\\n\\xc3\\xa1'))
     a &lt; b<br/>
     c &amp; d<br/>
     \xc3\xa1
     >>> handler.options['pre_wrap'] = True
-    >>> print handler._generate('abc\\ndef')
+    >>> print(handler._generate('abc\\ndef'))
     <pre>abc
     def</pre>
     """
     if markup is None:
       markup = self.markup
 
-    html = cgi.escape(markup.decode('utf8'))
-    html = utf8_encoded(html)
+    html = cgi.escape(markup)
     if self.options.get('pre_wrap', False):
       return '<pre>%s</pre>' % html
     else:

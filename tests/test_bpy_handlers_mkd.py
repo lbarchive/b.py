@@ -19,6 +19,7 @@
 # THE SOFTWARE.
 
 
+from __future__ import unicode_literals
 from bpy.handlers.mkd import Handler
 
 import test_bpy_handlers_base as test_base
@@ -42,3 +43,7 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
   # =====
 
   test_generate_str_EXPECT = '<p>\xc3\xa1</p>'
+
+  # =====
+
+  test_smartypants_EXPECT = '<p>foo &#8220;bar&#8221;</p>'

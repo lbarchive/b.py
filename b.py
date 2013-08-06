@@ -20,13 +20,15 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function
 import argparse as ap
+import codecs
 import httplib2
 import imp
 import os
 from os import path
 import re
-from StringIO import StringIO
+from io import StringIO
 import sys
 from tempfile import gettempdir
 import traceback
@@ -75,7 +77,7 @@ class Storage(BaseStorage):
   def _validate_file(self):
 
     if os.path.islink(self._filename) and not self._filename_link_warned:
-      print 'File: %s is a symbolic link.' % self._filename
+      print('File: %s is a symbolic link.' % self._filename)
       self._filename_link_warned = True
 
 
@@ -148,7 +150,7 @@ def load_config():
   try:
     search_path = [os.getcwd()]
     _mod_data = imp.find_module(BRC, search_path)
-    print 'Loading local configuration...'
+    print('Loading local configuration...')
     try:
       rc = imp.load_module(BRC, *_mod_data)
     finally:
@@ -158,7 +160,7 @@ def load_config():
     pass
   except Exception:
     traceback.print_exc()
-    print 'Error in %s, aborted.' % _mod_data[1]
+    print('Error in %s, aborted.' % _mod_data[1])
     sys.exit(1)
   return rc
 
@@ -173,7 +175,7 @@ def find_handler(filename):
         module = __import__(hdlr['module'], fromlist=['Handler'])
         break
       except Exception:
-        print 'Cannot load module %s of handler %s' % (hdlr['module'], name)
+        print('Cannot load module %s of handler %s' % (hdlr['module'], name))
         traceback.print_exc()
   sys.path.pop(0)
   if module:
@@ -192,10 +194,10 @@ def posting(post, http, service):
     raise ValueError('Unsupported kind: %s' % kind)
 
   if 'id' in post:
-    print 'Updating a %s: %s' % (kind, title)
+    print('Updating a %s: %s' % (kind, title))
     req = posts.update(blogId=post['blog']['id'], postId=post['id'], body=post)
   else:
-    print 'Posting a new %s: %s' % (kind, title)
+    print('Posting a new %s: %s' % (kind, title))
     req = posts.insert(blogId=post['blog']['id'], body=post)
 
   resp = req.execute(http=http)
@@ -211,23 +213,23 @@ def do_search(rc, args):
   elif hasattr(rc, 'blog'):
     blog_id = rc.blog
   else:
-    print >> sys.stderr, 'no blog ID to search'
+    print('no blog ID to search', file=sys.stderr)
     sys.exit(1)
   q = ' '.join(args.q)
   fields = 'items(labels,published,title,url)'
   req = posts.search(blogId=blog_id, q=q, fields=fields)
   resp = req.execute(http=http)
   items = resp.get('items', [])
-  print 'Found %d posts on Blog %s' % (len(items), blog_id)
-  print
+  print('Found %d posts on Blog %s' % (len(items), blog_id))
+  print()
   for post in items:
-    print post['title']
+    print(post['title'])
     labels = post.get('labels', [])
     if labels:
-      print 'Labels:', ', '.join(labels)
-    print 'Published:', post['published']
-    print post['url']
-    print
+      print('Labels:', ', '.join(labels))
+    print('Published:', post['published'])
+    print(post['url'])
+    print()
 
 
 def get_http_service():
@@ -275,15 +277,15 @@ def main():
     blogs = service.blogs()
     req = blogs.listByUser(userId='self')
     resp = req.execute(http=http)
-    print '%-20s: %s' % ('Blog ID', 'Blog name')
+    print('%-20s: %s' % ('Blog ID', 'Blog name'))
     for blog in resp['items']:
-      print '%-20s: %s' % (blog['id'], blog['name'])
+      print('%-20s: %s' % (blog['id'], blog['name']))
   elif args.command == 'search':
     do_search(rc, args)
   elif args.command in ('generate', 'checklink', 'post'):
     handler = find_handler(args.filename)
     if not handler:
-      print 'No handler for the file!'
+      print('No handler for the file!')
       sys.exit(1)
 
     hdr = handler.header
@@ -299,31 +301,33 @@ def main():
     post.update(handler.generate_post())
 
     if args.command == 'generate':
-      with open(path.join(gettempdir(), 'draft.html'), 'w') as f:
+      with codecs.open(path.join(gettempdir(), 'draft.html'), 'w',
+                       encoding='utf8') as f:
         f.write(post['content'])
 
       if args.command == 'generate' and path.exists(TEMPLATE_PATH):
-        with open(TEMPLATE_PATH) as f:
+        with codecs.open(TEMPLATE_PATH, encoding='utf8') as f:
           html = f.read()
         html = html.replace('%%Title%%', post['title'])
         html = html.replace('%%Content%%', post['content'])
-        with open(path.join(gettempdir(), 'preview.html'), 'w') as f:
+        with codecs.open(path.join(gettempdir(), 'preview.html'), 'w',
+                         encoding='utf8') as f:
           f.write(html)
       return
     elif args.command == 'checklink':
       if not HAS_LNKCKR:
-        print 'You do not have lnkckr library'
+        print('You do not have lnkckr library')
         return
       c = Checker()
       c.process(StringIO(post['content']))
       c.check()
-      print
+      print()
       c.print_all()
       return
 
     if 'blog' not in post:
-      print ('You need to specify which blog to post on '
-             'in either brc.py or header of %s.' % handler.filename)
+      print('You need to specify which blog to post on '
+            'in either brc.py or header of %s.' % handler.filename)
       sys.exit(1)
 
     http, service = get_http_service()

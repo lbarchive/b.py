@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+* Port to Python 3, use Unicode in Python 2
+
 ## Version 0.5.2 (2013-07-29T03:37:44Z)
 
 * fix options doesn't get read properly

@@ -19,12 +19,14 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function, unicode_literals
 from abc import abstractmethod, ABCMeta
 import codecs
 from hashlib import md5
 from os.path import basename, splitext
 import re
 import sys
+import warnings
 
 HAS_SMARTYPANTS = False
 try:
@@ -33,8 +35,6 @@ try:
   HAS_SMARTYPANTS = True
 except ImportError:
   pass
-
-from bpy.util import utf8_encoded
 
 
 class BaseHandler():
@@ -66,11 +66,7 @@ class BaseHandler():
     self.options.update(options or {})
     if filename:
       with codecs.open(filename, 'r', 'utf8') as f:
-        # load file as utf8, then encoding into ut8 string, this would be
-        # easier without changing exchaging existing literl string into u'...'
-        # and better when b.py converts to Python 3 as libraries support
-        # Python 3.
-        self.source = f.read().encode('utf8')
+        self.source = f.read()
       header, markup = self.split_header_markup()
       self.title = splitext(basename(filename))[0]
     else:
@@ -86,23 +82,19 @@ class BaseHandler():
     >>> class Handler(BaseHandler):
     ...   def _generate(self, source=None): return source
     >>> handler = Handler(None)
-    >>> print handler.header
+    >>> print(handler.header)
     {}
     >>> handler.modified
     False
     >>> handler.set_header('foo', 'bar')
-    >>> handler.header
-    {'foo': 'bar'}
+    >>> print(handler.header['foo'])
+    bar
     >>> handler.modified
     True
     """
     if k in self.header and self.header[k] == v:
       return
 
-    if isinstance(k, unicode):
-      k = k.encode('utf8')
-    if isinstance(v, unicode):
-      v = v.encode('utf8')
     self.header[k] = v
     self.modified = True
 
@@ -113,8 +105,8 @@ class BaseHandler():
     ...   def _generate(self, source=None): return source
     >>> handler = Handler(None)
     >>> handler.merge_header({'id': 12345, 'bogus': 'blah'})
-    >>> handler.header
-    {'id': 12345}
+    >>> print(handler.header['id'])
+    12345
     >>> handler.modified
     True
     """
@@ -139,7 +131,7 @@ class BaseHandler():
     ...   }
     >>> handler = Handler(None, options)
     >>> handler.markup = 'content'
-    >>> print handler.markup
+    >>> print(handler.markup)
     the prefix
     content
     the suffix
@@ -174,19 +166,19 @@ class BaseHandler():
     ...   'id_affix': None,
     ...   }
     >>> handler = Handler(None, options)
-    >>> print repr(handler.id_affix)
+    >>> print(repr(handler.id_affix))
     None
     >>> handler.options['id_affix'] = 'foobar'
-    >>> print repr(handler.id_affix)
-    'foobar'
+    >>> print(handler.id_affix)
+    foobar
     >>> # auto generate an id affix from title
     >>> handler.options['id_affix'] = ''
     >>> handler.title = 'abc'
-    >>> print repr(handler.id_affix)
-    '9001'
+    >>> print(handler.id_affix)
+    9001
     >>> handler.header['id_affix'] = 'override-affix'
-    >>> print repr(handler.id_affix)
-    'override-affix'
+    >>> print(handler.id_affix)
+    override-affix
     """
     id_affix = self.options['id_affix']
     # override?
@@ -203,7 +195,7 @@ class BaseHandler():
       return id_affix
 
     m = md5()
-    m.update(self.title)
+    m.update(self.title.encode('utf8'))
     return m.hexdigest()[:4]
 
   @abstractmethod
@@ -211,17 +203,16 @@ class BaseHandler():
     """Generate HTML of markup source"""
     raise NotImplementedError
 
-  @utf8_encoded
   def generate(self, markup=None):
     """Generate HTML
 
     >>> class Handler(BaseHandler):
     ...   def _generate(self, markup=None): return markup
     >>> handler = Handler(None)
-    >>> print handler.generate('foo "bar"')
+    >>> print(handler.generate('foo "bar"'))
     foo "bar"
-    >>> handler.options['smartypants'] = True
-    >>> print handler.generate('foo "bar"')
+    >>> handler.options['smartypants'] = True # doctest: +SKIP
+    >>> print(handler.generate('foo "bar"')) # doctest: +SKIP
     foo &#8220;bar&#8221;
     """
 
@@ -232,8 +223,10 @@ class BaseHandler():
 
     if self.options.get('smartypants', False):
       if not HAS_SMARTYPANTS:
-        print >> sys.stderr, ("WARNING: smartypants option is set, "
-                              "but the library isn't installed.")
+        if sys.version_info.major == 3:
+          raise NotImplementedError('smartypants is not supported in Python 3')
+        warnings.warn("smartypants option is set, "
+                      "but the library isn't installed.", RuntimeWarning)
         return html
       RE = smartypants.tags_to_skip_regex
       pattern = RE.pattern.replace('|code', '|code|tt')
@@ -253,12 +246,12 @@ class BaseHandler():
     ...   HEADER_FMT = '--- %s: %s'
     ...   def _generate(self, source=None): pass
     >>> handler = Handler(None)
-    >>> print handler.generate_header({'title': 'foobar'})
+    >>> print(handler.generate_header({'title': 'foobar'}))
     foo !b
     --- title: foobar
     bar
     <BLANKLINE>
-    >>> print handler.generate_header({'labels': ['foo', 'bar']})
+    >>> print(handler.generate_header({'labels': ['foo', 'bar']}))
     foo !b
     --- labels: foo, bar
     bar
@@ -273,7 +266,7 @@ class BaseHandler():
         v = ', '.join(v)
       lines.append(self.HEADER_FMT % (k, v))
     lines.append(self.PREFIX_END)
-    return '\n'.join(filter(None, lines)) + '\n'
+    return '\n'.join([_f for _f in lines if _f]) + '\n'
 
   def generate_title(self, title=None):
     """Generate title for posting
@@ -281,13 +274,13 @@ class BaseHandler():
     >>> class Handler(BaseHandler):
     ...   def _generate(self, source=None): return source
     >>> handler = Handler(None)
-    >>> print handler.generate_title('foo "bar"')
+    >>> print(handler.generate_title('foo "bar"'))
     foo "bar"
-    >>> handler.options['smartypants'] = True
-    >>> print handler.generate_title('foo "bar"')
+    >>> print(handler.generate_title('foo\\nbar\\n\\n'))
+    foo bar
+    >>> handler.options['smartypants'] = True # doctest: +SKIP
+    >>> print(handler.generate_title('foo "bar"')) # doctest: +SKIP
     foo &#8220;bar&#8221;
-    >>> print repr(handler.generate_title('foo\\nbar\\n\\n'))
-    'foo bar'
     """
     if title is None:
       title = self.header.get('title', self.title)
@@ -325,9 +318,9 @@ class BaseHandler():
         m = self.RE_HEADER.match(item)
         if not m:
           continue
-        k, v = map(str.strip, m.groups())
+        k, v = list(map(type('').strip, m.groups()))
         if k == 'labels':
-          v = filter(None, [label.strip() for label in v.split(',')])
+          v = [_f for _f in [label.strip() for label in v.split(',')] if _f]
         _header[k] = v
     header = _header
 

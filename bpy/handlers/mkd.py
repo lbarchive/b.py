@@ -19,16 +19,17 @@
 # THE SOFTWARE.
 
 
+from __future__ import print_function, unicode_literals
 import markdown
+
 from bpy.handlers import base
-from bpy.util import utf8_encoded
 
 
 class Handler(base.BaseHandler):
   """Handler for Markdown markup language
 
   >>> handler = Handler(None)
-  >>> print handler.generate_header({'title': 'foobar'})
+  >>> print(handler.generate_header({'title': 'foobar'}))
   <!-- !b
   title: foobar
   -->
@@ -43,13 +44,12 @@ class Handler(base.BaseHandler):
     """Generate HTML from Markdown
 
     >>> handler = Handler(None)
-    >>> print handler._generate('a *b*')
+    >>> print(handler._generate('a *b*'))
     <p>a <em>b</em></p>
     """
     if markup is None:
       markup = self.markup
 
     # markdown library only accepts unicode, utf8 encoded str results in error.
-    markup = markup.decode('utf8')
     html = markdown.markdown(markup, **self.options.get('config', {}))
-    return utf8_encoded(html)
+    return html

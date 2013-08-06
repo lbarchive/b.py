@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import print_function
 from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
 import sys
@@ -70,8 +71,8 @@ class cmd_pep8(Command):
     try:
       import pep8
     except ImportError:
-      print >> sys.stderr, ('Cannot import pep8, you forgot to install?\n'
-                            'run `pip install pep8` to install.')
+      print(('Cannot import pep8, you forgot to install?\n'
+             'run `pip install pep8` to install.'), file=sys.stderr)
       sys.exit(1)
 
     p8 = pep8.StyleGuide()
@@ -81,25 +82,25 @@ class cmd_pep8(Command):
     # ignore four-space indentation error
     p8.options.ignore += ('E111', 'E121')
 
-    print
-    print 'Options'
-    print '======='
-    print
-    print 'Exclude:', p8.options.exclude
-    print 'Ignore :', p8.options.ignore
+    print()
+    print('Options')
+    print('=======')
+    print()
+    print('Exclude:', p8.options.exclude)
+    print('Ignore :', p8.options.ignore)
 
-    print
-    print 'Results'
-    print '======='
-    print
+    print()
+    print('Results')
+    print('=======')
+    print()
     report = p8.check_files('.')
 
-    print
-    print 'Statistics'
-    print '=========='
-    print
+    print()
+    print('Statistics')
+    print('==========')
+    print()
     report.print_statistics()
-    print '%-7d Total errors and warnings' % report.get_count()
+    print('%-7d Total errors and warnings' % report.get_count())
 
 
 class cmd_pyflakes(Command):
@@ -121,8 +122,8 @@ class cmd_pyflakes(Command):
       from pyflakes import api
       from pyflakes import reporter as modReporter
     except ImportError:
-      print >> sys.stderr, ('Cannot import pyflakes, you forgot to install?\n'
-                            'run `pip install pyflakes` to install.')
+      print(('Cannot import pyflakes, you forgot to install?\n'
+             'run `pip install pyflakes` to install.'), file=sys.stderr)
       sys.exit(1)
 
     from os.path import basename
@@ -138,19 +139,19 @@ class cmd_pyflakes(Command):
           yield path
     api.iterSourceCode = _iterSourceCode
 
-    print
-    print 'Options'
-    print '======='
-    print
-    print 'Exclude:', EXCLUDE_SCRIPTS
+    print()
+    print('Options')
+    print('=======')
+    print()
+    print('Exclude:', EXCLUDE_SCRIPTS)
 
-    print
-    print 'Results'
-    print '======='
-    print
+    print()
+    print('Results')
+    print('=======')
+    print()
     warnings = api.checkRecursive('.', reporter)
-    print
-    print 'Total warnings: %d' % warnings
+    print()
+    print('Total warnings: %d' % warnings)
 
 
 class cmd_pylint(Command):
@@ -172,15 +173,15 @@ class cmd_pylint(Command):
     try:
       from pylint import lint
     except ImportError:
-      print >> sys.stderr, ('Cannot import pylint, you forgot to install?\n'
-                            'run `pip install pylint` to install.')
+      print(('Cannot import pylint, you forgot to install?\n'
+             'run `pip install pylint` to install.'), file=sys.stderr)
       sys.exit(1)
 
-    print
-    print 'Options'
-    print '======='
-    print
-    print 'Exclude:', EXCLUDE_SCRIPTS
+    print()
+    print('Options')
+    print('=======')
+    print()
+    print('Exclude:', EXCLUDE_SCRIPTS)
 
     files = ['setup.py', 'b.py', 'bpy'] + glob('tests/*.py')
     args = [
@@ -189,7 +190,7 @@ class cmd_pylint(Command):
       '--include-ids=y',
       '--indent-string="  "',
     ] + files
-    print
+    print()
     lint.Run(args)
 
 # ============================================================================
@@ -215,7 +216,7 @@ with open(script_name) as f:
   # keep these
   meta_keys = ['name', 'description', 'version', 'license', 'url', 'author',
                'author_email']
-  meta = dict(filter(lambda m: m[0] in meta_keys, meta.items()))
+  meta = dict([m for m in meta.items() if m[0] in meta_keys])
 
 classifiers = [
   'Development Status :: 3 - Alpha',
@@ -227,6 +228,7 @@ classifiers = [
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 2.6',
   'Programming Language :: Python :: 2.7',
+  'Programming Language :: Python :: 3.2',
   'Topic :: Text Processing',
   'Topic :: Text Processing :: Markup',
   'Topic :: Text Processing :: Markup :: HTML',

@@ -20,11 +20,18 @@
 
 
 import doctest
+import sys
 
-from bpy.handlers import base, asciidoc, html, mkd, rst, text
+from bpy.handlers import base, html, mkd, rst, text
+if sys.version_info.major == 2:
+  from bpy.handlers import asciidoc
+else:
+  asciidoc = None
 
 
 def load_tests(loader, tests, pattern):
   for module in (base, asciidoc, html, mkd, rst, text):
+    if not module:
+      continue
     tests.addTests(doctest.DocTestSuite(module))
   return tests
