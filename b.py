@@ -27,7 +27,6 @@ import httplib2
 import imp
 import os
 from os import path
-import re
 from io import StringIO
 import sys
 from tempfile import gettempdir
@@ -37,6 +36,8 @@ from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage as BaseStorage
 from oauth2client.tools import run
+
+from bpy.handlers import handlers, find_handler
 
 HAS_LNKCKR = False
 try:
@@ -87,30 +88,6 @@ class Storage(BaseStorage):
 # filename of local configuration without '.py' suffix.
 BRC = 'brc'
 TEMPLATE_PATH = path.join(os.getcwd(), 'tmpl.html')
-
-# handlers for markup files
-handlers = {
-  'AsciiDoc': {
-    'match': re.compile(r'.*\.asciidoc$'),
-    'module': 'bpy.handlers.asciidoc',
-  },
-  'HTML': {
-    'match': re.compile(r'.*\.(html?|raw)$'),
-    'module': 'bpy.handlers.html',
-  },
-  'Markdown': {
-    'match': re.compile(r'.*\.(markdown|md(own)?|mkdn?)$'),
-    'module': 'bpy.handlers.mkd',
-  },
-  'reStructuredText': {
-    'match': re.compile(r'.*\.rst$'),
-    'module': 'bpy.handlers.rst',
-  },
-  'Text': {
-    'match': re.compile(r'.*\.te?xt$'),
-    'module': 'bpy.handlers.text',
-  },
-}
 
 
 def parse_args():
@@ -163,24 +140,6 @@ def load_config():
     print('Error in %s, aborted.' % _mod_data[1])
     sys.exit(1)
   return rc
-
-
-def find_handler(filename):
-
-  sys.path.insert(0, os.getcwd())
-  module = None
-  for name, hdlr in handlers.items():
-    if hdlr['match'].match(filename):
-      try:
-        module = __import__(hdlr['module'], fromlist=['Handler'])
-        break
-      except Exception:
-        print('Cannot load module %s of handler %s' % (hdlr['module'], name))
-        traceback.print_exc()
-  sys.path.pop(0)
-  if module:
-    return module.Handler(filename, hdlr.get('options', {}))
-  return None
 
 
 def posting(post, http, service):
