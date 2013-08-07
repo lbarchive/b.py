@@ -49,7 +49,7 @@ class BaseHandler():
     'id_affix': None,
   }
 
-  MERGE_HEADERS = ('kind', 'blog', 'id', 'url')
+  MERGE_HEADERS = ('service', 'kind', 'blog', 'id', 'url', 'draft')
   HEADER_FMT = '%s: %s'
   PREFIX_HEAD = ''
   PREFIX_END = ''
@@ -262,8 +262,11 @@ class BaseHandler():
 
     lines = [self.PREFIX_HEAD + '!b']
     for k, v in header.items():
-      if k == 'labels':
+      if k in ('labels', 'categories'):
         v = ', '.join(v)
+      elif k == 'draft':
+        v = repr(v)
+        print(k, v)
       lines.append(self.HEADER_FMT % (k, v))
     lines.append(self.PREFIX_END)
     return '\n'.join([_f for _f in lines if _f]) + '\n'
@@ -293,8 +296,8 @@ class BaseHandler():
 
   def generate_post(self):
     """Generate dict for merging to post object of API"""
-    post = {'title': self.generate_title()}
-    for k in ('blog', 'id', 'labels'):
+    post = {'title': self.generate_title(), 'draft': False}
+    for k in ('blog', 'id', 'labels', 'categories', 'draft'):
       if k not in self.header:
         continue
       if k == 'blog':
@@ -319,8 +322,10 @@ class BaseHandler():
         if not m:
           continue
         k, v = list(map(type('').strip, m.groups()))
-        if k == 'labels':
+        if k in ('labels', 'categories'):
           v = [_f for _f in [label.strip() for label in v.split(',')] if _f]
+        elif k == 'draft':
+          v = v.lower() in ('true', 'yes', '1')
         _header[k] = v
     header = _header
 

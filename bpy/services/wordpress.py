@@ -86,7 +86,11 @@ class Service(BaseService):
 
     wpost.title = title
     wpost.content = post['content']
-    wpost.post_status = 'publish'
+    wpost.post_status = 'draft' if post['draft'] else 'publish'
+    wpost.terms_names = {
+      'post_tag': post['labels'],
+      'category': post['categories'] if 'categories' in post else [],
+    }
 
     resp = {}
     if 'id' in post:
@@ -99,7 +103,7 @@ class Service(BaseService):
       resp['id'] = wpost.id
       resp['url'] = wpost.link
 
-    for k in ('service', 'blog', 'kind'):
+    for k in ('service', 'blog', 'kind', 'draft'):
       resp[k] = post[k]
 
     handler.merge_header(resp)

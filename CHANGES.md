@@ -20,6 +20,9 @@ CHANGES
 * Add `bpy.services.wordpress`
 
     Options: `username` and `password`
+    Headers: `categories` and `draft`
+
+* `service` will be added to headers
 
 ## Version 0.5.2 (2013-07-29T03:37:44Z)
 

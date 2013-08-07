@@ -179,6 +179,8 @@ In reStructuredText (different markup has different style of header), a header l
        kind: post
        title: Title of "something."
        labels: comma, separated, list
+       categories: another, comma, separated, list
+       draft: False
        blog: 12345
        id: 54321
        id_affix: foobar
@@ -188,7 +190,11 @@ In normal usage, you may specify `title` and `labels`. `title` will override the
 
 `kind`, `blog`, `id`, and `url` are automatically added after a successful posting. `url` doesn't actually mean anything, just for you to have a record of the URL of a post.
 
-`kind` is the type of the posting, default is `post` and currently only supports `post`.
+`kind` is the type of the posting, `post` or `page`, default is `post` and currently Blogger service only supports `post`.
+
+`categories` is the catgories, only WordPress service uses this.
+
+`draft` is the post status, `true`, `yes`, or `1` for draft post, otherwise published post. Only WordPress service supports this.
 
 `blog` and `id` are very important, they are used in updating post and they should not be edited by you.
 
@@ -202,10 +208,18 @@ Configuration
 It's the configuration that *b.py* reads from current working directory. Currently, only `blog` and `handlers` are used, it may read like:
 
     :::python
-    blog = 12345
+    service = '<service id>'
+    service_options = {
+      # see Services section
+    }
+
     handlers = {
-      ... # see Handler section
-      }
+      # see Handlers section
+    }
+
+    services = {
+      # see Services section
+    }
 
 Services
 --------

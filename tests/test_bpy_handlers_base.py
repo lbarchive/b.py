@@ -337,6 +337,7 @@ post content'''
 
     self.assertEqual(post, {
       'title': 'the title',
+      'draft': False,
       'id': '123',
       'blog': {'id': '456'}
     })
