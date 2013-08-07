@@ -5,6 +5,21 @@ CHANGES
 
 * Port to Python 3, use Unicode in Python 2
 * Modularize Blogger API use, new services for adding new services
+* Add `service_options` to rc:
+
+    The options for a service can be specified using `service_options` which is a `dict`. Previous `blog`, now must be assigned within `service_options`, for example:
+
+        service = 'blogger'
+        service_options = {
+          'blog': 12345,
+          'other_option': 'other value',
+        }
+
+    The options will be supplied when initialize the service.
+
+* Add `bpy.services.wordpress`
+
+    Options: `username` and `password`
 
 ## Version 0.5.2 (2013-07-29T03:37:44Z)
 

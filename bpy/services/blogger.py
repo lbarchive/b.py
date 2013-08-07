@@ -114,13 +114,13 @@ class Service(BaseService):
       'kind': 'blogger#%s' % hdr.get('kind', 'post'),
       'content': handler.generate(),
     }
-    if isinstance(self.blog_id, int):
-      post['blog'] = {'id': self.blog_id}
+    if isinstance(self.options['blog'], int):
+      post['blog'] = {'id': self.options['blog']}
     post.update(handler.generate_post())
 
     return handler, post
 
-  def post(self, blog_id=None):
+  def post(self):
 
     handler, post = self.make_handler_post()
 
@@ -152,16 +152,19 @@ class Service(BaseService):
     handler.merge_header(resp)
     handler.write()
 
-  def search(self, blog_id, q):
+  def search(self, q):
+
+    if self.options['blog'] is None:
+      raise ValueError('no blog ID to search')
 
     self.auth()
 
     fields = 'items(labels,published,title,url)'
     posts = self.service.posts()
-    req = posts.search(blogId=blog_id, q=q, fields=fields)
+    req = posts.search(blogId=self.options['blog'], q=q, fields=fields)
     resp = req.execute(http=self.http)
     items = resp.get('items', [])
-    print('Found %d posts on Blog %s' % (len(items), blog_id))
+    print('Found %d posts on Blog %s' % (len(items), self.options['blog']))
     print()
     for post in items:
       print(post['title'])

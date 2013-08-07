@@ -34,10 +34,14 @@ services = {
     'match': re.compile(r'^(b|blogger)$', re.I),
     'module': 'bpy.services.blogger',
   },
+  'WordPress': {
+    'match': re.compile(r'^(wp|wordpress)$', re.I),
+    'module': 'bpy.services.wordpress',
+  },
 }
 
 
-def find_service(service_name, *args, **kwargs):
+def find_service(service_name, service_options, *args, **kwargs):
 
   sys.path.insert(0, os.getcwd())
   module = None
@@ -51,5 +55,5 @@ def find_service(service_name, *args, **kwargs):
         traceback.print_exc()
   sys.path.pop(0)
   if module:
-    return module.Service(*args, **kwargs)
+    return module.Service(service_options, *args, **kwargs)
   return None

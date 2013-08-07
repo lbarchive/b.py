@@ -347,6 +347,5 @@ class BaseHandler():
       self.update_source()
 
     with codecs.open(self.filename, 'w', 'utf8') as f:
-      # decode back into Uncode string
-      f.write(self.source.decode('utf8'))
+      f.write(self.source)
     self.modified = False

@@ -107,6 +107,7 @@ def main():
   args = parse_args()
 
   rc = load_config()
+  service_options = {'blog': None}
   if rc:
     if hasattr(rc, 'handlers'):
       for name, handler in rc.handlers.items():
@@ -122,23 +123,18 @@ def main():
           services[name] = service.copy()
     if hasattr(rc, 'service'):
       args.service = rc.service
+    if hasattr(rc, 'service_options'):
+      service_options.update(rc.service_options)
 
-  blog_id = None
-  if hasattr(args, 'blog'):
-    blog_id = args.blog
-  elif hasattr(rc, 'blog'):
-    blog_id = rc.blog
+  if hasattr(args, 'blog') and args.blog is not None:
+    service_options['blog'] = args.blog
   filename = args.filename if hasattr(args, 'filename') else None
-  service = find_service(args.service, blog_id, filename)
+  service = find_service(args.service, service_options, filename)
 
   if args.command == 'blogs':
     service.list_blogs()
   elif args.command == 'search':
-    if blog_id is None:
-      print('no blog ID to search', file=sys.stderr)
-      sys.exit(1)
-    q = ' '.join(args.q)
-    service.search(blog_id, q)
+    service.search(' '.join(args.q))
   elif args.command == 'generate':
     service.generate()
   elif args.command == 'checklink':

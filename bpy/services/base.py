@@ -41,9 +41,9 @@ class Service(object):
 
   service_name = 'base'
 
-  def __init__(self, blog_id=None, filename=None):
+  def __init__(self, options, filename=None):
 
-    self.blog_id = blog_id
+    self.options = options
     self.filename = filename
 
   def post(self):
