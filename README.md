@@ -1,9 +1,12 @@
 b.py
 ====
 
-> *Publishing (technical) posts to Blogger in your favorite markup language seamlessly without much fuss.*
+> *Publishing (technical) posts to Blogger or WordPress in your favorite markup language seamlessly without much fuss.*
 
-**b.py** is a Python program which enables [Blogger][] bloggers to blog from command-line.
+**b.py** is a Python program which enables [Blogger][] or [WordPress][] bloggers to blog from command-line.
+
+[Blogger]: http://www.blogger.com
+[WordPress]: http://wordpress.org
 
 **Contents**
 
@@ -12,9 +15,10 @@ b.py
 Current status
 --------------
 
-* Python: 2.6[^unsupported], 2.7
+* Python: 2.6[^unsupported], 2.7, 3.2[^python3]
 * System: Linux, Windows[^unsupported]
-* Markup handlers: AsciiDoc, HTML, Markdown, reStructuredText, Text
+* Services: Blogger, WordPress
+* Handlers: AsciiDoc, HTML, Markdown, reStructuredText, Text
 * Post data
 
     API v3 only supports `insert` and `update` on posts resources, no pages support at this moment.
@@ -41,14 +45,38 @@ I wish *b.py* can support major operating systems and many markup languages some
 *If anything is unclear since this is a new project, open an [issue][issues] for it.*
 
 [^unsupported]: not officially supported, only reported working. If you are a Windows Python developer, feel free to contact the project owner and help the project.
+[^python3]: For Python 3+, b.py cannot support fully, because some dependencies may not have Python 3 support.
 [^4space]: 4-space indentation check is ignored.
 
 Dependencies
 ------------
 
-* [Google APIs Client Library for Python][GoogleAPI]
+name | dependency | Python
+--- | --- | ---
+***Services***
+Blogger | [Google APIs Client Library for Python][GoogleAPI] | 2
+ | `pip install google-api-python-client`
+WordPress | [python-wordpress-xmlrpc][] | 2 / 3
+ | `pip install python-wordpress-xmlrpc`
+***Handlers***
+AsciiDoc | [AsciiDoc][] | 2
+HTML | None | 2 / 3
+Markdown | [Markdown][] | 2 / 3
+reStructuredText | [reStructuredText][] | 2 / 3
+Text | None | 2 / 3
+***Others***
+lnkckr | [lnkckr][] | 2 / 3
+smartypants | [smartypants][] | 2
 
-        $ pip install --upgrade google-api-python-client
+[GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
+[python-wordpress-xmlrpc]: https://github.com/maxcutler/python-wordpress-xmlrpc
+
+[AsciiDoc]: http://www.methods.co.nz/asciidoc/
+[Markdown]: http://pypi.python.org/pypi/Markdown
+[reStructuredText]: http://docutils.sourceforge.net/rst.html
+
+[smartypants]: http://pypi.python.org/pypi/smartypants
+[lnkckr]: https://bitbucket.org/livibetter/lnkckr
 
 Installation
 ------------
@@ -179,20 +207,95 @@ It's the configuration that *b.py* reads from current working directory. Current
       ... # see Handler section
       }
 
+Services
+--------
+
+Services' IDs:
+
+service | IDs
+--- | ---
+Base | `base`
+Blogger | `b`, `blogger`
+WordPress | `wp`, `wordpress`
+
+### Service options
+
+To assign options to chosen service, add `service_options` to `brc.py`, for example:
+
+    :::python
+    service = "<service id>"
+    service_options = {
+      'option1': 'value1',
+      'option2': 2,
+    }
+
+### Base
+
+Base recognizes no options, it's only used for `generate` or `checklink` commands.
+
+### Blogger
+
+Blogger service recognize the following options:
+
+    :::python
+    service = "wordpress"
+    service_options = {
+      'blog': <blog id>,
+    }
+
+### WordPress
+
+WordPress service recognize the following options:
+
+    :::python
+    service = "wordpress"
+    service_options = {
+      'blog': <blog url>,
+      'username': 'user01',
+      'password': 'secret',
+    }
+
+`blog` should be the URL of WordPress blog, for example, `http://<something>.wordpress.com/` or `http://example.com/wordpress/`. Note that the tailing slash must be included.
+
+### Writing a custom service
+
+A sample handler `sample_service.py`:
+
+    :::python
+    from bpy.service import base
+
+    class Service(base.Service):
+
+      # see bpy/services for examples
+      pass
+
+And corresponding setting in `brc.py`:
+
+    :::python
+    import re
+
+    # this matches the re
+    service = 'foobar'
+
+    services = {
+      'SampleService': {
+        'match': re.compile(r'^foobar$'),
+        'module': 'sample_service',
+      },
+    }
+
 Handlers
 --------
 
-Markup handlers and their IDs, libraries, and extensions:
+Markup handlers' IDs and extensions:
 
-* [AsciiDoc][] (`AsciiDoc`): `.asciidoc`
-* HTML (`HTML`): `.html`, `.htm`, `.raw`
-* [Markdown][] (`Markdown`): `.md`, `.mkd`, `.mkdn`, `.mkdown`, `.markdown`
-* [reStructuredText][] (`reStructuredText`): `.rst`
-* Text (`Text`): `.txt`, `.text`
-
-[AsciiDoc]: http://www.methods.co.nz/asciidoc/
-[Markdown]: http://pypi.python.org/pypi/Markdown
-[reStructuredText]: http://docutils.sourceforge.net/rst.html
+ID | extensions
+--- | ---
+`AsciiDoc` | `.asciidoc`
+`HTML` | `.html`, `.htm`, `.raw`
+`Markdown` | `.md`, `.mkd`, `.mkdn`, `.mkdown`, `.markdown`
+`reStructuredText` | `.rst`
+`Text` | `.txt`, `.text`
 
 ### General options
 
@@ -257,6 +360,7 @@ You can specify [configuration][markdown-config] for Python Markdown in `brc.py`
       },
     }
 
+[markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
 
 ### reStructuredText
 
@@ -278,6 +382,8 @@ You can specify [settings-overrides][] for reStructuredText in `brc.py`, for exa
         },
       },
     }
+
+[settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
 
 #### Custom Directives and Roles
 
@@ -352,6 +458,8 @@ Help and Support
 
 Please use [Issues][issues] to file a bug report or request a new feature.
 
+[issues]: https://bitbucket.org/livibetter/b.py/issues
+
 Feel free to contribute and create a pull request.
 
 Links
@@ -359,17 +467,10 @@ Links
 
 * [PyPI][]
 
+[PyPI]: http://pypi.python.org/pypi/b.py
+
 License
 -------
 
     This project is licensed under the MIT License, see COPYING.
     Copyright (C) 2011-2013 by Yu-Jie Lin.
-
-[Blogger]: http://www.blogger.com
-[smartypants]: http://pypi.python.org/pypi/smartypants
-[GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
-[markdown-config]: http://packages.python.org/Markdown/reference.html#markdown
-[settings-overrides]: http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
-[issues]: https://bitbucket.org/livibetter/b.py/issues
-[PyPI]: http://pypi.python.org/pypi/b.py
-[lnkckr]: https://bitbucket.org/livibetter/lnkckr

@@ -31,7 +31,7 @@ from bpy.handlers import handlers
 from bpy.services import services, find_service
 
 __program__ = 'b.py'
-__description__ = 'Post to Blogger in markup language seamlessly'
+__description__ = 'Post to Blogger or WordPress in markup language seamlessly'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
 __license__ = 'MIT'
 __version__ = '0.5.2'
