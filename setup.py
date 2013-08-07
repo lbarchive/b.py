@@ -238,6 +238,7 @@ packages = [
   'bpy',
   'bpy.api',
   'bpy.handlers',
+  'bpy.services',
 ]
 
 setup_d = dict(

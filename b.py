@@ -22,29 +22,13 @@
 
 from __future__ import print_function
 import argparse as ap
-import codecs
-import httplib2
 import imp
 import os
-from os import path
-from io import StringIO
 import sys
-from tempfile import gettempdir
 import traceback
 
-from apiclient.discovery import build
-from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.file import Storage as BaseStorage
-from oauth2client.tools import run
-
-from bpy.handlers import handlers, find_handler
-
-HAS_LNKCKR = False
-try:
-  from lnkckr.checkers.html import Checker
-  HAS_LNKCKR = True
-except ImportError:
-  pass
+from bpy.handlers import handlers
+from bpy.services import services, find_service
 
 __program__ = 'b.py'
 __description__ = 'Post to Blogger in markup language seamlessly'
@@ -56,38 +40,12 @@ __website__ = 'http://bitbucket.org/livibetter/b.py'
 __author__ = 'Yu-Jie Lin'
 __email__ = 'livibetter@gmail.com'
 
-# API stuff
-###########
-
-# global stuff
-http = None
-service = None
-
-API_STORAGE = 'b.dat'
-
-
-class Storage(BaseStorage):
-  """Inherit the API Storage to suppress CredentialsFileSymbolicLinkError
-  """
-
-  def __init__(self, filename):
-
-    super(Storage, self).__init__(filename)
-    self._filename_link_warned = False
-
-  def _validate_file(self):
-
-    if os.path.islink(self._filename) and not self._filename_link_warned:
-      print('File: %s is a symbolic link.' % self._filename)
-      self._filename_link_warned = True
-
 
 # b.py stuff
 ############
 
 # filename of local configuration without '.py' suffix.
 BRC = 'brc'
-TEMPLATE_PATH = path.join(os.getcwd(), 'tmpl.html')
 
 
 def parse_args():
@@ -95,6 +53,8 @@ def parse_args():
   p = ap.ArgumentParser()
   p.add_argument('--version', action='version',
                  version='%(prog)s ' + __version__)
+  p.add_argument('-s', '--service', default='base',
+                 help='what service to use. (Default: %(default)s)')
   sp = p.add_subparsers(help='commands')
 
   pblogs = sp.add_parser('blogs', help='list blogs')
@@ -142,82 +102,6 @@ def load_config():
   return rc
 
 
-def posting(post, http, service):
-
-  kind = post['kind'].replace('blogger#', '')
-  title = post['title']
-
-  if kind == 'post':
-    posts = service.posts()
-  else:
-    raise ValueError('Unsupported kind: %s' % kind)
-
-  if 'id' in post:
-    print('Updating a %s: %s' % (kind, title))
-    req = posts.update(blogId=post['blog']['id'], postId=post['id'], body=post)
-  else:
-    print('Posting a new %s: %s' % (kind, title))
-    req = posts.insert(blogId=post['blog']['id'], body=post)
-
-  resp = req.execute(http=http)
-  return resp
-
-
-def do_search(rc, args):
-
-  http, service = get_http_service()
-  posts = service.posts()
-  if args.blog:
-    blog_id = args.blog
-  elif hasattr(rc, 'blog'):
-    blog_id = rc.blog
-  else:
-    print('no blog ID to search', file=sys.stderr)
-    sys.exit(1)
-  q = ' '.join(args.q)
-  fields = 'items(labels,published,title,url)'
-  req = posts.search(blogId=blog_id, q=q, fields=fields)
-  resp = req.execute(http=http)
-  items = resp.get('items', [])
-  print('Found %d posts on Blog %s' % (len(items), blog_id))
-  print()
-  for post in items:
-    print(post['title'])
-    labels = post.get('labels', [])
-    if labels:
-      print('Labels:', ', '.join(labels))
-    print('Published:', post['published'])
-    print(post['url'])
-    print()
-
-
-def get_http_service():
-
-  global http, service
-
-  if http and service:
-    return http, service
-
-  FLOW = OAuth2WebServerFlow(
-    '56045325640.apps.googleusercontent.com',
-    'xCzmIv2FUWxeQzA5yJvm4w9U',
-    'https://www.googleapis.com/auth/blogger',
-    auth_uri='https://accounts.google.com/o/oauth2/auth',
-    token_uri='https://accounts.google.com/o/oauth2/token',
-  )
-
-  storage = Storage(API_STORAGE)
-  credentials = storage.get()
-  if credentials is None or credentials.invalid:
-    credentials = run(FLOW, storage)
-
-  http = httplib2.Http()
-  http = credentials.authorize(http)
-  service = build("blogger", "v3", http=http)
-
-  return http, service
-
-
 def main():
 
   args = parse_args()
@@ -230,70 +114,37 @@ def main():
           handlers[name].update(handler)
         else:
           handlers[name] = handler.copy()
+    if hasattr(rc, 'services'):
+      for name, service in rc.services.items():
+        if name in services:
+          services[name].update(service)
+        else:
+          services[name] = service.copy()
+    if hasattr(rc, 'service'):
+      args.service = rc.service
+
+  blog_id = None
+  if hasattr(args, 'blog'):
+    blog_id = args.blog
+  elif hasattr(rc, 'blog'):
+    blog_id = rc.blog
+  filename = args.filename if hasattr(args, 'filename') else None
+  service = find_service(args.service, blog_id, filename)
 
   if args.command == 'blogs':
-    http, service = get_http_service()
-    blogs = service.blogs()
-    req = blogs.listByUser(userId='self')
-    resp = req.execute(http=http)
-    print('%-20s: %s' % ('Blog ID', 'Blog name'))
-    for blog in resp['items']:
-      print('%-20s: %s' % (blog['id'], blog['name']))
+    service.list_blogs()
   elif args.command == 'search':
-    do_search(rc, args)
-  elif args.command in ('generate', 'checklink', 'post'):
-    handler = find_handler(args.filename)
-    if not handler:
-      print('No handler for the file!')
+    if blog_id is None:
+      print('no blog ID to search', file=sys.stderr)
       sys.exit(1)
-
-    hdr = handler.header
-
-    post = {
-      # default resource kind is blogger#post
-      'kind': 'blogger#%s' % hdr.get('kind', 'post'),
-      'content': handler.generate(),
-    }
-    if rc:
-      if hasattr(rc, 'blog'):
-        post['blog'] = {'id': rc.blog}
-    post.update(handler.generate_post())
-
-    if args.command == 'generate':
-      with codecs.open(path.join(gettempdir(), 'draft.html'), 'w',
-                       encoding='utf8') as f:
-        f.write(post['content'])
-
-      if args.command == 'generate' and path.exists(TEMPLATE_PATH):
-        with codecs.open(TEMPLATE_PATH, encoding='utf8') as f:
-          html = f.read()
-        html = html.replace('%%Title%%', post['title'])
-        html = html.replace('%%Content%%', post['content'])
-        with codecs.open(path.join(gettempdir(), 'preview.html'), 'w',
-                         encoding='utf8') as f:
-          f.write(html)
-      return
-    elif args.command == 'checklink':
-      if not HAS_LNKCKR:
-        print('You do not have lnkckr library')
-        return
-      c = Checker()
-      c.process(StringIO(post['content']))
-      c.check()
-      print()
-      c.print_all()
-      return
-
-    if 'blog' not in post:
-      print('You need to specify which blog to post on '
-            'in either brc.py or header of %s.' % handler.filename)
-      sys.exit(1)
-
-    http, service = get_http_service()
-    resp = posting(post, http, service)
-
-    handler.merge_header(resp)
-    handler.write()
+    q = ' '.join(args.q)
+    service.search(blog_id, q)
+  elif args.command == 'generate':
+    service.generate()
+  elif args.command == 'checklink':
+    service.checklink()
+  elif args.command == 'post':
+    service.post()
 
 
 if __name__ == '__main__':
