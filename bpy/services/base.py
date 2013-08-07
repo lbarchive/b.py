@@ -24,6 +24,7 @@ import codecs
 from io import StringIO
 import os
 from os import path
+import sys
 from tempfile import gettempdir
 
 HAS_LNKCKR = False
@@ -32,6 +33,8 @@ try:
   HAS_LNKCKR = True
 except ImportError:
   pass
+
+from bpy.handlers import find_handler
 
 TEMPLATE_PATH = path.join(os.getcwd(), 'tmpl.html')
 
@@ -50,9 +53,30 @@ class Service(object):
     """Publish the post to the service"""
     raise NotImplementedError
 
+  def make_handler_post(self):
+
+    handler = find_handler(self.filename)
+    if not handler:
+      print('No handler for the file!')
+      sys.exit(1)
+
+    hdr = handler.header
+
+    post = {
+      'service': self.service_name,
+      # default resource kind is blogger#post
+      'kind': 'blogger#%s' % hdr.get('kind', 'post'),
+      'content': handler.generate(),
+    }
+    if isinstance(self.options['blog'], int):
+      post['blog'] = {'id': self.options['blog']}
+    post.update(handler.generate_post())
+
+    return handler, post
+
   def generate(self):
 
-    handler, post = self.make_handler_post(self.filename)
+    handler, post = self.make_handler_post()
     with codecs.open(path.join(gettempdir(), 'draft.html'), 'w',
                      encoding='utf8') as f:
       f.write(post['content'])
@@ -71,7 +95,7 @@ class Service(object):
     if not HAS_LNKCKR:
       print('You do not have lnkckr library')
       return
-    handler, post = self.make_handler_post(self.filename)
+    handler, post = self.make_handler_post()
     c = Checker()
     c.process(StringIO(post['content']))
     c.check()

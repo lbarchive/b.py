@@ -48,7 +48,6 @@ if sys.version_info.major == 2:
         self._filename_link_warned = True
 
 from bpy.services.base import Service as BaseService
-from bpy.handlers import find_handler
 
 
 class Service(BaseService):
@@ -98,27 +97,6 @@ class Service(BaseService):
     print('%-20s: %s' % ('Blog ID', 'Blog name'))
     for blog in resp['items']:
       print('%-20s: %s' % (blog['id'], blog['name']))
-
-  def make_handler_post(self):
-
-    handler = find_handler(self.filename)
-    if not handler:
-      print('No handler for the file!')
-      sys.exit(1)
-
-    hdr = handler.header
-
-    post = {
-      'service': self.service_name,
-      # default resource kind is blogger#post
-      'kind': 'blogger#%s' % hdr.get('kind', 'post'),
-      'content': handler.generate(),
-    }
-    if isinstance(self.options['blog'], int):
-      post['blog'] = {'id': self.options['blog']}
-    post.update(handler.generate_post())
-
-    return handler, post
 
   def post(self):
 
