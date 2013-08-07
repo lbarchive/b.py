@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+## Version 0.6.0 (2013-08-07T21:40:36Z)
+
 * Port to Python 3, use Unicode in Python 2
 * Modularize Blogger API use, new services for adding new services
 * Add `service_options` to rc:
