@@ -98,13 +98,15 @@ To uninstall:
 Commands
 --------
 
-command   | supported services
---------- | ------------------
-blogs     | `b`
-post      | `b`, `wp`
-generate  | `base`, `b`, `wp`
-checklink | `base`, `b`, `wp`
-search    | `b`
+command     | supported services
+----------- | ------------------
+`blogs`     | `b`
+`post`      | `b`, `wp`
+`generate`  | `base`, `b`, `wp`
+`checklink` | `base`, `b`, `wp`
+`search`    | `b`
+
+Descriptions:
 
 *   `blogs`: list blogs. This can be used for blog IDs lookup.
 
@@ -115,6 +117,7 @@ search    | `b`
     The generation can output a preview html at `<TEMP>/preview.html` if there is `tmpl.html`. It will replace `%%Title%%` with post title and `%%Content%%` with generated HTML.
 
 *   `checklink`: check links in generated HTML using [lnkckr][].
+
 *   `search`: search blog
 
 Work (post) flow
