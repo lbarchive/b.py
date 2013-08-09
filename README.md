@@ -33,12 +33,12 @@ Current status
 
 * Tests/checks
 
-    name | command
-    --- | ---
-    Unittest | `python setup.py test`
+    name          | command
+    ------------- | --------------------------
+    Unittest      | `python setup.py test`
     PEP8[^4space] | `python setup.py pep8`
-    Pyflakes | `python setup.py pyflakes`
-    Pylint | `python setup.py pylint`
+    Pyflakes      | `python setup.py pyflakes`
+    Pylint        | `python setup.py pylint`
 
 I wish *b.py* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 
@@ -51,22 +51,22 @@ I wish *b.py* can support major operating systems and many markup languages some
 Dependencies
 ------------
 
-name | dependency | Python
---- | --- | ---
+name             | dependency                                         | Python
+---------------- | -------------------------------------------------- | ------
 ***Services***
-Blogger | [Google APIs Client Library for Python][GoogleAPI] | 2
- | `pip install google-api-python-client`
-WordPress | [python-wordpress-xmlrpc][] | 2 / 3
- | `pip install python-wordpress-xmlrpc`
+Blogger          | [Google APIs Client Library for Python][GoogleAPI] | 2
+                 | `pip install google-api-python-client`
+WordPress        | [python-wordpress-xmlrpc][]                        | 2 / 3
+                 | `pip install python-wordpress-xmlrpc`
 ***Handlers***
-AsciiDoc | [AsciiDoc][] | 2
-HTML | None | 2 / 3
-Markdown | [Markdown][] | 2 / 3
-reStructuredText | [reStructuredText][] | 2 / 3
-Text | None | 2 / 3
+AsciiDoc         | [AsciiDoc][]                                       | 2
+HTML             | None                                               | 2 / 3
+Markdown         | [Markdown][]                                       | 2 / 3
+reStructuredText | [reStructuredText][]                               | 2 / 3
+Text             | None                                               | 2 / 3
 ***Others***
-lnkckr | [lnkckr][] | 2 / 3
-smartypants | [smartypants][] | 2
+lnkckr           | [lnkckr][]                                         | 2 / 3
+smartypants      | [smartypants][]                                    | 2
 
 [GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
 [python-wordpress-xmlrpc]: https://github.com/maxcutler/python-wordpress-xmlrpc
@@ -95,47 +95,32 @@ To uninstall:
 
     $ pip uninstall b.py
 
-### Authorization
-
-You need to authorize *b.py* to access your Blogger account. Simply using `blogs` command (see *Commands* section) would get you into the authorization process:
-
-    $ b.py blogs
-
-Once you follow the steps and finish, there should be a `b.dat` credential file created under the current working directory, you should keep it safe.
-
-### Basic configuration file
-
-Beside the `b.dat` above, you may also need a `brc.py`, the *b.py* local configuration file. For starter, the following setting should be sufficient:
-
-    blog = <THE BLOG ID>
-
-You can use `blogs` command to quickly get the blog ID.
-
 Commands
 --------
 
-### `blogs`
+command   | supported services
+--------- | ------------------
+blogs     | `b`
+post      | `b`, `wp`
+generate  | `base`, `b`, `wp`
+checklink | `base`, `b`, `wp`
+search    | `b`
 
-List blogs. This can be used for blog IDs lookup.
+*   `blogs`: list blogs. This can be used for blog IDs lookup.
 
-### `post`
+*   `post`:  post or update a blog post.
 
-Post or update a blog post.
+*   `generate` : generate HTML file at `<TEMP>/draft.html`, where `<TEMP>` is the system's temporary directory.
 
-### `generate`
+    The generation can output a preview html at `<TEMP>/preview.html` if there is `tmpl.html`. It will replace `%%Title%%` with post title and `%%Content%%` with generated HTML.
 
-Generate HTML file at `<TEMP>/draft.html`, where `<TEMP>` is the system's temporary directory.
-
-The generation can output a preview html at `<TEMP>/preview.html` if there is `tmpl.html`. It will replace `%%Title%%` with post title and `%%Content%%` with generated HTML.
-
-### `checklink`
-
-Check links in generated HTML using [lnkckr][].
+*   `checklink`: check links in generated HTML using [lnkckr][].
+*   `search`: search blog
 
 Work (post) flow
 ----------------
 
-You should have completed the steps in *Installation* section, that is having `bpy.rc` and `b.dat` reside in the directory for your posts.
+You should have completed the steps in *Installation* and the service sections, that is having `brc.py` and `b.dat` reside in the directory for your posts for Blogger service or `brc.py` for WordPress service.
 
 Let's create a first post, `my-first-post.rst`:
 
@@ -145,7 +130,7 @@ Let's create a first post, `my-first-post.rst`:
 
     Hooray, posting frm commandline!
 
-Then issue the command to post it to Blogger:
+Then issue the command to post it to the service:
 
     $ b.py post my-first-post.rst
 
@@ -176,6 +161,7 @@ A header is used to specify the meta-data of a post, such as title or labels, it
 In reStructuredText (different markup has different style of header), a header look like
 
     .. !b
+       service: blogger
        kind: post
        title: Title of "something."
        labels: comma, separated, list
@@ -186,9 +172,11 @@ In reStructuredText (different markup has different style of header), a header l
        id_affix: foobar
        url: http://example.com/2013/01/title-of-something.html
 
-In normal usage, you may specify `title` and `labels`. `title` will override the post title, if this is missed, the post title will be the filename without extension.
+In normal usage, you may specify `title` and `labels`. `title` will override the post title, if this is missed, the post title will be the filename without the extension.
 
-`kind`, `blog`, `id`, and `url` are automatically added after a successful posting. `url` doesn't actually mean anything, just for you to have a record of the URL of a post.
+`service`, `kind`, `blog`, `id`, and `url` are automatically added after a successful posting. `url` doesn't actually mean anything, just for you to have a record of the URL of a post.
+
+`service` is the service is used for processing.
 
 `kind` is the type of the posting, `post` or `page`, default is `post` and currently Blogger service only supports `post`.
 
@@ -205,7 +193,7 @@ Configuration
 
 ### `brc.py`
 
-It's the configuration that *b.py* reads from current working directory. Currently, only `blog` and `handlers` are used, it may read like:
+`brc.py` the configuration that *b.py* reads from current working directory, it may look like:
 
     :::python
     service = '<service id>'
@@ -226,10 +214,10 @@ Services
 
 Services' IDs:
 
-service | IDs
---- | ---
-Base | `base`
-Blogger | `b`, `blogger`
+service   | IDs
+--------- | -----------------
+Base      | `base`
+Blogger   | `b`, `blogger`
 WordPress | `wp`, `wordpress`
 
 ### Service options
@@ -257,6 +245,14 @@ Blogger service recognize the following options:
       'blog': <blog id>,
     }
 
+You can use `blogs` command to quickly get the blog ID.
+
+You also need to authorize *b.py* to access your Blogger account. Simply using `blogs` command (see *Commands* section) would get you into the authorization process:
+
+    $ b.py blogs
+
+Once you follow the steps and finish, there should be a `b.dat` credential file created under the current working directory, you should keep it safe.
+
 ### WordPress
 
 WordPress service recognize the following options:
@@ -270,6 +266,8 @@ WordPress service recognize the following options:
     }
 
 `blog` should be the URL of WordPress blog, for example, `http://<something>.wordpress.com/` or `http://example.com/wordpress/`. Note that the tailing slash must be included.
+
+In order to use WordPress XML-RPC API, you must provide `username` and `password`.
 
 ### Writing a custom service
 
@@ -303,13 +301,13 @@ Handlers
 
 Markup handlers' IDs and extensions:
 
-ID | extensions
---- | ---
-`AsciiDoc` | `.asciidoc`
-`HTML` | `.html`, `.htm`, `.raw`
-`Markdown` | `.md`, `.mkd`, `.mkdn`, `.mkdown`, `.markdown`
+ID                 | extensions
+------------------ | ----------------------------------------------
+`AsciiDoc`         | `.asciidoc`
+`HTML`             | `.html`, `.htm`, `.raw`
+`Markdown`         | `.md`, `.mkd`, `.mkdn`, `.mkdown`, `.markdown`
 `reStructuredText` | `.rst`
-`Text` | `.txt`, `.text`
+`Text`             | `.txt`, `.text`
 
 ### General options
 
