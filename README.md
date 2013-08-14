@@ -39,6 +39,9 @@ Current status
     PEP8[^4space] | `python setup.py pep8`
     Pyflakes      | `python setup.py pyflakes`
     Pylint        | `python setup.py pylint`
+    Install       | `make install_test`
+
+    * Install: check if source distribution can be installed by pip. It uses virtualenv to create a temporary environment and installs the package.
 
 I wish *b.py* can support major operating systems and many markup languages someday, even different blogging platform, if possible.
 
@@ -67,6 +70,11 @@ Text             | None                                               | 2 / 3
 ***Others***
 lnkckr           | [lnkckr][]                                         | 2 / 3
 smartypants      | [smartypants][] >= 1.7.1                           | 2 / 3
+***Tests***
+PEP8             |                                                    | 2 / 3
+Pyflakes         |                                                    | 2 / 3
+Pylint           |                                                    | 2 / 3
+install\_test    | virtualenv, make                                   | 2 / 3
 
 [GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
 [python-wordpress-xmlrpc]: https://github.com/maxcutler/python-wordpress-xmlrpc

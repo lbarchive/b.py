@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+* add `install_test` target for testing package installation
+
 ## Version 0.6.1 (2013-08-14T07:41:25Z)
 
 * remove smartypants Python 3 exception, which now supports Python 3 since v1.7.1
