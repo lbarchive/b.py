@@ -218,6 +218,9 @@ with open(script_name) as f:
                'author_email']
   meta = dict([m for m in meta.items() if m[0] in meta_keys])
 
+with open('README-PyPI.rst') as f:
+  long_description = f.read()
+
 classifiers = [
   'Development Status :: 3 - Alpha',
   'Environment :: Console',
@@ -242,6 +245,7 @@ packages = [
 ]
 
 setup_d = dict(
+  long_description=long_description,
   cmdclass={
     'pep8': cmd_pep8,
     'pyflakes': cmd_pyflakes,

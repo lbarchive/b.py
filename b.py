@@ -33,12 +33,12 @@ from bpy.services import services, find_service
 __program__ = 'b.py'
 __description__ = 'Post to Blogger or WordPress in markup language seamlessly'
 __copyright__ = 'Copyright 2013, Yu Jie Lin'
-__license__ = 'MIT'
+__license__ = 'MIT License'
 __version__ = '0.6.0'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
-__email__ = 'livibetter@gmail.com'
+__author_email__ = 'livibetter@gmail.com'
 
 
 # b.py stuff
