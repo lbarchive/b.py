@@ -66,7 +66,7 @@ reStructuredText | [reStructuredText][]                               | 2 / 3
 Text             | None                                               | 2 / 3
 ***Others***
 lnkckr           | [lnkckr][]                                         | 2 / 3
-smartypants      | [smartypants][]                                    | 2
+smartypants      | [smartypants][] >= 1.7.1                           | 2 / 3
 
 [GoogleAPI]: https://developers.google.com/blogger/docs/3.0/api-lib/python
 [python-wordpress-xmlrpc]: https://github.com/maxcutler/python-wordpress-xmlrpc

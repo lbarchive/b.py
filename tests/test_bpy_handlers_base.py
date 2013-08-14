@@ -20,7 +20,6 @@
 
 from __future__ import unicode_literals
 import unittest
-import sys
 
 from bpy.handlers.base import BaseHandler
 
@@ -309,11 +308,6 @@ post content'''
     handler = self.handler
     handler.options['smartypants'] = True
     handler.markup = self.test_smartypants_MARKUP
-
-    if sys.version_info.major == 3:
-      with self.assertRaises(NotImplementedError):
-        html = handler.generate()
-      return
 
     html = handler.generate()
     self.assertEqual(html, self.test_smartypants_EXPECT)

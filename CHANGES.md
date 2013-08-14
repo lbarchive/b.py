@@ -3,6 +3,8 @@ CHANGES
 
 ## Development
 
+* remove smartypants Python 3 exception, which now supports Python 3 since v1.7.1
+
 ## Version 0.6.0 (2013-08-07T21:40:36Z)
 
 * Port to Python 3, use Unicode in Python 2

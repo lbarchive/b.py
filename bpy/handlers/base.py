@@ -25,7 +25,6 @@ import codecs
 from hashlib import md5
 from os.path import basename, splitext
 import re
-import sys
 import warnings
 
 HAS_SMARTYPANTS = False
@@ -211,8 +210,8 @@ class BaseHandler():
     >>> handler = Handler(None)
     >>> print(handler.generate('foo "bar"'))
     foo "bar"
-    >>> handler.options['smartypants'] = True # doctest: +SKIP
-    >>> print(handler.generate('foo "bar"')) # doctest: +SKIP
+    >>> handler.options['smartypants'] = True
+    >>> print(handler.generate('foo "bar"'))
     foo &#8220;bar&#8221;
     """
 
@@ -223,8 +222,6 @@ class BaseHandler():
 
     if self.options.get('smartypants', False):
       if not HAS_SMARTYPANTS:
-        if sys.version_info.major == 3:
-          raise NotImplementedError('smartypants is not supported in Python 3')
         warnings.warn("smartypants option is set, "
                       "but the library isn't installed.", RuntimeWarning)
         return html
@@ -233,7 +230,7 @@ class BaseHandler():
       pattern = pattern.replace('|script', '|script|style')
       RE = re.compile(pattern, RE.flags)
       smartypants.tags_to_skip_regex = RE
-      html = smartyPants(html)
+      html = smartyPants(html, 'qbdew')
 
     return html
 
@@ -281,8 +278,8 @@ class BaseHandler():
     foo "bar"
     >>> print(handler.generate_title('foo\\nbar\\n\\n'))
     foo bar
-    >>> handler.options['smartypants'] = True # doctest: +SKIP
-    >>> print(handler.generate_title('foo "bar"')) # doctest: +SKIP
+    >>> handler.options['smartypants'] = True
+    >>> print(handler.generate_title('foo "bar"'))
     foo &#8220;bar&#8221;
     """
     if title is None:
