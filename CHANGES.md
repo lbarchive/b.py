@@ -3,7 +3,11 @@ CHANGES
 
 ## Development
 
-* add `install_test` target for testing package installation
+## Version 0.6.2 (2013-08-18T11:51:37Z)
+
+* add test, test_pep0, test_pyflakes test_test (unittest), install_test
+  Makefile targets
+* update for smartypants >= 1.8.0
 
 ## Version 0.6.1 (2013-08-14T07:41:25Z)
 
