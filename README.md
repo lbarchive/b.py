@@ -69,7 +69,7 @@ reStructuredText | [reStructuredText][]                               | 2 / 3
 Text             | None                                               | 2 / 3
 ***Others***
 lnkckr           | [lnkckr][]                                         | 2 / 3
-smartypants      | [smartypants][] >= 1.7.1                           | 2 / 3
+smartypants      | [smartypants][] >= 1.8.0                           | 2 / 3
 ***Tests***
 PEP8             |                                                    | 2 / 3
 Pyflakes         |                                                    | 2 / 3

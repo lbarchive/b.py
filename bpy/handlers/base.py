@@ -30,7 +30,6 @@ import warnings
 HAS_SMARTYPANTS = False
 try:
   import smartypants
-  from smartypants import smartyPants
   HAS_SMARTYPANTS = True
 except ImportError:
   pass
@@ -225,12 +224,8 @@ class BaseHandler():
         warnings.warn("smartypants option is set, "
                       "but the library isn't installed.", RuntimeWarning)
         return html
-      RE = smartypants.tags_to_skip_regex
-      pattern = RE.pattern.replace('|code', '|code|tt')
-      pattern = pattern.replace('|script', '|script|style')
-      RE = re.compile(pattern, RE.flags)
-      smartypants.tags_to_skip_regex = RE
-      html = smartyPants(html, 'qbdew')
+      Attr = smartypants.Attr
+      html = smartypants.smartypants(html, Attr.set1 | Attr.w)
 
     return html
 
