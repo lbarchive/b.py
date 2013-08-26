@@ -32,11 +32,34 @@ VENV_PY3_CMD=virtualenv-python3.2
 
 BUILD_CMD=./setup.py sdist --formats gztar,zip bdist_wininst --plat-name win32
 
+DOC_FILES = docs/conf.py $(wildcard docs/*.rst)
+BPY_FILES = $(wildcard bpy/*.py) $(wildcard bpy/*/*.py)
+
+# ============================================================================
+
 build:
 	$(BUILD_CMD)
 
 upload:
 	$(BUILD_CMD) upload
+
+upload_doc: doc
+	$(PY2_CMD) setup.py upload_sphinx
+
+# ============================================================================
+
+doc: docs/_build/html apidoc
+
+docs/_build/html: $(DOC_FILES) $(BPY_FILES)
+	make -C docs html
+
+apidoc: docs/apidoc
+
+docs/apidoc: $(BPY_FILES)
+	rm -rf docs/apidoc
+	sphinx-apidoc -f -H Reference -o docs/apidoc bpy
+
+# ============================================================================
 
 test: test_pep8 test_pyflakes test_test install_test
 
@@ -57,4 +80,12 @@ $(VENV_PY2_CMD) $(VENV_PY3_CMD):
 	. $(INSTALL_TEST_DIR)/bin/activate ; type $(SCRIPT)
 	$(INSTALL_TEST_DIR)/bin/$(SCRIPT) --version
 
-.PHONY: build upload install_test $(VENV_PY2_CMD) $(VENV_PY3_CMD)
+# ============================================================================
+
+clean:
+	rm -rf *.pyc build dist __pycache__
+	make -C docs clean
+
+# ============================================================================
+
+.PHONY: build upload doc apidoc install_test $(VENV_PY2_CMD) $(VENV_PY3_CMD) clean

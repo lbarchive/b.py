@@ -152,11 +152,13 @@ class BaseHandler():
     The initial value is from self.options, and can be overriden by
     self.header.
 
-    Returns None if it's None.
-    Returns value if value is not ''
-    Returns first 4 digits of md5 of value if value is '', and assign back to
-            self.options. _generate method of Handler should write back to
-            self.header.
+    Returns
+
+    * None if it's None.
+    * value if value is not ''
+    * first 4 digits of md5 of value if value is '', and assign back to
+      self.options. _generate method of Handler should write back to
+      self.header.
 
     >>> class Handler(BaseHandler):
     ...   def _generate(self, source=None): return source

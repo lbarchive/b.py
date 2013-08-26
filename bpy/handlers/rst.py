@@ -18,6 +18,56 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+You can specify settings-overrides_ for reStructuredText in :ref:`brc.py`, for
+example:
+
+.. code:: python
+
+  handlers = {
+    'reStructuredText': {
+      'options': {
+        'register_directives': {
+          'dir_name': MyDir,
+        },
+        'register_roles': {
+          'role_name': MyRole,
+        },
+        'settings_overrides': {
+          'footnote_references': 'brackets',
+        },
+      },
+    },
+  }
+
+.. _settings-overrides:
+   http://docutils.sourceforge.net/docs/user/config.html#html4css1-writer
+
+
+Custom Directives and Roles
+===========================
+
+For adding your own custom reStructuredText directives or roles, you can do it
+in :ref:`brc.py` with one of the following method:
+
+* by calling register functions of docutils directly,
+* by adding in b.py's option as shown above, or
+* by using decorator of b.py, for example:
+
+  .. code:: python
+
+    from docutils.parsers.rst import Directive
+    from bpy.handlers.rst import register_directive, register_role
+
+    @register_directive('mydir')
+    class MyDir(Directive):
+      pass
+
+    @register_role('myrole')
+    def myrole(name, rawtext, text, lineno, inliner, options=None,
+               content=None):
+      pass
+"""
 
 from __future__ import print_function, unicode_literals
 from docutils.core import publish_parts
@@ -29,9 +79,11 @@ from bpy.handlers import base
 def register_directive(dir_name):
   """For lazy guys
 
-  @register_directive(name)
-  class MyDirective(Directive):
-    [...]
+  .. code:: python
+
+    @register_directive(name)
+    class MyDirective(Directive):
+      pass
   """
   def _register_directive(directive):
     directives.register_directive(dir_name, directive)

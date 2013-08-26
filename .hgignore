@@ -1,0 +1,7 @@
+syntax: glob
+brc.py
+build
+dist
+docs/_build
+docs/apidoc
+MANIFEST

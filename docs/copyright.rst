@@ -1,0 +1,6 @@
+=========
+Copyright
+=========
+
+.. include:: ../COPYING
+   :literal:

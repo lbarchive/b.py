@@ -18,6 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+You can specify `configuration`__ for Python Markdown in :ref:`brc.py`, for
+example:
+
+__ http://packages.python.org/Markdown/reference.html#markdown
+
+.. code:: python
+
+  handlers = {
+    'Markdown': {
+      'options': {
+        'config': {
+          'extensions': ['extension1', 'extension2'],
+          'tab_length': 8,
+        },
+      },
+    },
+  }
+"""
 
 from __future__ import print_function, unicode_literals
 import markdown

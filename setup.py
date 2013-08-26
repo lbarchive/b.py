@@ -24,8 +24,20 @@ from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
 import sys
 
+try:
+    from sphinx.setup_command import BuildDoc
+except ImportError:
+    # No need of Sphinx for normal users
+    BuildDoc = None
+try:
+    from sphinx_pypi_upload import UploadDoc
+except ImportError:
+    # Sphinx-PyPI-upload not compatible with Python 3
+    UploadDoc = None
+
+
 # scripts to be exculded from checking
-EXCLUDE_SCRIPTS = ('asciidocapi.py',)
+EXCLUDE_SCRIPTS = ('asciidocapi.py', 'conf.py')
 
 script_name = 'b.py'
 
@@ -218,7 +230,7 @@ with open(script_name) as f:
                'author_email']
   meta = dict([m for m in meta.items() if m[0] in meta_keys])
 
-with open('README-PyPI.rst') as f:
+with open('README.rst') as f:
   long_description = f.read()
 
 classifiers = [
@@ -257,6 +269,11 @@ setup_d = dict(
   packages=packages,
   **meta
 )
+
+if BuildDoc:
+    setup_d['cmdclass']['build_sphinx'] = BuildDoc
+if UploadDoc:
+    setup_d['cmdclass']['upload_sphinx'] = UploadDoc
 
 if __name__ == '__main__':
   setup(**setup_d)

@@ -19,6 +19,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+No options are available at this moment.
+"""
 
 from __future__ import print_function, unicode_literals
 import StringIO

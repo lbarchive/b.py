@@ -18,6 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+The Text handler for plain text always escape HTML, and add ``<br/>`` if not
+``pre_wrap``.
+
+You can specify the following options for plain text in :ref:`brc.py`, for
+example:
+
+.. code:: python
+
+  handlers = {
+    'Text': {
+      'options': {
+        'pre_wrap': False
+      },
+    },
+  }
+
+``pre_wrap`` will wrap output in ``<pre/>`` tag.
+"""
 
 from __future__ import print_function, unicode_literals
 import cgi

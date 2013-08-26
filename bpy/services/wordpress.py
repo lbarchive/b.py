@@ -18,6 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+WordPress service recognizes the following options:
+
+.. code:: python
+
+  service = 'wordpress'
+  service_options = {
+    'blog': <blog url>,
+    'username': 'user01',
+    'password': 'secret',
+  }
+
+``blog`` should be the URL of WordPress blog, for example,
+``http://<something>.wordpress.com/`` or ``http://example.com/wordpress/``.
+Note that the tailing slash must be included.
+
+In order to use WordPress XML-RPC API, you must provide ``username`` and
+``password``.
+"""
 
 from __future__ import print_function
 import sys

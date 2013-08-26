@@ -19,6 +19,47 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+============
+b.py command
+============
+
+
+Commands
+========
+
+============= =======================
+command       supported services
+============= =======================
+``blogs``     ``b``
+``post``      ``b``, ``wp``
+``generate``  ``base``, ``b``, ``wp``
+``checklink`` ``base``, ``b``, ``wp``
+``search``    ``b``
+============= =======================
+
+Descriptions:
+
+``blogs``
+  list blogs. This can be used for blog IDs lookup.
+
+``post``
+   post or update a blog post.
+
+``generate``
+  generate HTML file at ``<TEMP>/draft.html``, where ``<TEMP>`` is the system's
+  temporary directory.
+
+  The generation can output a preview html at ``<TEMP>/preview.html`` if there
+  is ``tmpl.html``. It will replace ``%%Title%%`` with post title and
+  ``%%Content%%`` with generated HTML.
+
+``checklink``
+  check links in generated HTML using [lnkckr][].
+
+``search``
+  search blog
+"""
 
 from __future__ import print_function
 import argparse as ap

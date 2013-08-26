@@ -18,6 +18,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+Blogger service recognizes the following options:
+
+.. code:: python
+
+  service = 'blogger'
+  service_options = {
+    'blog': <blog id>,
+  }
+
+You can use ``blogs`` command to quickly get the blog ID.
+
+You also need to authorize *b.py* to access your Blogger account. Simply using
+``blogs`` command (see *Commands* section) would get you into the authorization
+process::
+
+  $ b.py blogs
+
+
+.. _b.dat:
+
+``b.dat``
+=========
+
+Once you follow the steps and finish, there should be a ``b.dat`` credential
+file created under the current working directory, you should keep it safe.
+"""
 
 from __future__ import print_function
 import httplib2

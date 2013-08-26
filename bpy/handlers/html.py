@@ -18,6 +18,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+HTML handler simply takes the file content as its output, and assume it's valid
+HTML, therefore the handler doesn't edit or validate the content.
+
+No options are available at this moment.
+"""
 
 from __future__ import print_function, unicode_literals
 

@@ -18,6 +18,63 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+Services' IDs:
+
+========= =====================
+service   IDs
+========= =====================
+Base      ``base``
+Blogger   ``b``, ``blogger``
+WordPress ``wp``, ``wordpress``
+========= =====================
+
+
+Options
+=======
+
+To assign options to chosen service, add ``service_options`` in :ref:`brc.py`,
+for example:
+
+.. code:: python
+
+  service = "<service id>"
+  service_options = {
+    'option1': 'value1',
+    'option2': 2,
+  }
+
+
+Writing a custom service
+========================
+
+A sample handler ``sample_service.py``:
+
+.. code:: python
+
+  from bpy.service import base
+
+  class Service(base.Service):
+
+    # see bpy/services for examples
+    pass
+
+And corresponding setting in :ref:`brc.py`:
+
+.. code:: python
+
+  import re
+
+  # this matches the re
+  service = 'foobar'
+
+  services = {
+    'SampleService': {
+      'match': re.compile(r'^foobar$'),
+      'module': 'sample_service',
+    },
+  }
+"""
 
 import os
 import re
