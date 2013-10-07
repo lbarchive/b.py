@@ -3,10 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to b.py's documentation!
-================================
+b.py documentation
+==================
 
-Contents:
+.. note::
+
+  This documentation is still in its early stage. If anything is unclear or you
+  have any suggestions or questions, please feel free to create an issue in
+  `issue tracker`_.
+
+  .. _issue tracker: https://bitbucket.org/livibetter/b.py/issues
+
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
@@ -16,9 +25,26 @@ Contents:
    b.py
    configuration
    header
-   apidoc/modules
-   changes
+   Changes <changes>
    copyright
+
+References
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   apidoc/bpy
+
+Links
+-----
+
+* b.py_ on Bitbucket
+* PyPI_
+
+.. _documentation: http://pythonhosted.org/b.py/
+.. _b.py: http://bitbucket.org/livibetter/b.py
+.. _PyPI: https://pypi.python.org/pypi/b.py
 
 
 Indices and tables

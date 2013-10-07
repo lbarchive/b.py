@@ -15,7 +15,10 @@ Examples
 More information
 ----------------
 
-You can read smartypants' documentation_ or visit b.py_ on Bitbucket.
+* Documentation_
+* b.py_ on Bitbucket
+* PyPI_
 
 .. _documentation: http://pythonhosted.org/b.py/
 .. _b.py: http://bitbucket.org/livibetter/b.py
+.. _PyPI: https://pypi.python.org/pypi/b.py

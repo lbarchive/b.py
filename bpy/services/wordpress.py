@@ -19,7 +19,7 @@
 # THE SOFTWARE.
 
 """
-WordPress service recognizes the following options:
+WordPress service recognizes the following options in :ref:`brc.py`:
 
 .. code:: python
 

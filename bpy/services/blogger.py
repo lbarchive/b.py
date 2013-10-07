@@ -19,7 +19,7 @@
 # THE SOFTWARE.
 
 """
-Blogger service recognizes the following options:
+Blogger service recognizes the following options in :ref:`brc.py`:
 
 .. code:: python
 
@@ -30,11 +30,21 @@ Blogger service recognizes the following options:
 
 You can use ``blogs`` command to quickly get the blog ID.
 
-You also need to authorize *b.py* to access your Blogger account. Simply using
-``blogs`` command (see *Commands* section) would get you into the authorization
-process::
 
-  $ b.py blogs
+.. _Authorization:
+
+Authorization
+=============
+
+You need to authorize *b.py* to access your Blogger account. Simply using
+``blogs`` command (see *Commands* section) to start the authorization process:
+
+.. code:: sh
+
+  b.py blogs
+
+Once you follow the prompted steps, there should be a b.dat_ created under the
+current working directory, you should keep it safe.
 
 
 .. _b.dat:
@@ -42,8 +52,10 @@ process::
 ``b.dat``
 =========
 
-Once you follow the steps and finish, there should be a ``b.dat`` credential
-file created under the current working directory, you should keep it safe.
+``b.dat`` is a credential file for Blogger service, it's read by *b.py* from
+the current directory.
+
+To create the file, please follow Authorization_.
 """
 
 from __future__ import print_function

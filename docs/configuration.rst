@@ -7,20 +7,32 @@ Configuration
 ``brc.py``
 ==========
 
-``brc.py`` the configuration that :doc:`b.py` reads from current working directory,
-it may look like:
+``brc.py`` is the configuration that :doc:`b.py` reads from the current working
+directory, it may look like:
 
 .. code:: python
 
   service = '<service id>'
   service_options = {
-    # see Services section
+    # see below
   }
 
+  # Normally, you only need settings above.
+  # For customized handlers and services, you can specify:
+
   handlers = {
-    # see Handlers section
+    # see below
   }
 
   services = {
-    # see Services section
+    # see below
   }
+
+A normal ``brc.py`` only needs ``service`` and ``service_options``, but you can
+add customized handlers and services.
+
+.. seealso:: :ref:`Service options <service-options>`
+
+.. seealso:: :ref:`Writing a custom handler <custom-handler>`
+
+.. seealso:: :ref:`Writing a custom service <custom-service>`

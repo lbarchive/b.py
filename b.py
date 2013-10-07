@@ -55,10 +55,12 @@ Descriptions:
   ``%%Content%%`` with generated HTML.
 
 ``checklink``
-  check links in generated HTML using [lnkckr][].
+  check links in generated HTML using lnkckr_.
 
 ``search``
   search blog
+
+.. _lnkckr: https://pypi.python.org/pypi/lnkckr
 """
 
 from __future__ import print_function

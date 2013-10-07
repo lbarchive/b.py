@@ -30,6 +30,8 @@ WordPress ``wp``, ``wordpress``
 ========= =====================
 
 
+.. _service-options:
+
 Options
 =======
 
@@ -44,6 +46,8 @@ for example:
     'option2': 2,
   }
 
+
+.. _custom-service:
 
 Writing a custom service
 ========================

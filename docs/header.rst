@@ -6,8 +6,18 @@ A header is used to specify the meta-data of a post, such as title or labels,
 it is also used to store information which is needed to update a post later on,
 such as ``id``.
 
-In reStructuredText (different markup has different style of header), a header
-look like
+Generally, header can be simply formed as the following regardless which markup
+language handler you use::
+
+  !b
+  key1: value1
+  key2: value2
+
+  post content goes here
+
+The handler will automatically reformed the header into *comment* after posting
+or updating, the format of comment depends on the markup language. For example,
+in reStructuredText, a header look like
 
 .. code:: rst
 
@@ -23,26 +33,62 @@ look like
      id_affix: foobar
      url: http://example.com/2013/01/title-of-something.html
 
-In normal usage, you may specify ``title`` and ``labels``. ``title`` will
-override the post title, if this is missed, the post title will be the filename
-without the extension.
+Making header into comment, so it wouldn't be rendered out if it's processed by
+tools other than *b.py*.
 
-``service``, ``kind``, ``blog``, ``id``, and ``url`` are automatically added
-after a successful posting. ``url`` doesn't actually mean anything, just for
-you to have a record of the URL of a post.
 
-``service`` is the service is used for processing.
+Keys
+====
 
-``kind`` is the type of the posting, ``post`` or ``page``, default is ``post``
-and currently Blogger service only supports ``post``.
+``service``:
+  used for processing.
 
-``categories`` is the catgories, only WordPress service uses this.
+  It could be added automatically after successfully posting.
 
-``draft`` is the post status, ``true``, ``yes``, or ``1`` for draft post,
-otherwise published post. Only WordPress service supports this.
+  .. seealso:: :doc:`apidoc/bpy.services`
 
-``blog`` and ``id`` are very important, they are used in updating post and they
-should not be edited by you.
+``blog``:
+  used in updating post and should not be edited by the user normally.
 
-``id_affix`` is the affix to HTML element ID, see also the General Options of
-Handlers.
+  It could be added automatically after successfully posting.
+  
+``id``:
+  used in updating post and should not be edited by the user normally.
+
+  It could be added automatically after successfully posting.
+
+``title``:
+  override the post title.
+  
+  If not specified, the post title will be the filename without the extension.
+
+``kind``:
+  type of the posting, ``post`` or ``page``, default is ``post``.
+  
+  Blogger service currently only supports ``post``.
+
+  It could be added automatically after successfully posting.
+
+``labels``:
+  labels or tags, comma-separated list.
+
+``categories``:
+  categories, comma-separated list.
+  
+  Only WordPress service uses this.
+
+``draft``:
+  the post status, ``true``, ``yes``, or ``1`` for draft post, otherwise
+  published post.
+
+  Only WordPress service supports this.
+
+``url``:
+  link of the post.
+
+  It could be added automatically after successfully posting.
+
+``id_affix``:
+  the affix to HTML element ID.
+
+  .. seealso:: :ref:`id_affix` in handler options.

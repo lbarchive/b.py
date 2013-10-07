@@ -60,6 +60,11 @@ value:
     },
   }
 
+.. _id_affix:
+
+``id_affix``
+------------
+
 ``id_affix`` is used to avoid conflict across posts' HTML element ID. It may be
 a prefix or suffix, depending on handler's implementation and markup library's
 support. It has three types of value:
@@ -72,17 +77,25 @@ Currently supported markup handler:
 
 * :mod:`bpy.handlers.rst`
 
+``markup_prefix`` and ``markup_suffix``
+---------------------------------------
+
 ``markup_prefix`` and ``markup_suffix`` can be useful for adding header and
 footer content for posts. Another useful case in reStructuredText is you can
 use it for setting up some directives, for example ``.. sectnum::``, so you can
 ensure all posts have prefixing section number if in use conjunction with
 ``.. contents::``.
 
+``smartypants``
+---------------
+
 If ``smartypants`` is enabled, then all generated HTML from markup processor
 will be processed by smartypants_ library.
 
 .. _smartypants: https://pypi.python.org/pypi/smartypants
 
+
+.. _custom-handler:
 
 Writing a custom handler
 ========================

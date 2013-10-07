@@ -33,7 +33,7 @@ VENV_PY3_CMD=virtualenv-python3.2
 BUILD_CMD=./setup.py sdist --formats gztar,zip bdist_wininst --plat-name win32
 
 DOC_FILES = docs/conf.py $(wildcard docs/*.rst)
-BPY_FILES = $(wildcard bpy/*.py) $(wildcard bpy/*/*.py)
+BPY_FILES = b.py $(wildcard bpy/*.py) $(wildcard bpy/*/*.py)
 
 # ============================================================================
 
@@ -48,7 +48,7 @@ upload_doc: doc
 
 # ============================================================================
 
-doc: docs/_build/html apidoc
+doc: apidoc docs/_build/html
 
 docs/_build/html: $(DOC_FILES) $(BPY_FILES)
 	make -C docs html
@@ -57,7 +57,7 @@ apidoc: docs/apidoc
 
 docs/apidoc: $(BPY_FILES)
 	rm -rf docs/apidoc
-	sphinx-apidoc -f -H Reference -o docs/apidoc bpy
+	sphinx-apidoc -f -T -o docs/apidoc bpy
 
 # ============================================================================
 
@@ -84,6 +84,7 @@ $(VENV_PY2_CMD) $(VENV_PY3_CMD):
 
 clean:
 	rm -rf *.pyc build dist __pycache__
+	rm -rf docs/apidoc
 	make -C docs clean
 
 # ============================================================================
