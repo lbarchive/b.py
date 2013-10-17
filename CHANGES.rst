@@ -12,6 +12,7 @@ Development
   * add ``doc`` for documentation generation
   * add ``upload_doc`` for uploading to PyPI
   * add ``clean`` for cleaning up built files
+* add Blogger page support (#1)
 
 Version 0.6.2 (2013-08-18T11:51:37Z)
 ====================================

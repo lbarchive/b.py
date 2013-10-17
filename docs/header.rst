@@ -65,8 +65,6 @@ Keys
 ``kind``:
   type of the posting, ``post`` or ``page``, default is ``post``.
   
-  Blogger service currently only supports ``post``.
-
   It could be added automatically after successfully posting.
 
 ``labels``:

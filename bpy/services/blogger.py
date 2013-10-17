@@ -153,13 +153,19 @@ class Service(BaseService):
 
     if kind == 'post':
       posts = self.service.posts()
+    elif kind == 'page':
+      posts = self.service.pages()
     else:
       raise ValueError('Unsupported kind: %s' % kind)
 
     if 'id' in post:
       print('Updating a %s: %s' % (kind, title))
-      req = posts.update(blogId=post['blog']['id'], postId=post['id'],
-                         body=post)
+      data = {
+        'blogId': post['blog']['id'],
+        'body': post,
+        '%sId' % kind: post['id'],
+      }
+      req = posts.update(**data)
     else:
       print('Posting a new %s: %s' % (kind, title))
       req = posts.insert(blogId=post['blog']['id'], body=post)
