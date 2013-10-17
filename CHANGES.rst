@@ -5,6 +5,9 @@ CHANGES
 Development
 ===========
 
+Version 0.7.0 (2013-10-17T03:31:14Z)
+====================================
+
 * add documentation generation
 * setup.py
   * add ``build_sphinx`` and ``upload_sphinx`` commands
