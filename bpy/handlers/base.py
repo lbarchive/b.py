@@ -260,7 +260,6 @@ class BaseHandler():
         v = ', '.join(v)
       elif k == 'draft':
         v = repr(v)
-        print(k, v)
       lines.append(self.HEADER_FMT % (k, v))
     lines.append(self.PREFIX_END)
     return '\n'.join([_f for _f in lines if _f]) + '\n'

@@ -79,7 +79,7 @@ Keys
   the post status, ``true``, ``yes``, or ``1`` for draft post, otherwise
   published post.
 
-  Only WordPress service supports this.
+  .. note:: Blogger page doesn't support draft status setting.
 
 ``url``:
   link of the post.

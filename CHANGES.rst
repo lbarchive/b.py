@@ -13,6 +13,10 @@ Development
   * add ``upload_doc`` for uploading to PyPI
   * add ``clean`` for cleaning up built files
 * add Blogger page support (#1)
+* add Blogger post draft support (#2)
+
+  #2 is split, #15 created for page kind, which doesn't have same draft setting
+  support as post kind.
 
 Version 0.6.2 (2013-08-18T11:51:37Z)
 ====================================
