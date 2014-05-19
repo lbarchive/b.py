@@ -51,7 +51,7 @@ Keys
   used in updating post and should not be edited by the user normally.
 
   It could be added automatically after successfully posting.
-  
+
 ``id``:
   used in updating post and should not be edited by the user normally.
 
@@ -59,12 +59,12 @@ Keys
 
 ``title``:
   override the post title.
-  
+
   If not specified, the post title will be the filename without the extension.
 
 ``kind``:
   type of the posting, ``post`` or ``page``, default is ``post``.
-  
+
   It could be added automatically after successfully posting.
 
 ``labels``:
@@ -72,7 +72,7 @@ Keys
 
 ``categories``:
   categories, comma-separated list.
-  
+
   Only WordPress service uses this.
 
 ``draft``:

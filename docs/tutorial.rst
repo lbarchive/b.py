@@ -6,18 +6,20 @@ Tutorial
 Setting up
 ==========
 
-You should have completed the steps in :ref:`Installation` and the service sections,
-that is having the following file(s) reside in the directory for your posts and
-all :ref:`Dependencies` installed properly.
+You should have completed the steps in :ref:`Installation` and the service
+sections, that is having the following file(s) reside in the directory for your
+posts and all :ref:`Dependencies` installed properly.
 
-* :mod:`Blogger service <bpy.services.blogger>`: :ref:`brc.py` and :ref:`b.dat`; or
+* :mod:`Blogger service <bpy.services.blogger>`: :ref:`brc.py` and
+  :ref:`b.dat`; or
 * :mod:`WordPress service <bpy.services.wordpress>`: :ref:`brc.py`
 
 
 Creating the first post
 =======================
 
-Let's create a first post, ``my-first-post.rst`` or ``my-first-post.md``, whatever markup language floats your boat:
+Let's create a first post, ``my-first-post.rst`` or ``my-first-post.md``,
+whatever markup language floats your boat:
 
 .. code:: rst
 
