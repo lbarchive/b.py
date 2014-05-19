@@ -83,6 +83,10 @@ Dependencies
 +------------------+----------------------------------------------------+--------+
 | **Tests**                                                                      |
 +------------------+----------------------------------------------------+--------+
+| DOC8             | doc8_::                                            | 2 / 3  |
+|                  |                                                    |        |
+|                  |   pip install doc8                                 |        |
++------------------+----------------------------------------------------+--------+
 | PEP8             | pep8_::                                            | 2 / 3  |
 |                  |                                                    |        |
 |                  |   pip install pep8                                 |        |
@@ -112,6 +116,7 @@ __ https://developers.google.com/blogger/docs/3.0/api-lib/python
 .. _smartypants: http://pypi.python.org/pypi/smartypants
 .. _lnkckr: https://bitbucket.org/livibetter/lnkckr
 
+.. _doc8: https://pypi.python.org/pypi/doc8
 .. _pep8: https://pypi.python.org/pypi/pep8
 .. _pyflakes: https://pypi.python.org/pypi/pyflakes
 .. _pylint: https://pypi.python.org/pypi/pylint
