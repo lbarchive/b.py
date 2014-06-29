@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,8 @@ from __future__ import print_function
 from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
 import sys
+
+from wheel.bdist_wheel import bdist_wheel
 
 try:
     from sphinx.setup_command import BuildDoc
@@ -63,6 +65,63 @@ class cmd_test(Command):
     tests = loader.discover(start_dir='tests')
     runner = TextTestRunner(verbosity=2)
     runner.run(tests)
+
+
+class cmd_isort(Command):
+
+  description = 'run isort'
+  user_options = []
+
+  def initialize_options(self):
+
+    pass
+
+  def finalize_options(self):
+
+    pass
+
+  def run(self):
+
+    try:
+      import isort
+    except ImportError:
+      print(('Cannot import isort, you forgot to install?\n'
+           'run `pip install isort` to install.'), file=sys.stderr)
+      sys.exit(1)
+
+    from glob import glob
+
+    print()
+    print('Options')
+    print('=======')
+    print()
+    print('Exclude:', EXCLUDE_SCRIPTS)
+    print()
+
+    files = ['setup.py', script_name] + \
+            glob('bpy/*.py') + \
+            glob('bpy/handlers/*.py') + \
+            glob('bpy/services/*.py') + \
+            glob('tests/*.py')
+
+    print('Results')
+    print('=======')
+    print()
+
+    fails = 0
+    for f in files:
+      # unfortunately, we have to do it twice
+      if isort.SortImports(f, check=True, skip=[]).incorrectly_sorted:
+        fails += 1
+        print()
+        isort.SortImports(f, show_diff=True, skip=[])
+        print()
+
+    print()
+    print('Statistics')
+    print('==========')
+    print()
+    print('%d files failed to pass' % fails)
 
 
 class cmd_pep8(Command):
@@ -259,6 +318,8 @@ packages = [
 setup_d = dict(
   long_description=long_description,
   cmdclass={
+    'bdist_wheel': bdist_wheel,
+    'isort': cmd_isort,
     'pep8': cmd_pep8,
     'pyflakes': cmd_pyflakes,
     'pylint': cmd_pylint,

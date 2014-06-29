@@ -7,6 +7,8 @@ Development
 
 * Makefile
   * add ``test_doc8`` for doc8 test
+  + add ``test_isort`` for import style check
++ add Python Wheel to build process
 
 Version 0.7.0 (2013-10-17T03:31:14Z)
 ====================================
