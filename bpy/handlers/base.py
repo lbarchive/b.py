@@ -20,12 +20,13 @@
 
 
 from __future__ import print_function, unicode_literals
-from abc import abstractmethod, ABCMeta
+
 import codecs
-from hashlib import md5
-from os.path import basename, splitext
 import re
 import warnings
+from abc import ABCMeta, abstractmethod
+from hashlib import md5
+from os.path import basename, splitext
 
 HAS_SMARTYPANTS = False
 try:

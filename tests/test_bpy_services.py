@@ -23,6 +23,7 @@ import doctest
 import sys
 
 from bpy.services import base
+
 if sys.version_info.major == 2:
   from bpy.services import blogger
 else:

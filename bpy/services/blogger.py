@@ -59,9 +59,13 @@ To create the file, please follow Authorization_.
 """
 
 from __future__ import print_function
-import httplib2
+
 import os
 import sys
+
+import httplib2
+
+from bpy.services.base import Service as BaseService
 
 if sys.version_info.major == 2:
   from apiclient.discovery import build
@@ -85,8 +89,6 @@ if sys.version_info.major == 2:
       if os.path.islink(self._filename) and not self._filename_link_warned:
         print('File: %s is a symbolic link.' % self._filename)
         self._filename_link_warned = True
-
-from bpy.services.base import Service as BaseService
 
 
 class Service(BaseService):

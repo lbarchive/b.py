@@ -64,6 +64,7 @@ Descriptions:
 """
 
 from __future__ import print_function
+
 import argparse as ap
 import imp
 import os
@@ -71,7 +72,7 @@ import sys
 import traceback
 
 from bpy.handlers import handlers
-from bpy.services import services, find_service
+from bpy.services import find_service, services
 
 __program__ = 'b.py'
 __description__ = 'Post to Blogger or WordPress in markup language seamlessly'

@@ -20,12 +20,12 @@
 
 
 from __future__ import unicode_literals
+
 from docutils import nodes
 from docutils.parsers.rst import Directive
 
-from bpy.handlers.rst import Handler, register_directive, register_role
-
 import test_bpy_handlers_base as test_base
+from bpy.handlers.rst import Handler, register_directive, register_role
 
 
 class HandlerTestCase(test_base.BaseHandlerTestCase):

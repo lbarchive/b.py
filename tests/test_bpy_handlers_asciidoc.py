@@ -19,13 +19,14 @@
 # THE SOFTWARE.
 
 from __future__ import unicode_literals
-import unittest
+
 import sys
+import unittest
+
+import test_bpy_handlers_base as test_base
 
 if sys.version_info.major == 2:
   from bpy.handlers.asciidoc import Handler
-
-import test_bpy_handlers_base as test_base
 
 
 @unittest.skipIf(sys.version_info.major != 2, 'asciidoc only support Python 2')

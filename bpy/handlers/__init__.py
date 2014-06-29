@@ -137,7 +137,6 @@ import re
 import sys
 import traceback
 
-
 handlers = {
   'AsciiDoc': {
     'match': re.compile(r'.*\.asciidoc$'),

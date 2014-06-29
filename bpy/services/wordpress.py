@@ -39,13 +39,15 @@ In order to use WordPress XML-RPC API, you must provide ``username`` and
 """
 
 from __future__ import print_function
+
 import sys
 
-from wordpress_xmlrpc import Client, WordPressPage, WordPressPost
-from wordpress_xmlrpc.methods import posts
-
-from bpy.services.base import Service as BaseService
 from bpy.handlers import find_handler
+from bpy.services.base import Service as BaseService
+
+# isort has different result for Python 2 and 3, so skip them
+from wordpress_xmlrpc import Client, WordPressPage, WordPressPost  # isort:skip
+from wordpress_xmlrpc.methods import posts  # isort:skip
 
 
 class Service(BaseService):

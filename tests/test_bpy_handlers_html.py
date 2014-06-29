@@ -19,9 +19,8 @@
 # THE SOFTWARE.
 
 
-from bpy.handlers.html import Handler
-
 import test_bpy_handlers_base as test_base
+from bpy.handlers.html import Handler
 
 
 class HandlerTestCase(test_base.BaseHandlerTestCase):

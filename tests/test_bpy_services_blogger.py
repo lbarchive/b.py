@@ -20,8 +20,9 @@
 
 
 from __future__ import unicode_literals
-import unittest
+
 import sys
+import unittest
 
 from bpy.services.blogger import Service
 from test_bpy_services_base import BaseServiceTestCase

@@ -19,6 +19,7 @@
 # THE SOFTWARE.
 
 from __future__ import unicode_literals
+
 import unittest
 
 from bpy.handlers.base import BaseHandler

@@ -39,6 +39,7 @@ __ http://packages.python.org/Markdown/reference.html#markdown
 """
 
 from __future__ import print_function, unicode_literals
+
 import markdown
 
 from bpy.handlers import base

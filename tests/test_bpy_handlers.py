@@ -23,6 +23,7 @@ import doctest
 import sys
 
 from bpy.handlers import base, html, mkd, rst, text
+
 if sys.version_info.major == 2:
   from bpy.handlers import asciidoc
 else:

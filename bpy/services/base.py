@@ -24,12 +24,15 @@ commands.
 """
 
 from __future__ import print_function
+
 import codecs
-from io import StringIO
 import os
-from os import path
 import sys
+from io import StringIO
+from os import path
 from tempfile import gettempdir
+
+from bpy.handlers import find_handler
 
 HAS_LNKCKR = False
 try:
@@ -38,7 +41,6 @@ try:
 except ImportError:
   pass
 
-from bpy.handlers import find_handler
 
 TEMPLATE_PATH = path.join(os.getcwd(), 'tmpl.html')
 

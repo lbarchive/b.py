@@ -20,22 +20,23 @@
 # THE SOFTWARE.
 
 from __future__ import print_function
+
+import sys
 from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
-import sys
 
 from wheel.bdist_wheel import bdist_wheel
 
 try:
-    from sphinx.setup_command import BuildDoc
+  from sphinx.setup_command import BuildDoc
 except ImportError:
-    # No need of Sphinx for normal users
-    BuildDoc = None
+  # No need of Sphinx for normal users
+  BuildDoc = None
 try:
-    from sphinx_pypi_upload import UploadDoc
+  from sphinx_pypi_upload import UploadDoc
 except ImportError:
-    # Sphinx-PyPI-upload not compatible with Python 3
-    UploadDoc = None
+  # Sphinx-PyPI-upload not compatible with Python 3
+  UploadDoc = None
 
 
 # scripts to be exculded from checking
@@ -86,7 +87,7 @@ class cmd_isort(Command):
       import isort
     except ImportError:
       print(('Cannot import isort, you forgot to install?\n'
-           'run `pip install isort` to install.'), file=sys.stderr)
+            'run `pip install isort` to install.'), file=sys.stderr)
       sys.exit(1)
 
     from glob import glob
@@ -98,11 +99,11 @@ class cmd_isort(Command):
     print('Exclude:', EXCLUDE_SCRIPTS)
     print()
 
-    files = ['setup.py', script_name] + \
-            glob('bpy/*.py') + \
-            glob('bpy/handlers/*.py') + \
-            glob('bpy/services/*.py') + \
-            glob('tests/*.py')
+    files = (['setup.py', script_name] +
+             glob('bpy/*.py') +
+             glob('bpy/handlers/*.py') +
+             glob('bpy/services/*.py') +
+             glob('tests/*.py'))
 
     print('Results')
     print('=======')

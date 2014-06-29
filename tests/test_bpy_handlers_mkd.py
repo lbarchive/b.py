@@ -20,9 +20,9 @@
 
 
 from __future__ import unicode_literals
-from bpy.handlers.mkd import Handler
 
 import test_bpy_handlers_base as test_base
+from bpy.handlers.mkd import Handler
 
 
 class HandlerTestCase(test_base.BaseHandlerTestCase):
