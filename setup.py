@@ -25,7 +25,10 @@ import sys
 from distutils.core import Command, setup
 from unittest import TestLoader, TextTestRunner
 
-from wheel.bdist_wheel import bdist_wheel
+try:
+  from wheel.bdist_wheel import bdist_wheel
+except ImportError:
+  bdist_wheel = None
 
 try:
   from sphinx.setup_command import BuildDoc
@@ -332,10 +335,12 @@ setup_d = dict(
   **meta
 )
 
+if bdist_wheel:
+  setup_d['cmdclass']['bdist_wheel'] = bdist_wheel
 if BuildDoc:
-    setup_d['cmdclass']['build_sphinx'] = BuildDoc
+  setup_d['cmdclass']['build_sphinx'] = BuildDoc
 if UploadDoc:
-    setup_d['cmdclass']['upload_sphinx'] = UploadDoc
+  setup_d['cmdclass']['upload_sphinx'] = UploadDoc
 
 if __name__ == '__main__':
   setup(**setup_d)
