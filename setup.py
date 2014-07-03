@@ -322,7 +322,6 @@ packages = [
 setup_d = dict(
   long_description=long_description,
   cmdclass={
-    'bdist_wheel': bdist_wheel,
     'isort': cmd_isort,
     'pep8': cmd_pep8,
     'pyflakes': cmd_pyflakes,
