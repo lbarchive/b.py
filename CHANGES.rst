@@ -6,13 +6,15 @@ Development
 ===========
 
 * Makefile
-  * add ``test_doc8`` for doc8 test
+
+  + add ``test_doc8`` for doc8 test
   + add ``test_isort`` for import style check
+
   * rename target ``install_test`` to ``test_setup``
   * target ``test_setup``
 
-    * test packages build
-    * test with ``LC_ALL=C``
+    + add test for packages build
+    + add test for ``LC_ALL=C``
 
 + add Python Wheel to build process
 
@@ -21,11 +23,15 @@ Version 0.7.0 (2013-10-17T03:31:14Z)
 
 * add documentation generation
 * setup.py
-  * add ``build_sphinx`` and ``upload_sphinx`` commands
+
+  + add ``build_sphinx`` and ``upload_sphinx`` commands
+
 * Makefile
-  * add ``doc`` for documentation generation
-  * add ``upload_doc`` for uploading to PyPI
-  * add ``clean`` for cleaning up built files
+
+  + add ``doc`` for documentation generation
+  + add ``upload_doc`` for uploading to PyPI
+  + add ``clean`` for cleaning up built files
+
 * add Blogger page support (#1)
 * add Blogger post draft support (#2)
 
