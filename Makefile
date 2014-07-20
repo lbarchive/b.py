@@ -24,11 +24,6 @@ SCRIPT=b.py
 PY2_CMD=python2
 PY3_CMD=python3
 INSTALL_TEST_DIR=/tmp/$(PACKAGE)_install_test
-# if version or naming isn't matched to environment, for example, Python 2.6,
-# run the following to override:
-#   make VENV_PY2_CMD=virtualenv-python2.6 install_test
-VENV_PY2_CMD=virtualenv-python2.7
-VENV_PY3_CMD=virtualenv-python3.2
 
 BUILD_CMD=./setup.py sdist --formats gztar,zip bdist_wheel bdist_wininst --plat-name win32
 
@@ -61,7 +56,7 @@ docs/apidoc: $(BPY_FILES)
 
 # ============================================================================
 
-test: test_isort test_pep8 test_pyflakes test_test install_test
+test: test_isort test_pep8 test_pyflakes test_test test_setup
 
 test_%:
 	@echo '========================================================================================='
@@ -73,16 +68,32 @@ test_doc8:
 	@echo '========================================================================================='
 	doc8 ${DOC_FILES}
 
-install_test: $(VENV_PY2_CMD) $(VENV_PY3_CMD)
+test_setup: test_setup_py2 test_setup_py3
 
-$(VENV_PY2_CMD) $(VENV_PY3_CMD):
+test_setup_py2 test_setup_py3:
 	@echo '========================================================================================='
 	rm -rf $(INSTALL_TEST_DIR)
-	$@ $(INSTALL_TEST_DIR)
-	./setup.py sdist --dist-dir $(INSTALL_TEST_DIR)
+	$(eval PY_CMD = \
+		$(if $(findstring py2,$@),\
+			$(PY2_CMD),\
+			$(if $(findstring py3,$@),\
+				$(PY3_CMD),\
+				$(error Do not know what to do with $@)\
+			)\
+		)\
+	)
+	$(PY_CMD) -m virtualenv $(INSTALL_TEST_DIR)
+	LC_ALL=C $(PY_CMD) setup.py --version >/dev/null
+	$(PY_CMD) $(BUILD_CMD)
+	$(PY_CMD) setup.py sdist --dist-dir $(INSTALL_TEST_DIR)
 	$(INSTALL_TEST_DIR)/bin/pip install $(INSTALL_TEST_DIR)/*.tar.gz
-	. $(INSTALL_TEST_DIR)/bin/activate ; type $(SCRIPT)
-	$(INSTALL_TEST_DIR)/bin/$(SCRIPT) --version
+	@\
+		CHK_VER="`$(PY_CMD) $(SCRIPT) --version 2>&1`";\
+		cd $(INSTALL_TEST_DIR);\
+		. bin/activate;\
+		[ "`type $(SCRIPT)`" = "$(SCRIPT) is $(INSTALL_TEST_DIR)/bin/$(SCRIPT)" ] &&\
+		[ "$$CHK_VER" = "`bin/$(SCRIPT) --version 2>&1`" ]
+	rm -rf $(INSTALL_TEST_DIR)
 
 # ============================================================================
 
@@ -93,4 +104,4 @@ clean:
 
 # ============================================================================
 
-.PHONY: build upload doc apidoc install_test $(VENV_PY2_CMD) $(VENV_PY3_CMD) clean
+.PHONY: build upload doc apidoc test_setup test_setup_py2 test_setup_py3 clean

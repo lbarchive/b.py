@@ -8,6 +8,12 @@ Development
 * Makefile
   * add ``test_doc8`` for doc8 test
   + add ``test_isort`` for import style check
+  * rename target ``install_test`` to ``test_setup``
+  * target ``test_setup``
+
+    * test packages build
+    * test with ``LC_ALL=C``
+
 + add Python Wheel to build process
 
 Version 0.7.0 (2013-10-17T03:31:14Z)
