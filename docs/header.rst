@@ -76,10 +76,8 @@ Keys
   Only WordPress service uses this.
 
 ``draft``:
-  the post status, ``true``, ``yes``, or ``1`` for draft post, otherwise
-  published post.
-
-  .. note:: Blogger page doesn't support draft status setting.
+  the post or page status, ``true``, ``yes``, or ``1`` for draft post,
+  otherwise published post or page.
 
 ``url``:
   link of the post.

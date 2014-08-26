@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013-2014 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -166,34 +166,18 @@ class Service(BaseService):
     }
     if 'id' in post:
       data['%sId' % kind] = post['id']
+      action = 'revert' if post['draft'] else 'publish'
+      data[action] = True
       print('Updating a %s: %s' % (kind, title))
       req = posts.update(**data)
     else:
-      # The API for draft status is very inconvenient, when creating a new
-      # post, you can use isDraft, but you can't use it when updating, you must
-      # use publish and revert to change the draft status. And currently only
-      # post kind support isDraft.
-      if kind == 'post':
-        data['isDraft'] = post['draft']
+      data['isDraft'] = post['draft']
       print('Posting a new %s: %s' % (kind, title))
       req = posts.insert(**data)
 
     resp = req.execute(http=self.http)
 
     resp['draft'] = resp['status'] == 'DRAFT'
-    # only post kind support publish and revert methods, have to use second API
-    # request just to set the correct draft status.
-    if kind == 'post' and resp['draft'] != post['draft']:
-      data = {
-        'blogId': post['blog']['id'],
-        'postId': resp['id'],
-      }
-      if post['draft']:
-        req = posts.revert(**data)
-      else:
-        req = posts.publish(**data)
-      resp_draft = req.execute(http=self.http)
-      resp['draft'] = resp_draft['status'] == 'DRAFT'
 
     handler.merge_header(resp)
     handler.write()

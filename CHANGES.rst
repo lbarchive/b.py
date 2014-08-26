@@ -18,6 +18,11 @@ Development
 
 + add Python Wheel to build process
 
+* add Blogger page draft support (#15)
+
+  also simplify the post draft, both post and page use publish and revert
+  action to update post or page for the draft status
+
 Version 0.7.0 (2013-10-17T03:31:14Z)
 ====================================
 
