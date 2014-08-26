@@ -5,6 +5,9 @@ CHANGES
 Development
 ===========
 
+Version 0.8.0 (2014-08-26T12:17:09Z)
+====================================
+
 * Makefile
 
   + add ``test_doc8`` for doc8 test

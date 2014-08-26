@@ -76,9 +76,9 @@ from bpy.services import find_service, services
 
 __program__ = 'b.py'
 __description__ = 'Post to Blogger or WordPress in markup language seamlessly'
-__copyright__ = 'Copyright 2013, Yu Jie Lin'
+__copyright__ = 'Copyright 2013-2014, Yu Jie Lin'
 __license__ = 'MIT License'
-__version__ = '0.7.0'
+__version__ = '0.8.0'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
