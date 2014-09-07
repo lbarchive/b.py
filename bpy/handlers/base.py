@@ -26,7 +26,8 @@ import re
 import warnings
 from abc import ABCMeta, abstractmethod
 from hashlib import md5
-from os.path import basename, splitext
+from os.path import basename, splitext, exists
+from base64 import b64encode
 
 HAS_SMARTYPANTS = False
 try:
@@ -56,6 +57,8 @@ class BaseHandler():
   RE_SPLIT = re.compile(r'^(?:([^\n]*?!b.*?)\n\n)?(.*)',
                         re.DOTALL | re.MULTILINE)
   RE_HEADER = re.compile(r'.*?([a-zA-Z0-9_-]+)\s*[=:]\s*(.*)\s*')
+
+  RE_IMG = re.compile(r'(<img.*?)src="([^"]*)"(.*?>)')
 
   def __init__(self, filename, options=None):
 
@@ -230,6 +233,9 @@ class BaseHandler():
       Attr = smartypants.Attr
       html = smartypants.smartypants(html, Attr.set1 | Attr.w)
 
+    if self.options.get('embed_images', False):
+        html = self.embed_images(html)
+
     return html
 
   def generate_header(self, header=None):
@@ -348,3 +354,23 @@ class BaseHandler():
     with codecs.open(self.filename, 'w', 'utf8') as f:
       f.write(self.source)
     self.modified = False
+
+  def embed_images(self, html):
+    return self.RE_IMG.sub(self.embed_image, html)
+
+  def embed_image(self, match):
+    img_name = match.group(2)
+    if exists(img_name):
+      img_prefix = match.group(1)
+      src_attr = "src=\"" + self.encode_image(img_name) + "\""
+      img_suffix = match.group(3)
+      return img_prefix + src_attr + img_suffix
+    else:
+      return match.group(0)
+
+  def encode_image(self, name):
+    with open(name, "rb") as f:
+      image_data = f.read()
+      ext = splitext(name)[1].lstrip('.')
+      encoded_image = b64encode(image_data)
+      return "data:image/" + ext + ";base64," + encoded_image
