@@ -27,7 +27,7 @@ INSTALL_TEST_DIR=/tmp/$(PACKAGE)_install_test
 
 BUILD_CMD=./setup.py sdist --formats gztar,zip bdist_wheel bdist_wininst --plat-name win32
 
-DOC_FILES = docs/conf.py $(wildcard docs/*.rst)
+DOC_FILES = docs/conf.py $(wildcard docs/*.rst) CHANGES.rst
 BPY_FILES = b.py $(wildcard bpy/*.py) $(wildcard bpy/*/*.py)
 
 # ============================================================================

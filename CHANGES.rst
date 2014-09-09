@@ -5,6 +5,10 @@ CHANGES
 Development
 ===========
 
+* Makefile
+
+  * fix ``doc`` for ``CHANGES.rst`` prerequisite
+
 * add ``embed_images`` configuration option to embed image files via data URI
   scheme for all but text handler (pull request #2, by Adam Kemp)
 
