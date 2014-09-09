@@ -56,6 +56,9 @@ value:
 
         # use smartypant to process the output of markup processor
         'smartypants': False,
+
+        # support image embedding via data URI scheme
+        'embed_images': False,
       },
     },
   }
@@ -94,6 +97,40 @@ will be processed by smartypants_ library.
 
 .. _smartypants: https://pypi.python.org/pypi/smartypants
 
+.. _embed_images:
+
+``embed_images``
+----------------
+
+.. note::
+
+  Only :mod:`bpy.handlers.text` does not support this option.
+
+When this option is enabled, it looks for the ``src`` attribute of ``img`` tag
+in rendered HTML, see if there is a local files, excluding ``http``, ``https``,
+and ``data`` schemes, if found, it reads the file and embeds with Base64
+encoded content.
+
+For example, in reStructuredText:
+
+.. code:: rst
+
+  .. image:: /path/to/test.png
+
+Instead of
+
+.. code:: html
+
+  <img alt="/path/to/test.png" src="/path/to/test.png" />
+
+It could be replaced with, if ``/path/to/test.png`` exists:
+
+.. code:: html
+
+  <img alt="/path/to/test.png" src="data:image/png;base64,..." />
+
+If the image file can't be found, a message will be printed out, the rendered
+image tag will be kept untouched.
 
 .. _custom-handler:
 

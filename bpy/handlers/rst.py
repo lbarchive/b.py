@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2013 by Yu-Jie Lin
+# Copyright (C) 2011-2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,14 +19,15 @@
 # THE SOFTWARE.
 
 """
-You can specify settings-overrides_ for reStructuredText in :ref:`brc.py`, for
-example:
+You can specify settings-overrides_ for reStructuredText in :ref:`brc.py` or
+the embed_images_, for example:
 
 .. code:: python
 
   handlers = {
     'reStructuredText': {
       'options': {
+        'embed_images': True,
         'register_directives': {
           'dir_name': MyDir,
         },

@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,9 @@ import codecs
 import re
 import warnings
 from abc import ABCMeta, abstractmethod
-from hashlib import md5
-from os.path import basename, splitext, exists
 from base64 import b64encode
+from hashlib import md5
+from os.path import basename, exists, splitext
 
 HAS_SMARTYPANTS = False
 try:
@@ -58,7 +58,15 @@ class BaseHandler():
                         re.DOTALL | re.MULTILINE)
   RE_HEADER = re.compile(r'.*?([a-zA-Z0-9_-]+)\s*[=:]\s*(.*)\s*')
 
-  RE_IMG = re.compile(r'(<img.*?)src="([^"]*)"(.*?>)')
+  SUPPORT_EMBED_IMAGES = True
+  RE_IMG = re.compile(
+    r'''
+    (?P<prefix><img.*?)
+    src="(?!data:image/|https?://)(?P<src>[^"]*)"
+    (?P<suffix>.*?>)
+    ''',
+    re.VERBOSE
+  )
 
   def __init__(self, filename, options=None):
 
@@ -233,8 +241,8 @@ class BaseHandler():
       Attr = smartypants.Attr
       html = smartypants.smartypants(html, Attr.set1 | Attr.w)
 
-    if self.options.get('embed_images', False):
-        html = self.embed_images(html)
+    if self.SUPPORT_EMBED_IMAGES and self.options.get('embed_images', False):
+      html = self.embed_images(html)
 
     return html
 
@@ -356,21 +364,36 @@ class BaseHandler():
     self.modified = False
 
   def embed_images(self, html):
-    return self.RE_IMG.sub(self.embed_image, html)
+    """Embed images on local filesystem as data URI
 
-  def embed_image(self, match):
-    img_name = match.group(2)
-    if exists(img_name):
-      img_prefix = match.group(1)
-      src_attr = "src=\"" + self.encode_image(img_name) + "\""
-      img_suffix = match.group(3)
-      return img_prefix + src_attr + img_suffix
-    else:
+    >>> class Handler(BaseHandler):
+    ...   def _generate(self, source=None): return source
+    >>> handler = Handler(None)
+    >>> html = '<img src="http://example.com/example.png"/>'
+    >>> print(handler.embed_images(html))
+    <img src="http://example.com/example.png"/>
+    >>> html = '<img src="tests/test.png"/>'
+    >>> print(handler.embed_images(html))  #doctest: +ELLIPSIS
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB...QmCC"/>
+    """
+    if not self.SUPPORT_EMBED_IMAGES:
+      raise RuntimeError('%r does not support embed_images' % type(self))
+
+    return self.RE_IMG.sub(self._embed_image, html)
+
+  @staticmethod
+  def _embed_image(match):
+
+    src = match.group('src')
+    if not exists(src):
+      print('%s is not found.' % src)
       return match.group(0)
 
-  def encode_image(self, name):
-    with open(name, "rb") as f:
-      image_data = f.read()
-      ext = splitext(name)[1].lstrip('.')
-      encoded_image = b64encode(image_data)
-      return "data:image/" + ext + ";base64," + encoded_image
+    with open(src, 'rb') as f:
+      data = b64encode(f.read()).decode('ascii')
+
+    return '%ssrc="%s"%s' % (
+      match.group('prefix'),
+      'data:image/%s;base64,%s' % (splitext(src)[1].lstrip('.'), data),
+      match.group('suffix'),
+    )

@@ -5,6 +5,18 @@ CHANGES
 Development
 ===========
 
+* add ``embed_images`` configuration option to embed image files via data URI
+  scheme for all but text handler (pull request #2, by Adam Kemp)
+
+  * skip ``http``, ``https``, and ``data`` schemes
+  * if file not found, a message is printed out, rendered HTML tag is kept
+    untouched
+  * related doctest and unittest tests are added, testing ``embed_images``
+    function and with ``generate``, if with text handler, it will raise
+    ``RuntimeError`` or treat ``img`` tag as plain text, respectively
+  * ``BaseHandler`` has class attribute ``SUPPORT_EMBED_IMAGES`` for subclass
+    to turn off the support as text handler utilizing it
+
 Version 0.8.0 (2014-08-26T12:17:09Z)
 ====================================
 

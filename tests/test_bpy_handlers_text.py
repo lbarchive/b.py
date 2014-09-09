@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -48,3 +48,20 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
     handler = self.handler
     handler.options['pre_wrap'] = True
     super(HandlerTestCase, self).test_generate_title_common_markup()
+
+  # =====
+
+  def test_embed_images(self):
+
+    handler = self.handler
+    self.assertRaises(RuntimeError, handler.embed_images, ('', ))
+
+  def test_embed_images_generate(self):
+
+    handler = self.handler
+    handler.options['embed_images'] = True
+
+    handler.markup = '<img src="http://example.com/example.png"/>'
+    html = handler.generate()
+    EXPECT = '&lt;img src="http://example.com/example.png"/&gt;'
+    self.assertEqual(html, EXPECT)

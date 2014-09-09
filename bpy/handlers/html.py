@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,17 @@
 HTML handler simply takes the file content as its output, and assume it's valid
 HTML, therefore the handler doesn't edit or validate the content.
 
-No options are available at this moment.
+You can specify embed_images_, for example:
+
+.. code:: python
+
+  handlers = {
+    'HTML': {
+      'options': {
+        'embed_images': True,
+      },
+    },
+  }
 """
 
 from __future__ import print_function, unicode_literals

@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -68,6 +68,8 @@ class Handler(base.BaseHandler):
   PREFIX_HEAD = ''
   PREFIX_END = ''
   HEADER_FMT = '%s: %s'
+
+  SUPPORT_EMBED_IMAGES = False
 
   def generate_title(self, markup=None):
     """Generate HTML from plain text

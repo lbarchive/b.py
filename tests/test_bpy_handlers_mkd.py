@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,8 @@
 
 
 from __future__ import unicode_literals
+
+import unittest
 
 import test_bpy_handlers_base as test_base
 from bpy.handlers.mkd import Handler
@@ -47,3 +49,17 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
   # =====
 
   test_smartypants_EXPECT = '<p>foo &#8220;bar&#8221;</p>'
+
+  # =====
+
+  @unittest.skip('tested in BaseHandler')
+  def test_embed_images(self):
+
+    pass
+
+  test_embed_images_generate_SOURCE = '![tests/test.png](tests/test.png)'
+  test_embed_images_generate_EXPECT = (
+    '<p><img alt="tests/test.png" src="%s" /></p>' % (
+      test_base.BaseHandlerTestCase.test_embed_images_data_URI
+    )
+  )

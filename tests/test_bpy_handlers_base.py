@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -360,3 +360,60 @@ post content'''
 
     handler.update_source()
     self.assertEqual(handler.source, source)
+
+  # =====
+
+  test_embed_images_src = 'tests/test.png'
+  test_embed_images_data_URI = (
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAI'
+    'AAACQd1PeAAAADElEQVQI12Oorq4GAALmAXLRBAkWAAAAAElFTkSuQmCC'
+  )
+
+  test_embed_images_SOURCE1 = '<img src="http://example.com/example.png"/>'
+  test_embed_images_EXPECT1 = test_embed_images_SOURCE1
+
+  test_embed_images_SOURCE2 = '<img src="tests/test.png"/>'
+  test_embed_images_EXPECT2 = '<img src="%s"/>' % test_embed_images_data_URI
+
+  test_embed_images_SOURCE3 = '<img alt="foo" src="tests/test.png"/>'
+  test_embed_images_EXPECT3 = '<img alt="foo" src="%s"/>' % (
+                              test_embed_images_data_URI)
+
+  test_embed_images_SOURCE4 = '<img src="tests/test.png" title="bar"/>'
+  test_embed_images_EXPECT4 = '<img src="%s" title="bar"/>' % (
+                              test_embed_images_data_URI)
+
+  test_embed_images_SOURCE5 = '<img src="%s"/>' % test_embed_images_data_URI
+  test_embed_images_EXPECT5 = test_embed_images_SOURCE5
+
+  def test_embed_images(self):
+
+    handler = self.handler
+
+    result = handler.embed_images(self.test_embed_images_SOURCE1)
+    self.assertEqual(result, self.test_embed_images_EXPECT1)
+
+    result = handler.embed_images(self.test_embed_images_SOURCE2)
+    self.assertEqual(result, self.test_embed_images_EXPECT2)
+
+    result = handler.embed_images(self.test_embed_images_SOURCE3)
+    self.assertEqual(result, self.test_embed_images_EXPECT3)
+
+    result = handler.embed_images(self.test_embed_images_SOURCE4)
+    self.assertEqual(result, self.test_embed_images_EXPECT4)
+
+    result = handler.embed_images(self.test_embed_images_SOURCE5)
+    self.assertEqual(result, self.test_embed_images_EXPECT5)
+
+  test_embed_images_generate_SOURCE = '<img src="tests/test.png"/>'
+  test_embed_images_generate_EXPECT = '<img src="%s"/>' % (
+                                      test_embed_images_data_URI)
+
+  def test_embed_images_generate(self):
+
+    handler = self.handler
+    handler.options['embed_images'] = True
+
+    handler.markup = self.test_embed_images_generate_SOURCE
+    html = handler.generate()
+    self.assertEqual(html, self.test_embed_images_generate_EXPECT)

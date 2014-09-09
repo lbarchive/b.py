@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 """
-You can specify `configuration`__ for Python Markdown in :ref:`brc.py`, for
-example:
+You can specify `configuration`__ for Python Markdown in :ref:`brc.py` or
+embed_images_, for example:
 
 __ http://packages.python.org/Markdown/reference.html#markdown
 
@@ -33,6 +33,7 @@ __ http://packages.python.org/Markdown/reference.html#markdown
           'extensions': ['extension1', 'extension2'],
           'tab_length': 8,
         },
+        'embed_images': True,
       },
     },
   }

@@ -52,3 +52,17 @@ class HandlerTestCase(test_base.BaseHandlerTestCase):
   # =====
 
   test_smartypants_EXPECT = '<p>foo &#8220;bar&#8221;</p>'
+
+  # =====
+
+  @unittest.skip('tested in BaseHandler')
+  def test_embed_images(self):
+
+    pass
+
+  test_embed_images_generate_SOURCE = 'image:tests/test.png[tests/test.png]'
+  test_embed_images_generate_EXPECT = (
+    '<p><img src="%s" style="border-width: 0;" alt="tests/test.png"></p>' % (
+      test_base.BaseHandlerTestCase.test_embed_images_data_URI
+    )
+  )
