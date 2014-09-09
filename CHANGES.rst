@@ -5,6 +5,9 @@ CHANGES
 Development
 ===========
 
+Version 0.9.0 (2014-09-09T03:06:03Z)
+====================================
+
 * Makefile
 
   * fix ``doc`` for ``CHANGES.rst`` prerequisite
