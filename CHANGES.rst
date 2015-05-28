@@ -5,6 +5,9 @@ CHANGES
 Development
 ===========
 
+Version 0.9.1 (2015-05-28T20:17:33Z)
+====================================
+
 * fix Blogger authentication warning on the deprecation of ``oauth2client.tools.run`` by switching_ to ``run_flow``.
 
   .. _switching: https://github.com/pydata/pandas/issues/8327#issuecomment-97282417

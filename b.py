@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013-2015 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ __program__ = 'b.py'
 __description__ = 'Post to Blogger or WordPress in markup language seamlessly'
 __copyright__ = 'Copyright 2013-2014, Yu Jie Lin'
 __license__ = 'MIT License'
-__version__ = '0.9.0'
+__version__ = '0.9.1'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'
