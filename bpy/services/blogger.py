@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2014 by Yu-Jie Lin
+# Copyright (C) 2013-2015 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +71,7 @@ if sys.version_info.major == 2:
   from apiclient.discovery import build
   from oauth2client.client import OAuth2WebServerFlow
   from oauth2client.file import Storage as BaseStorage
-  from oauth2client.tools import run
+  from oauth2client.tools import run_flow, argparser
 
   API_STORAGE = 'b.dat'
 
@@ -123,7 +123,7 @@ class Service(BaseService):
     storage = Storage(API_STORAGE)
     credentials = storage.get()
     if credentials is None or credentials.invalid:
-      credentials = run(FLOW, storage)
+      credentials = run_flow(FLOW, storage, argparser.parse_args([]))
 
     http = httplib2.Http()
     self.http = credentials.authorize(http)
