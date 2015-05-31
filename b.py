@@ -67,6 +67,7 @@ from __future__ import print_function
 
 import argparse as ap
 import imp
+import logging
 import os
 import sys
 import traceback
@@ -97,6 +98,8 @@ def parse_args():
   p = ap.ArgumentParser()
   p.add_argument('--version', action='version',
                  version='%(prog)s ' + __version__)
+  p.add_argument('-d', '--debug', action='store_true',
+                 help='turn on debugging messages')
   p.add_argument('-s', '--service', default='base',
                  help='what service to use. (Default: %(default)s)')
   sp = p.add_subparsers(help='commands')
@@ -149,6 +152,18 @@ def load_config():
 def main():
 
   args = parse_args()
+
+  logging.basicConfig(
+    format=(
+      '%(asctime)s '
+      '%(levelname).4s '
+      '%(module)5.5s:%(funcName)-10.10s:%(lineno)04d '
+      '%(message)s'
+    ),
+    datefmt='%H:%M:%S',
+  )
+  if args.debug:
+    logging.getLogger().setLevel(logging.DEBUG)
 
   rc = load_config()
   service_options = {'blog': None}

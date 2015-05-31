@@ -5,6 +5,8 @@ CHANGES
 Development
 ===========
 
+* add ``-d``/``--debug`` for debugging messages
+
 Version 0.9.1 (2015-05-28T20:17:33Z)
 ====================================
 

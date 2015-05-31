@@ -1,4 +1,4 @@
-# Copyright (C) 2013, 2014 Yu-Jie Lin
+# Copyright (C) 2013-2015 Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
 from __future__ import print_function, unicode_literals
 
 import codecs
+import logging
 import re
 import warnings
 from abc import ABCMeta, abstractmethod
@@ -322,6 +323,11 @@ class BaseHandler():
       source = self.source
 
     header, markup = self.RE_SPLIT.match(source).groups()
+    if not header:
+      logging.warning('found no header')
+    if not markup:
+      logging.warning('markup is empty')
+    logging.debug('markup length = %d' % len(markup))
 
     _header = {}
     if header:
@@ -336,6 +342,8 @@ class BaseHandler():
           v = v.lower() in ('true', 'yes', '1')
         _header[k] = v
     header = _header
+
+    logging.debug('header = %r' % header)
 
     return header, markup
 
