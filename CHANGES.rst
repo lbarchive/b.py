@@ -6,6 +6,7 @@ Development
 ===========
 
 * add ``-d``/``--debug`` for debugging messages
+* show warning about ``stdout`` encoding not ``UTF-*``, and set ``errors`` to ``replace``
 
 Version 0.9.1 (2015-05-28T20:17:33Z)
 ====================================

@@ -66,6 +66,7 @@ Descriptions:
 from __future__ import print_function
 
 import argparse as ap
+import codecs
 import imp
 import logging
 import os
@@ -164,6 +165,20 @@ def main():
   )
   if args.debug:
     logging.getLogger().setLevel(logging.DEBUG)
+
+  encoding = sys.stdout.encoding
+  if not encoding.startswith('UTF'):
+    msg = (
+      'standard output encoding is %s, '
+      'try to set with UTF-8 if there is output issues.'
+    )
+    logging.warning(msg % encoding)
+    if sys.version_info.major == 2:
+      sys.stdout = codecs.getwriter(encoding)(sys.stdout, 'replace')
+      sys.stderr = codecs.getwriter(encoding)(sys.stderr, 'replace')
+    elif sys.version_info.major == 3:
+      sys.stdout = codecs.getwriter(encoding)(sys.stdout.buffer, 'replace')
+      sys.stderr = codecs.getwriter(encoding)(sys.stderr.buffer, 'replace')
 
   rc = load_config()
   service_options = {'blog': None}
