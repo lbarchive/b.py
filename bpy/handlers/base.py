@@ -208,7 +208,13 @@ class BaseHandler():
       return id_affix
 
     m = md5()
-    m.update(self.title.encode('utf8'))
+    # if self.title is Unicode-type string, then encode it,
+    # otherwise it's byte-type, then just update with it.
+    # The __future__.unicode_literals ensures '' is unicode-type.
+    if isinstance(self.title, type('')):
+      m.update(self.title.encode('utf8'))
+    else:
+      m.update(self.title)
     return m.hexdigest()[:4]
 
   @abstractmethod

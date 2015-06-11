@@ -5,6 +5,7 @@ CHANGES
 Development
 ===========
 
+* fix ``UnicodeDecodeError`` when filename with Unicode characters
 * add ``-d``/``--debug`` for debugging messages
 * show warning about ``stdout`` encoding not ``UTF-*``, and set ``errors`` to ``replace``
 
