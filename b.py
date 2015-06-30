@@ -80,7 +80,7 @@ __program__ = 'b.py'
 __description__ = 'Post to Blogger or WordPress in markup language seamlessly'
 __copyright__ = 'Copyright 2013-2014, Yu Jie Lin'
 __license__ = 'MIT License'
-__version__ = '0.9.1'
+__version__ = '0.10.0'
 __website__ = 'http://bitbucket.org/livibetter/b.py'
 
 __author__ = 'Yu-Jie Lin'

@@ -5,6 +5,9 @@ CHANGES
 Development
 ===========
 
+Version 0.10.0 (2015-06-30T19:13:44Z)
+=====================================
+
 * fix ``UnicodeDecodeError`` when filename with Unicode characters
 * add ``-d``/``--debug`` for debugging messages
 * show warning about ``stdout`` encoding not ``UTF-*``, and set ``errors`` to ``replace``
