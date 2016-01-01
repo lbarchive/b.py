@@ -22,7 +22,8 @@ Installation
   pip install b.py
 
 Or install to user-site, meaning no root required and install at your home
-directory::
+directory, be sure to have ``$HOME/.local/bin`` in ``PATH`` environment
+variable::
 
   pip install --user b.py
 

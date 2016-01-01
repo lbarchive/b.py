@@ -5,6 +5,8 @@ CHANGES
 Development
 ===========
 
+* add note about ``$HOME/.local/bin`` in ``$PATH`` for user scheme installation
+
 Version 0.10.0 (2015-06-30T19:13:44Z)
 =====================================
 
