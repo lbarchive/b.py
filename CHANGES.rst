@@ -5,6 +5,7 @@ CHANGES
 Development
 ===========
 
+* fix missing ``labels`` header causing exception for WordPress service
 * add note about ``$HOME/.local/bin`` in ``$PATH`` for user scheme installation
 
 Version 0.10.0 (2015-06-30T19:13:44Z)

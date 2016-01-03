@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2014, 2016 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -109,8 +109,8 @@ class Service(BaseService):
     wpost.content = post['content']
     wpost.post_status = 'draft' if post['draft'] else 'publish'
     wpost.terms_names = {
-      'post_tag': post['labels'],
-      'category': post['categories'] if 'categories' in post else [],
+      'post_tag': post.get('labels', []),
+      'category': post.get('categories', []),
     }
 
     resp = {}
