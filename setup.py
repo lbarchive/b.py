@@ -288,8 +288,8 @@ class cmd_pylint(Command):
 with open(script_name) as f:
   meta = dict(
     (k.strip(' _'), eval(v)) for k, v in
-      # There will be a '\n', with eval(), it's safe to ignore
-      (line.split('=') for line in f if line.startswith('__'))
+    # There will be a '\n', with eval(), it's safe to ignore
+    (line.split('=') for line in f if line.startswith('__'))
   )
 
   # renaming meta-data keys
