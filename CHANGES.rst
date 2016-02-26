@@ -5,6 +5,8 @@ CHANGES
 Development
 ===========
 
+* require to provide OAuth client ID and secret
+
 Version 0.10.1 (2016-01-31T23:01:48Z)
 =====================================
 

@@ -10,8 +10,8 @@ You should have completed the steps in :ref:`Installation` and the service
 sections, that is having the following file(s) reside in the directory for your
 posts and all :ref:`Dependencies` installed properly.
 
-* :mod:`Blogger service <bpy.services.blogger>`: :ref:`brc.py` and
-  :ref:`b.dat`; or
+* :mod:`Blogger service <bpy.services.blogger>`: :ref:`brc.py`,
+  :ref:`b.dat`, and :ref:`client ID`; or
 * :mod:`WordPress service <bpy.services.wordpress>`: :ref:`brc.py`
 
 

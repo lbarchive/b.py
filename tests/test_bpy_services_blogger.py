@@ -1,4 +1,4 @@
-# Copyright (C) 2013 by Yu-Jie Lin
+# Copyright (C) 2013, 2016 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,19 @@ from test_bpy_services_base import BaseServiceTestCase
 
 class ServiceTestCase(BaseServiceTestCase):
 
-  def setUp(self):
+  def test_no_client_id(self):
 
-    self.service = Service(None)
+    with self.assertRaises(RuntimeError):
+      Service({'service_options': {}})
 
   @unittest.skipIf(sys.version_info.major == 2, 'only test with Python 3')
   def test_python3_error(self):
 
     with self.assertRaises(RuntimeError):
-      self.service.list_blogs()
+      service = Service({
+        'service_options': {
+          'client_id': 'dummy',
+          'client_secret': 'dummy',
+        }
+      })
+      service.list_blogs()

@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2015 by Yu-Jie Lin
+# Copyright (C) 2013-2016 by Yu-Jie Lin
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,12 +19,16 @@
 # THE SOFTWARE.
 
 """
+
 Blogger service recognizes the following options in :ref:`brc.py`:
 
+.. _blogger-brc:
 .. code:: python
 
   service = 'blogger'
   service_options = {
+    client_id: '<your client ID>',
+    client_secret: '<your client secret>',
     'blog': <blog id>,
   }
 
@@ -36,8 +40,9 @@ You can use ``blogs`` command to quickly get the blog ID.
 Authorization
 =============
 
-You need to authorize *b.py* to access your Blogger account. Simply using
-``blogs`` command (see *Commands* section) to start the authorization process:
+You need to authorize *b.py* to access your Blogger account with your OAuth
+`client ID`_. Simply using ``blogs`` command (see *Commands* section) to start
+the authorization process:
 
 .. code:: sh
 
@@ -46,6 +51,22 @@ You need to authorize *b.py* to access your Blogger account. Simply using
 Once you follow the prompted steps, there should be a b.dat_ created under the
 current working directory, you should keep it safe.
 
+.. _Client ID:
+
+Client ID
+=========
+
+You will need to obtain a OAuth Client ID in order to use *b.py*.
+
+1. Go to `Google Developers Console`_.
+2. Create a new project.
+3. Enable *Blogger API*.
+4. Create a *OAuth client ID* credential with *Other* application type.
+5. Download the credential JSON for *Client Secret*.
+6. Add *Client ID* and *Client Secert* to your :ref:`brc.py` as shown here__.
+
+.. _Google Developers Console:  https://console.developers.google.com/
+__ blogger-brc_
 
 .. _b.dat:
 
@@ -102,6 +123,15 @@ class Service(BaseService):
     self.http = None
     self.service = None
 
+    if 'client_id' not in self.options or 'client_secret' not in self.options:
+      raise RuntimeError(
+        'You need to supply client ID and secret, see '
+        'http://pythonhosted.org/b.py/apidoc/bpy.services.html#client-id'
+      )
+
+    self.client_id = self.options['client_id']
+    self.client_secret = self.options['client_secret']
+
   def auth(self):
 
     if sys.version_info.major != 2:
@@ -113,8 +143,8 @@ class Service(BaseService):
       return
 
     FLOW = OAuth2WebServerFlow(
-      '56045325640.apps.googleusercontent.com',
-      'xCzmIv2FUWxeQzA5yJvm4w9U',
+      self.client_id,
+      self.client_secret,
       'https://www.googleapis.com/auth/blogger',
       auth_uri='https://accounts.google.com/o/oauth2/auth',
       token_uri='https://accounts.google.com/o/oauth2/token',

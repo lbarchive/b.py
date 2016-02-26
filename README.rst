@@ -1,6 +1,18 @@
 b.py
 ====
 
+.. important::
+
+  As of 2016-02-26, this project is under bugfix-only status and you are also
+  required to provide your own OAuth `Client ID`_ if you are using *b.py* with
+  Blogger; and you will need to re-authorize.
+
+  .. _Client ID:
+     http://pythonhosted.org/b.py/apidoc/bpy.services.html#client-id
+
+  If you would like to take over the project, please contact project owner on
+  Bitbucket.
+
 Enabling bloggers to publish posts in their favorite markup language to Blogger
 or WordPress.
 

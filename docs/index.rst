@@ -6,13 +6,16 @@
 b.py documentation
 ==================
 
-.. note::
+.. important::
 
-  This documentation is still in its early stage. If anything is unclear or you
-  have any suggestions or questions, please feel free to create an issue in
-  `issue tracker`_.
+  As of 2016-02-26, this project is under bugfix-only status and you are also
+  required to provide your own OAuth :ref:`Client ID` if you are using *b.py*
+  with Blogger; and you will need to re-authorize.
 
-  .. _issue tracker: https://bitbucket.org/livibetter/b.py/issues
+  .. _Client ID: http://pythonhosted.org/b.py/apidoc/bpy.services.html#client-id
+
+  If you would like to take over the project, please contact project owner on
+  Bitbucket.
 
 Contents
 --------
